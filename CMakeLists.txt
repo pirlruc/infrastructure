@@ -55,7 +55,9 @@ add_library(
   ${PROJECT_NAME}
   
   ${PROJECT_SOURCE_DIR}/include
+
   ${PROJECT_SOURCE_DIR}/src/file.cpp
+  ${PROJECT_SOURCE_DIR}/src/string.cpp
 )
 add_library(improc::infrastructure ALIAS ${PROJECT_NAME})
 
@@ -95,6 +97,7 @@ install(FILES   ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE                  
 install(FILES   ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE                                   DESTINATION share/licenses/improc/spdlog)
 
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/file.hpp                    DESTINATION include/improc/infrastructure)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/string.hpp                  DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_singleton.hpp        DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark_singleton.hpp     DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_infrastructure.hpp   DESTINATION include/improc/infrastructure)
