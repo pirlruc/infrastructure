@@ -53,20 +53,15 @@ message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 
 add_library(
   ${PROJECT_NAME}
-    
-  ${PROJECT_SOURCE_DIR}/include/improc/exception.hpp
-  ${PROJECT_SOURCE_DIR}/include/improc/improc_defs.hpp
-  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_singleton.hpp
-  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark_singleton.hpp
-  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_infrastructure.hpp
-  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/jsonfile_parser.hpp
-
+  
+  ${PROJECT_SOURCE_DIR}/include
   ${PROJECT_SOURCE_DIR}/src/file.cpp
 )
 add_library(improc::infrastructure ALIAS ${PROJECT_NAME})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD           17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED  TRUE)
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE        CXX)
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION                ${PROJECT_VERSION})
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX          ${CMAKE_DEBUG_POSTFIX})
 
@@ -85,24 +80,9 @@ target_link_libraries       (${PROJECT_NAME}   INTERFACE jsoncpp_lib)
 
 # Tests configuration
 if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
-  add_subdirectory(${PROJECT_SOURCE_DIR}/test ${CMAKE_BINARY_DIR}/test)
+  add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/test)
+  add_subdirectory(${PROJECT_SOURCE_DIR}/version  ${CMAKE_BINARY_DIR}/version)
 endif()
-
-# Create executable file to get version of library
-configure_file(
-  ${PROJECT_SOURCE_DIR}/version/version_config.hpp.in 
-  ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_config.hpp
-)
-
-add_executable(
-  ${PROJECT_NAME}_version
-
-  ${PROJECT_SOURCE_DIR}/version/main.cpp
-)
-set_target_properties     (${PROJECT_NAME}_version PROPERTIES CXX_STANDARD           11)
-set_target_properties     (${PROJECT_NAME}_version PROPERTIES CXX_STANDARD_REQUIRED  TRUE)
-set_target_properties     (${PROJECT_NAME}_version PROPERTIES DEBUG_POSTFIX          ${CMAKE_DEBUG_POSTFIX})
-target_include_directories(${PROJECT_NAME}_version PRIVATE    ${CMAKE_BINARY_DIR})
 
 # Install configuration
 set(${PROJECT_NAME}_libs ${PROJECT_NAME} spdlog jsoncpp_lib)
@@ -119,6 +99,3 @@ install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_singl
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark_singleton.hpp     DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_infrastructure.hpp   DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/jsonfile_parser.hpp         DESTINATION include/improc/infrastructure)
-
-install(TARGETS ${PROJECT_NAME}_version                         DESTINATION bin)
-install(FILES   ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_config.hpp  DESTINATION include)
