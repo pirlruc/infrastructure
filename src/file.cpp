@@ -11,7 +11,13 @@ improc::File::File() {}
  * 
  * @param filepath 
  */
-improc::File::File(const std::string& filepath) : filepath_(std::filesystem::path(std::move(filepath))) {}
+improc::File::File(const std::string& filepath) 
+{
+    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
+                      , spdlog::level::trace
+                      , "Creating File object..." );
+    this->set_filepath(std::move(filepath));
+}
 
 /**
  * @brief Set the filepath object
@@ -23,6 +29,13 @@ void improc::File::set_filepath(const std::string& filepath)
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Setting filepath {}...",filepath );
+    if (improc::File::IsFile(filepath) == false)
+    {
+        SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
+                          , spdlog::level::err
+                          , "ERROR_03: Invalid filepath {}.",filepath );
+        throw improc::invalid_filepath();
+    }
     this->filepath_ = std::filesystem::path(std::move(filepath));
 }
 
@@ -106,7 +119,7 @@ std::string improc::File::Read(const std::string& filepath)
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Reading content from filepath {}...",filepath );
-    if (improc::File::Exists(filepath) == false) {
+    if (improc::File::IsFile(filepath) == false) {
         SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                           , spdlog::level::err
                           , "ERROR_01: Filepath {} does not exist.",filepath );
@@ -147,12 +160,27 @@ void improc::File::Remove(const std::string& filepath)
  * @return true 
  * @return false 
  */
-inline bool improc::File::Exists(const std::string& filepath)
+bool improc::File::Exists(const std::string& filepath)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Checking if filepath {} exists...",filepath );
     return std::filesystem::exists(std::move(filepath));
+}
+
+/**
+ * @brief Check if filepath exists and is a file
+ * 
+ * @param filepath 
+ * @return true 
+ * @return false 
+ */
+bool improc::File::IsFile(const std::string& filepath)
+{
+    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
+                      , spdlog::level::trace
+                      , "Checking if filepath {} exists and is a file...",filepath );
+    return std::filesystem::is_regular_file(std::move(filepath));
 }
 
 /**
