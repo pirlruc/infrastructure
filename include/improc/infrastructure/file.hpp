@@ -19,25 +19,26 @@ namespace improc {
      */
     class IMPROC_EXPORTS File
     {
-        protected:
-            std::string filepath_;
+        private:
+            std::filesystem::path   filepath_;
 
         public:
             File();
             File(const std::string& filepath);
 
-            void                set_filepath(const std::string& filepath);
+            void                    set_filepath(const std::string& filepath);
             
-            std::string         get_filename () const;
-            std::string         get_extension() const;
+            std::string             get_filepath () const;
+            std::string             get_filename () const;
+            std::string             get_extension() const;
 
-            std::string         Read();
-            void                Remove();
-            bool                Exists() const;
+            std::string             Read();
+            void                    Remove();
+            bool                    Exists() const;
 
-            static std::string  Read    (const std::string& filepath);
-            static void         Remove  (const std::string& filepath);
-            static inline bool  Exists  (const std::string& filepath);
+            static std::string      Read    (const std::string& filepath);
+            static void             Remove  (const std::string& filepath);
+            static inline bool      Exists  (const std::string& filepath);
     };
 
     /**
@@ -50,13 +51,13 @@ namespace improc {
             JsonFile();
             JsonFile(const std::string& filepath);
 
-            void                set_filepath(const std::string& filepath);
+            void                    set_filepath(const std::string& filepath);
 
-            Json::Value         Read();
-            static Json::Value  Read(const std::string& filepath);
+            Json::Value             Read();
+            static Json::Value      Read(const std::string& filepath);
 
         private:
-            static inline bool  IsExtensionValid(const std::string& filepath);
+            static inline bool      IsExtensionValid(const improc::File& json_file);
     };
 }
 
