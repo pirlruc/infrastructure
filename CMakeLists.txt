@@ -56,6 +56,7 @@ add_library(
   
   ${PROJECT_SOURCE_DIR}/include
 
+  ${PROJECT_SOURCE_DIR}/src/folder.cpp
   ${PROJECT_SOURCE_DIR}/src/file.cpp
   ${PROJECT_SOURCE_DIR}/src/string.cpp
 )

@@ -25,6 +25,13 @@ namespace improc {
         }
     };
 
+    class invalid_folder_path: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Invalid folder path";
+        }
+    };
+
     class file_processing_error: public std::exception {
     public:
         virtual const char* what() const throw() {
