@@ -31,6 +31,18 @@ namespace improc {
          */
         template <class path_type = std::filesystem::path>
         class IMPROC_EXPORTS ListFilesInFolderAndSubfolders : public ListFiles<std::filesystem::recursive_directory_iterator,path_type> {};
+
+        template <class path_type = std::filesystem::path>
+        struct NoSorting
+        {
+            static std::vector<path_type> Sort(const std::vector<path_type>& filepaths);
+        };
+
+        template <class path_type = std::filesystem::path>
+        struct SortFilesByAscendingFilename
+        {
+            static std::vector<path_type> Sort(std::vector<path_type> filepaths);
+        };
     }
 }
 

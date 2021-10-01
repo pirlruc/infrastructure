@@ -40,6 +40,36 @@ void improc::Folder::set_folder_path(const std::string& folder_path)
 }
 
 /**
+ * @brief Obtain list of files in a folder
+ * 
+ * @param folder_path
+ * @return std::vector<std::filesystem::path> - list of files in folder 
+ */
+std::vector<std::filesystem::path> improc::Folder::GetFilesInFolder() const
+{
+    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
+                      , spdlog::level::trace
+                      , "Obtain files in folder {}...",this->folder_path_.string());
+    improc::folder::ListFilesInFolder<std::filesystem::path> folder_list {};
+    return folder_list.GetFiles(this->folder_path_);
+}
+
+/**
+ * @brief Obtain list of files in a folder and subfolders
+ * 
+ * @param folder_path
+ * @return std::vector<std::filesystem::path> - list of files in folder and subfolders
+ */
+std::vector<std::filesystem::path> improc::Folder::GetFilesInFolderAndSubfolders() const
+{
+    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
+                      , spdlog::level::trace
+                      , "Obtain files in folder and subfolders {}...",this->folder_path_.string());
+    improc::folder::ListFilesInFolderAndSubfolders<std::filesystem::path> folder_list {};
+    return folder_list.GetFiles(this->folder_path_);
+}
+
+/**
  * @brief Check if folder path exists and is a folder
  * 
  * @param folder_path
@@ -55,43 +85,15 @@ inline bool improc::Folder::IsFolder(const std::string& folder_path)
 }
 
 /**
- * @brief Obtain list of files in a folder
+ * @brief 
  * 
- * @param folder_path
- * @return std::vector<std::filesystem::path> - list of files in folder 
+ * @param  files 
+ * @return std::vector<std::filesystem::path> 
  */
-std::vector<std::filesystem::path> improc::Folder::GetFilesInFolder()
+std::vector<std::filesystem::path> improc::Folder::SortFilesByAscendingFilename(const std::vector<std::filesystem::path>& filepaths)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
-                      , "Obtain files in folder {}...",this->folder_path_.string());
-    improc::folder::ListFilesInFolder<std::filesystem::path> folder_list {};
-    return folder_list.GetFiles(this->folder_path_);
-}
-
-/**
- * @brief Obtain list of files in a folder and subfolders
- * 
- * @param folder_path
- * @return std::vector<std::filesystem::path> - list of files in folder and subfolders
- */
-std::vector<std::filesystem::path> improc::Folder::GetFilesInFolderAndSubfolders()
-{
-    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                      , spdlog::level::trace
-                      , "Obtain files in folder and subfolders{}...",this->folder_path_.string());
-    improc::folder::ListFilesInFolderAndSubfolders<std::filesystem::path> folder_list {};
-    return folder_list.GetFiles(this->folder_path_);
-}
-
-std::vector<std::filesystem::path> improc::SortFilesByFilename(std::vector<std::filesystem::path> files)
-{
-    std::sort   ( files.begin()
-                , files.end()
-                , [] (const auto& lhs, const auto& rhs) 
-                    {
-                        return lhs.filename().string() < rhs.filename().string();
-                    }
-                );
-    return files;
+                      , "Sort files by ascending filename..." );
+    return std::move(improc::folder::SortFilesByAscendingFilename<std::filesystem::path>().Sort(filepaths));
 }

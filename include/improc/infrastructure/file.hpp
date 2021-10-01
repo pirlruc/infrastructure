@@ -32,8 +32,8 @@ namespace improc {
             std::string             get_filename () const;
             std::string             get_extension() const;
 
-            std::string             Read();
-            void                    Remove();
+            std::string             Read()   const;
+            void                    Remove() const;
             bool                    Exists() const;
 
             static std::string      Read    (const std::string& filepath);
@@ -54,7 +54,7 @@ namespace improc {
 
             void                    set_filepath(const std::string& filepath);
 
-            Json::Value             Read();
+            Json::Value             Read() const;
             static Json::Value      Read(const std::string& filepath);
 
         private:

@@ -69,9 +69,43 @@ TEST(Folder,TestGetFilesInFolderAndSubfoldersUsingStrings) {
 TEST(Folder,TestSortFilesByFilename) {
     improc::Folder folder_exists {"../../test/data/test"};
     std::vector<std::filesystem::path> files = folder_exists.GetFilesInFolderAndSubfolders();
-    files = improc::SortFilesByFilename(files);
+    files = improc::Folder::SortFilesByAscendingFilename(files);
     EXPECT_STREQ(files[0].filename().c_str(),"test_1.txt");
     EXPECT_STREQ(files[1].filename().c_str(),"test_12.txt");
     EXPECT_STREQ(files[2].filename().c_str(),"test_2.txt");
     EXPECT_STREQ(files[3].filename().c_str(),"test_3.txt");
+}
+
+TEST(Folder,TestNoSortingPolicy) {
+    improc::Folder folder_exists {"../../test/data/test"};
+    std::vector<std::filesystem::path> files        = folder_exists.GetFilesInFolderAndSubfolders();
+    std::vector<std::filesystem::path> sorted_files = improc::folder::NoSorting().Sort(files);
+    for (size_t file_idx = 0; file_idx < files.size(); file_idx++)
+    {
+        EXPECT_STREQ(sorted_files[file_idx].filename().c_str(),files[file_idx].filename().c_str());
+    }
+}
+
+TEST(Folder,TestSortFilesByAscendingFilenamePolicy) {
+    improc::Folder folder_exists {"../../test/data/test"};
+    std::vector<std::filesystem::path> files        = folder_exists.GetFilesInFolderAndSubfolders();
+    std::vector<std::filesystem::path> sorted_files = improc::folder::SortFilesByAscendingFilename().Sort(files);
+    EXPECT_STREQ(sorted_files[0].filename().c_str(),"test_1.txt");
+    EXPECT_STREQ(sorted_files[1].filename().c_str(),"test_12.txt");
+    EXPECT_STREQ(sorted_files[2].filename().c_str(),"test_2.txt");
+    EXPECT_STREQ(sorted_files[3].filename().c_str(),"test_3.txt");
+}
+
+TEST(Folder,TestSortFilesByAscendingFilenamePolicyUsingString) {
+    std::vector<std::string> files        = improc::folder::ListFilesInFolderAndSubfolders<std::string>().GetFiles("../../test/data/test");
+    std::vector<std::string> sorted_files = improc::folder::SortFilesByAscendingFilename<std::string>().Sort(files);
+    EXPECT_STREQ(std::filesystem::path(sorted_files[0]).filename().c_str(),"test_1.txt");
+    EXPECT_STREQ(std::filesystem::path(sorted_files[1]).filename().c_str(),"test_12.txt");
+    EXPECT_STREQ(std::filesystem::path(sorted_files[2]).filename().c_str(),"test_2.txt");
+    EXPECT_STREQ(std::filesystem::path(sorted_files[3]).filename().c_str(),"test_3.txt");
+}
+
+TEST(Folder,TestSortFilesByAscendingFilenamePolicyUsingUnknown) {
+    std::vector<int> array_int {0,2,21,1,3};
+    EXPECT_THROW(improc::folder::SortFilesByAscendingFilename<int>().Sort(array_int),improc::not_supported_data_type);
 }

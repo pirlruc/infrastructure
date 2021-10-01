@@ -83,7 +83,7 @@ std::string improc::File::get_extension() const
  * 
  * @return std::string 
  */
-std::string improc::File::Read()
+std::string improc::File::Read() const
 {
     return improc::File::Read(this->filepath_.string());
 }
@@ -92,7 +92,7 @@ std::string improc::File::Read()
  * @brief Remove a file
  * 
  */
-void improc::File::Remove()
+void improc::File::Remove() const
 {
     std::filesystem::remove(this->filepath_);
 }
@@ -228,7 +228,7 @@ void improc::JsonFile::set_filepath(const std::string& filepath)
  * 
  * @return Json::Value 
  */
-Json::Value improc::JsonFile::Read()
+Json::Value improc::JsonFile::Read() const
 {
     return improc::JsonFile::Read(this->get_filepath());
 }
