@@ -2,7 +2,6 @@
 #define IMPROC_INFRASTRUCTURE_STRING_HPP
 
 #include <improc/improc_defs.hpp>
-#include <improc/exception.hpp>
 #include <improc/infrastructure/logger_infrastructure.hpp>
 
 #include <string>
@@ -23,7 +22,7 @@ namespace improc {
             String(const std::string& str_data);
 
             void                        set_string(const std::string& str_data);
-            std::string                 get_data();
+            std::string                 get_data() const;
 
             void                        ToLower();
             void                        ToUpper();

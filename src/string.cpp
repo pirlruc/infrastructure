@@ -31,7 +31,7 @@ void improc::String::set_string(const std::string& str_data)
  * 
  * @return std::string
  */
-std::string improc::String::get_data()
+std::string improc::String::get_data() const
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace

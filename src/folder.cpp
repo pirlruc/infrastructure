@@ -65,7 +65,7 @@ std::vector<std::filesystem::path> improc::Folder::GetFilesInFolder()
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Obtain files in folder {}...",this->folder_path_.string());
-    improc::folder::ListFilesInFolder<std::filesystem::path,std::filesystem::directory_iterator> folder_list {};
+    improc::folder::ListFilesInFolder<std::filesystem::path> folder_list {};
     return folder_list.GetFiles(this->folder_path_);
 }
 
@@ -80,7 +80,7 @@ std::vector<std::filesystem::path> improc::Folder::GetFilesInFolderAndSubfolders
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Obtain files in folder and subfolders{}...",this->folder_path_.string());
-    improc::folder::ListFilesInFolder<std::filesystem::path,std::filesystem::recursive_directory_iterator> folder_list {};
+    improc::folder::ListFilesInFolderAndSubfolders<std::filesystem::path> folder_list {};
     return folder_list.GetFiles(this->folder_path_);
 }
 

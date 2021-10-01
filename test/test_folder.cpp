@@ -36,13 +36,33 @@ TEST(Folder,TestGetFilesInFolderAndSubfolders) {
     EXPECT_EQ(folder_exists.GetFilesInFolderAndSubfolders().size(),4);
 }
 
+TEST(Folder,TestGetFilesInFolderUsingPath) {
+    improc::folder::ListFiles<std::filesystem::directory_iterator,std::filesystem::path> folder_list {};
+    EXPECT_EQ(folder_list.GetFiles("../../test/data/test").size(),2);
+}
+
+TEST(Folder,TestGetFilesInFolderAndSubfoldersUsingPath) {
+    improc::folder::ListFiles<std::filesystem::recursive_directory_iterator,std::filesystem::path> folder_list {};
+    EXPECT_EQ(folder_list.GetFiles("../../test/data/test").size(),4);
+}
+
+TEST(Folder,TestGetFilesInFolderUsingPolicy) {
+    improc::folder::ListFilesInFolder folder_list {};
+    EXPECT_EQ(folder_list.GetFiles("../../test/data/test").size(),2);
+}
+
+TEST(Folder,TestGetFilesInFolderAndSubfoldersUsingPolicy) {
+    improc::folder::ListFilesInFolderAndSubfolders folder_list {};
+    EXPECT_EQ(folder_list.GetFiles("../../test/data/test").size(),4);
+}
+
 TEST(Folder,TestGetFilesInFolderUsingStrings) {
-    improc::folder::ListFilesInFolder<std::string,std::filesystem::directory_iterator> folder_list {};
+    improc::folder::ListFiles<std::filesystem::directory_iterator,std::string> folder_list {};
     EXPECT_EQ(folder_list.GetFiles("../../test/data/test").size(),2);
 }
 
 TEST(Folder,TestGetFilesInFolderAndSubfoldersUsingStrings) {
-    improc::folder::ListFilesInFolder<std::string,std::filesystem::recursive_directory_iterator> folder_list {};
+    improc::folder::ListFiles<std::filesystem::recursive_directory_iterator,std::string> folder_list {};
     EXPECT_EQ(folder_list.GetFiles("../../test/data/test").size(),4);
 }
 

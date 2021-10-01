@@ -8,8 +8,8 @@
  * @param  folder_path 
  * @return std::vector<path_type> 
  */
-template <class path_type, class list_file_type>
-std::vector<path_type> improc::folder::ListFilesInFolder<path_type,list_file_type>::GetFiles(const path_type& folder_path)
+template <class list_file_type, class path_type>
+std::vector<path_type> improc::folder::ListFiles<list_file_type,path_type>::GetFiles(const path_type& folder_path)
 {
     std::vector<path_type> files {};
     for (auto& folder_entry : list_file_type(folder_path))
