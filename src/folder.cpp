@@ -65,16 +65,8 @@ std::vector<std::filesystem::path> improc::Folder::GetFilesInFolder()
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Obtain files in folder {}...",this->folder_path_.string());
-    std::vector<std::filesystem::path> files {};
-    for (auto& folder_entry : std::filesystem::directory_iterator(this->folder_path_))
-    {
-        std::filesystem::path filepath = folder_entry.path();
-        if (improc::File::IsFile(filepath.string()) == true)
-        {
-            files.push_back(std::move(filepath));
-        }
-    }
-    return std::move(files);
+    improc::folder::ListFilesInFolder<std::filesystem::path,std::filesystem::directory_iterator> folder_list {};
+    return folder_list.GetFiles(this->folder_path_);
 }
 
 /**
@@ -88,16 +80,8 @@ std::vector<std::filesystem::path> improc::Folder::GetFilesInFolderAndSubfolders
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Obtain files in folder and subfolders{}...",this->folder_path_.string());
-    std::vector<std::filesystem::path> files {};
-    for (auto& folder_entry : std::filesystem::recursive_directory_iterator(this->folder_path_))
-    {
-        std::filesystem::path filepath = folder_entry.path();
-        if (improc::File::IsFile(filepath.string()) == true)
-        {
-            files.push_back(std::move(filepath));
-        }
-    }
-    return std::move(files);
+    improc::folder::ListFilesInFolder<std::filesystem::path,std::filesystem::recursive_directory_iterator> folder_list {};
+    return folder_list.GetFiles(this->folder_path_);
 }
 
 std::vector<std::filesystem::path> improc::SortFilesByFilename(std::vector<std::filesystem::path> files)

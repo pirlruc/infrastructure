@@ -36,6 +36,16 @@ TEST(Folder,TestGetFilesInFolderAndSubfolders) {
     EXPECT_EQ(folder_exists.GetFilesInFolderAndSubfolders().size(),4);
 }
 
+TEST(Folder,TestGetFilesInFolderUsingStrings) {
+    improc::folder::ListFilesInFolder<std::string,std::filesystem::directory_iterator> folder_list {};
+    EXPECT_EQ(folder_list.GetFiles("../../test/data/test").size(),2);
+}
+
+TEST(Folder,TestGetFilesInFolderAndSubfoldersUsingStrings) {
+    improc::folder::ListFilesInFolder<std::string,std::filesystem::recursive_directory_iterator> folder_list {};
+    EXPECT_EQ(folder_list.GetFiles("../../test/data/test").size(),4);
+}
+
 TEST(Folder,TestSortFilesByFilename) {
     improc::Folder folder_exists {"../../test/data/test"};
     std::vector<std::filesystem::path> files = folder_exists.GetFilesInFolderAndSubfolders();

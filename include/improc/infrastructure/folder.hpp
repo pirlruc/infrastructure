@@ -5,6 +5,7 @@
 #include <improc/exception.hpp>
 #include <improc/infrastructure/logger_infrastructure.hpp>
 #include <improc/infrastructure/file.hpp>
+#include <improc/infrastructure/folder_policies.hpp>
 
 #include <filesystem>
 
