@@ -10,10 +10,13 @@ namespace improc {
     namespace jsonfile
     {
         template<typename KeyType>
-        IMPROC_EXPORTS KeyType              ReadElement(const Json::Value& json_elem);
+        IMPROC_EXPORTS KeyType              ReadElement (const Json::Value& json_elem);
 
         template<>
-        IMPROC_EXPORTS inline std::string   ReadElement(const Json::Value& json_elem);
+        IMPROC_EXPORTS inline std::string   ReadElement (const Json::Value& json_elem);
+
+        template<typename KeyType>
+        IMPROC_EXPORTS std::vector<KeyType> ReadVector  (const Json::Value& json_vector);
     }
 }
 

@@ -167,3 +167,18 @@ TEST(JsonFile,TestReadingStringContent) {
     EXPECT_FALSE(content.empty());
     EXPECT_STREQ(content.c_str(),"test");
 }
+
+TEST(JsonFile,TestReadingStringElemAsArrayContent) {
+    improc::JsonFile file_exists {"../../test/data/test.json"};
+    std::vector<std::string> content = improc::jsonfile::ReadVector<std::string>(file_exists.Read()["content"]);
+    EXPECT_EQ(content.size(),1);
+    EXPECT_STREQ(content[0].c_str(),"test");
+}
+
+TEST(JsonFile,TestReadingStringArrayContent) {
+    improc::JsonFile file_exists {"../../test/data/test.json"};
+    std::vector<std::string> content = improc::jsonfile::ReadVector<std::string>(file_exists.Read()["content_array"]);
+    EXPECT_EQ(content.size(),2);
+    EXPECT_STREQ(content[0].c_str(),"test_1");
+    EXPECT_STREQ(content[1].c_str(),"test_2");
+}

@@ -1,3 +1,4 @@
 {
-	"content": "test"
+	"content": "test",
+	"content_array": ["test_1","test_2"]
 }

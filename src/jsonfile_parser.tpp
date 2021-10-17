@@ -29,3 +29,25 @@ inline std::string improc::jsonfile::ReadElement(const Json::Value& json_elem)
                       , "Reading string json element..." );
     return json_elem.asString();
 }
+
+
+template<typename KeyType>
+std::vector<KeyType> improc::jsonfile::ReadVector(const Json::Value& json_vector)
+{
+    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
+                      , spdlog::level::trace
+                      , "Reading array json element with type {}...",typeid(KeyType).name() );
+    std::vector<KeyType> list_elems;
+    if (json_vector.isArray() == true)
+    {
+        for (Json::Value::const_iterator elem_iter = json_vector.begin(); elem_iter != json_vector.end(); ++elem_iter)
+        {
+            list_elems.push_back(improc::jsonfile::ReadElement<KeyType>(*elem_iter));
+        }
+    }
+    else
+    {
+        list_elems.push_back(improc::jsonfile::ReadElement<KeyType>(json_vector));
+    }
+    return std::move(list_elems);
+}
