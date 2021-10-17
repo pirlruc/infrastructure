@@ -1,12 +1,12 @@
 /**
- * @brief Construct a new improc::BenchmarkSingleton<type> object
+ * @brief Construct a new improc::BenchmarkSingleton<BenchmarkType> object
  * 
- * @tparam type 
+ * @tparam BenchmarkType 
  * @param benchmark_logger 
  */
-template <typename type>
-improc::BenchmarkSingleton<type>::BenchmarkSingleton(std::shared_ptr<spdlog::logger>&& benchmark_logger) 
-: LoggerSingleton<type>(std::move(benchmark_logger)) 
+template <typename BenchmarkType>
+improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(std::shared_ptr<spdlog::logger>&& benchmark_logger) 
+: LoggerSingleton<BenchmarkType>(std::move(benchmark_logger)) 
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
@@ -16,14 +16,14 @@ improc::BenchmarkSingleton<type>::BenchmarkSingleton(std::shared_ptr<spdlog::log
 }
 
 /**
- * @brief Construct a new improc::BenchmarkSingleton<type> object
+ * @brief Construct a new improc::BenchmarkSingleton<BenchmarkType> object
  * 
- * @tparam type 
+ * @tparam BenchmarkType 
  * @param benchmark_logger 
  */
-template <typename type>
-improc::BenchmarkSingleton<type>::BenchmarkSingleton(const std::shared_ptr<spdlog::logger>& benchmark_logger) 
-: LoggerSingleton<type>(std::move(benchmark_logger)) 
+template <typename BenchmarkType>
+improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(const std::shared_ptr<spdlog::logger>& benchmark_logger) 
+: LoggerSingleton<BenchmarkType>(std::move(benchmark_logger)) 
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
@@ -32,23 +32,23 @@ improc::BenchmarkSingleton<type>::BenchmarkSingleton(const std::shared_ptr<spdlo
     this->data()->set_pattern("%n;%v");
 }
 
-template <typename type>
-void improc::BenchmarkSingleton<type>::AddFieldsToLine() {}
+template <typename BenchmarkType>
+void improc::BenchmarkSingleton<BenchmarkType>::AddFieldsToLine() {}
 
 /**
  * @brief Add fields to benchmark line. The line is not written in the benchmark.
  * If you want to write on the benchmark use the method WriteFields or use the
  * method WriteLine after defining the line to write in the benchmark.
  * 
- * @tparam type 
- * @tparam arg 
- * @tparam args 
+ * @tparam BenchmarkType 
+ * @tparam Arg 
+ * @tparam Args 
  * @param field_1 
  * @param field_n 
  */
-template <typename type>
-template<typename arg, typename ... args>
-void improc::BenchmarkSingleton<type>::AddFieldsToLine(arg field_1, args ... field_n)
+template <typename BenchmarkType>
+template<typename Arg, typename ... Args>
+void improc::BenchmarkSingleton<BenchmarkType>::AddFieldsToLine(Arg field_1, Args ... field_n)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
@@ -57,8 +57,8 @@ void improc::BenchmarkSingleton<type>::AddFieldsToLine(arg field_1, args ... fie
     this->AddFieldsToLine(field_n ...);
 }
 
-template <typename type>
-void improc::BenchmarkSingleton<type>::WriteFields() 
+template <typename BenchmarkType>
+void improc::BenchmarkSingleton<BenchmarkType>::WriteFields() 
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
@@ -69,15 +69,15 @@ void improc::BenchmarkSingleton<type>::WriteFields()
 /**
  * @brief Add fields to benchmark line. The line is written in the benchmark.
  * 
- * @tparam type 
- * @tparam arg 
- * @tparam args 
+ * @tparam BenchmarkType 
+ * @tparam Arg 
+ * @tparam Args 
  * @param field_1 
  * @param field_n 
  */
-template <typename type>
-template<typename arg, typename ... args>
-void improc::BenchmarkSingleton<type>::WriteFields(arg field_1, args ... field_n)
+template <typename BenchmarkType>
+template<typename Arg, typename ... Args>
+void improc::BenchmarkSingleton<BenchmarkType>::WriteFields(Arg field_1, Args ... field_n)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
@@ -89,10 +89,10 @@ void improc::BenchmarkSingleton<type>::WriteFields(arg field_1, args ... field_n
 /**
  * @brief Write benchmark line in the benchmark.
  * 
- * @tparam type 
+ * @tparam BenchmarkType 
  */
-template <typename type>
-void improc::BenchmarkSingleton<type>::WriteLine()
+template <typename BenchmarkType>
+void improc::BenchmarkSingleton<BenchmarkType>::WriteLine()
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace

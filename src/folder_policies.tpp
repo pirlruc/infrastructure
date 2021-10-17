@@ -1,21 +1,21 @@
 /**
  * @brief Obtain files in folder according to list_file_type.
  * 
- * @tparam path_type       - can be either std::string or std::filesystem::path
- * @tparam list_file_type  - can be either:
+ * @tparam ListFileType  - can be either:
  *                              1. std::filesystem::directory_iterator to get files in folder
  *                              2. std::filesystem::recursive_directory_iterator to get files in folder and subfolders
+ * @tparam PathType      - can be either std::string or std::filesystem::path
  * @param  folder_path 
  * @return std::vector<path_type> 
  */
-template <class list_file_type, class path_type>
-std::vector<path_type> improc::folder::ListFiles<list_file_type,path_type>::GetFiles(const path_type& folder_path)
+template <class ListFileType, class PathType>
+std::vector<PathType> improc::folder::ListFiles<ListFileType,PathType>::GetFiles(const PathType& folder_path)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Obtain files in folder {}...", std::filesystem::path(folder_path).string() );
-    std::vector<path_type> files {};
-    for (auto& folder_entry : list_file_type(folder_path))
+    std::vector<PathType> files {};
+    for (auto& folder_entry : ListFileType(folder_path))
     {
         std::filesystem::path filepath = folder_entry.path();
         if (improc::File::IsFile(filepath.string()) == true)
@@ -29,16 +29,16 @@ std::vector<path_type> improc::folder::ListFiles<list_file_type,path_type>::GetF
 /**
  * @brief Sort files by ascending filename.
  * 
- * @tparam path_type - can be either std::string or std::filesystem::path
+ * @tparam PathType - can be either std::string or std::filesystem::path
  * @param  filepaths 
- * @return std::vector<path_type> 
+ * @return std::vector<PathType> 
  */
-template <class path_type>
-std::vector<path_type> improc::folder::SortFilesByAscendingFilename<path_type>::Sort(std::vector<path_type> filepaths)
+template <class PathType>
+std::vector<PathType> improc::folder::SortFilesByAscendingFilename<PathType>::Sort(std::vector<PathType> filepaths)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::critical
-                      , "ERROR_01: File sorting not supported for data type {}.",typeid(path_type).name() );
+                      , "ERROR_01: File sorting not supported for data type {}.",typeid(PathType).name() );
     throw improc::not_supported_data_type();
 }
 

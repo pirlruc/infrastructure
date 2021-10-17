@@ -11,10 +11,10 @@ namespace improc {
      * It considers a specific pattern to create the information to write on the
      * benchmark: logger_name and message. 
      * 
-     * @tparam type 
+     * @tparam BenchmarkType 
      */
-    template <typename type>
-    class IMPROC_EXPORTS BenchmarkSingleton : public LoggerSingleton<type>
+    template <typename BenchmarkType>
+    class IMPROC_EXPORTS BenchmarkSingleton : public LoggerSingleton<BenchmarkType>
     {
         private:
             std::string                         line_msg_;
@@ -33,11 +33,11 @@ namespace improc {
             void                                WriteFields     ();
             void                                WriteLine       ();
 
-            template<typename arg, typename ... args>
-            void                                AddFieldsToLine (arg field_1, args ... field_n);
+            template<typename Arg, typename ... Args>
+            void                                AddFieldsToLine (Arg field_1, Args ... field_n);
 
-            template<typename arg, typename ... args>
-            void                                WriteFields     (arg field_1, args ... field_n);
+            template<typename Arg, typename ... Args>
+            void                                WriteFields     (Arg field_1, Args ... field_n);
     };
 }
 

@@ -10,9 +10,9 @@ namespace improc {
     /**
      * @brief Singleton template for loggers
      * 
-     * @tparam type 
+     * @tparam LoggerType 
      */
-    template <typename type>
+    template <typename LoggerType>
     class IMPROC_EXPORTS LoggerSingleton
     {
         private:
@@ -28,7 +28,7 @@ namespace improc {
             void operator= (const LoggerSingleton&  that) = delete;
             void operator= (const LoggerSingleton&& that) = delete;
 
-            static std::shared_ptr<type>        get(const std::string& logger_name = "");
+            static std::shared_ptr<LoggerType>  get(const std::string& logger_name = "");
             std::shared_ptr<spdlog::logger>     data();
     };
 }

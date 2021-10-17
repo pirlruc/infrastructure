@@ -7,35 +7,35 @@ namespace improc {
         /**
          * @brief General Policy for listing files.
          * 
-         * @tparam path_type      - type considered for paths
-         * @tparam list_file_type - rules to get files in folder
+         * @tparam ListFileType - rules to get files in folder
+         * @tparam PathType     - type considered for paths
          */
-        template <class list_file_type = std::filesystem::recursive_directory_iterator, class path_type = std::filesystem::path>
+        template <class ListFileType = std::filesystem::recursive_directory_iterator, class PathType = std::filesystem::path>
         struct ListFiles
         {
-            static std::vector<path_type> GetFiles(const path_type& folder_path);
+            static std::vector<PathType> GetFiles(const PathType& folder_path);
         };
 
         /**
          * @brief Policy for listing files in folder.
          * 
-         * @tparam path_type      - type considered for paths
+         * @tparam PathType      - type considered for paths
          */
-        template <class path_type = std::filesystem::path>
-        class IMPROC_EXPORTS ListFilesInFolder: public ListFiles<std::filesystem::directory_iterator,path_type> {};
+        template <class PathType = std::filesystem::path>
+        class IMPROC_EXPORTS ListFilesInFolder: public ListFiles<std::filesystem::directory_iterator,PathType> {};
 
         /**
          * @brief Policy for listing files in folder and subfolders.
          * 
-         * @tparam path_type      - type considered for paths
+         * @tparam PathType      - type considered for paths
          */
-        template <class path_type = std::filesystem::path>
-        class IMPROC_EXPORTS ListFilesInFolderAndSubfolders : public ListFiles<std::filesystem::recursive_directory_iterator,path_type> {};
+        template <class PathType = std::filesystem::path>
+        class IMPROC_EXPORTS ListFilesInFolderAndSubfolders : public ListFiles<std::filesystem::recursive_directory_iterator,PathType> {};
 
-        template <class path_type = std::filesystem::path>
+        template <class PathType = std::filesystem::path>
         struct SortFilesByAscendingFilename
         {
-            static std::vector<path_type> Sort(std::vector<path_type> filepaths);
+            static std::vector<PathType> Sort(std::vector<PathType> filepaths);
         };
     }
 }

@@ -1,16 +1,16 @@
 /**
- * @brief Read <key_type> element in json
+ * @brief Read <KeyType> element in json
  * 
- * @tparam key_type 
+ * @tparam KeyType 
  * @param json_elem 
- * @return key_type 
+ * @return KeyType 
  */
-template<typename key_type>
-key_type improc::jsonfile::ReadElement(const Json::Value& json_elem)
+template<typename KeyType>
+KeyType improc::jsonfile::ReadElement(const Json::Value& json_elem)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::critical
-                      , "ERROR_04: Parsing not defined for element {}.",typeid(key_type).name() );
+                      , "ERROR_04: Parsing not defined for element {}.",typeid(KeyType).name() );
     throw improc::not_supported_data_type();
 }
 
