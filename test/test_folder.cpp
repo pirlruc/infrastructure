@@ -76,16 +76,6 @@ TEST(Folder,TestSortFilesByFilename) {
     EXPECT_STREQ(files[3].filename().c_str(),"test_3.txt");
 }
 
-TEST(Folder,TestNoSortingPolicy) {
-    improc::Folder folder_exists {"../../test/data/test"};
-    std::vector<std::filesystem::path> files        = folder_exists.GetFilesInFolderAndSubfolders();
-    std::vector<std::filesystem::path> sorted_files = improc::folder::NoSorting().Sort(files);
-    for (size_t file_idx = 0; file_idx < files.size(); file_idx++)
-    {
-        EXPECT_STREQ(sorted_files[file_idx].filename().c_str(),files[file_idx].filename().c_str());
-    }
-}
-
 TEST(Folder,TestSortFilesByAscendingFilenamePolicy) {
     improc::Folder folder_exists {"../../test/data/test"};
     std::vector<std::filesystem::path> files        = folder_exists.GetFilesInFolderAndSubfolders();

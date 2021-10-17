@@ -42,7 +42,6 @@ void improc::Folder::set_folder_path(const std::string& folder_path)
 /**
  * @brief Obtain list of files in a folder
  * 
- * @param folder_path
  * @return std::vector<std::filesystem::path> - list of files in folder 
  */
 std::vector<std::filesystem::path> improc::Folder::GetFilesInFolder() const
@@ -57,7 +56,6 @@ std::vector<std::filesystem::path> improc::Folder::GetFilesInFolder() const
 /**
  * @brief Obtain list of files in a folder and subfolders
  * 
- * @param folder_path
  * @return std::vector<std::filesystem::path> - list of files in folder and subfolders
  */
 std::vector<std::filesystem::path> improc::Folder::GetFilesInFolderAndSubfolders() const
@@ -85,9 +83,9 @@ inline bool improc::Folder::IsFolder(const std::string& folder_path)
 }
 
 /**
- * @brief 
+ * @brief Sort files by ascending filename.
  * 
- * @param  files 
+ * @param filepaths 
  * @return std::vector<std::filesystem::path> 
  */
 std::vector<std::filesystem::path> improc::Folder::SortFilesByAscendingFilename(const std::vector<std::filesystem::path>& filepaths)

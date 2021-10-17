@@ -31,7 +31,6 @@ namespace improc {
             static bool                                 IsFolder(const std::string& folder_path);
             static std::vector<std::filesystem::path>   SortFilesByAscendingFilename(const std::vector<std::filesystem::path>& filepaths);
     };
-
 }
 
 #endif

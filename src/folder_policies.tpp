@@ -27,19 +27,6 @@ std::vector<path_type> improc::folder::ListFiles<list_file_type,path_type>::GetF
 }
 
 /**
- * @brief Do not sort files.
- * 
- * @tparam path_type - can be either std::string or std::filesystem::path
- * @param  filepaths 
- * @return std::vector<path_type> 
- */
-template <class path_type>
-std::vector<path_type> improc::folder::NoSorting<path_type>::Sort(const std::vector<path_type>& filepaths) 
-{
-    return std::move(filepaths);
-}
-
-/**
  * @brief Sort files by ascending filename.
  * 
  * @tparam path_type - can be either std::string or std::filesystem::path
