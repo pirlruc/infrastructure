@@ -18,6 +18,15 @@ namespace improc {
         }
     };
 
+    class not_found_in_factory : public std::exception
+    {
+        public:
+            const char* what() const throw()
+            {
+                return "Unknown object type passed to factory.";
+            }
+    };
+
     class invalid_filepath: public std::exception {
     public:
         virtual const char* what() const throw() {
