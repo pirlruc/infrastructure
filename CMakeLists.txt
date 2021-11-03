@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.14-3.18)
 
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install")
+
 if(NOT DEFINED IMPROC_SUPERPROJECT_VERSION)
   set(IMPROC_SUPERPROJECT_VERSION 1.0.0)
 endif()
@@ -44,12 +46,19 @@ FetchContent_Declare(
 set(JSONCPP_WITH_TESTS    OFF)
 set(JSONCPP_WITH_EXAMPLE  OFF)
 FetchContent_MakeAvailable(jsoncpp)
-# Already added in jsoncpp CMakeLists
-# target_include_directories(jsoncpp_lib INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/jsoncpp/include>
-#                                                                    $<INSTALL_INTERFACE:include> )
+
+# BOOST
+FetchContent_Declare(
+  boost
+  GIT_REPOSITORY https://github.com/boostorg/boost
+  GIT_TAG        boost-1.77.0
+  SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/boost
+)
+FetchContent_MakeAvailable(boost)
 
 message(STATUS "Build ${PROJECT_NAME} Version: ${PROJECT_VERSION}")
-message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
+message(STATUS "Install Dir: ${CMAKE_INSTALL_PREFIX}")
 
 add_library(
   ${PROJECT_NAME}
@@ -78,8 +87,10 @@ target_include_directories  (${PROJECT_NAME}   INTERFACE $<BUILD_INTERFACE:${PRO
 # Link dependencies
 target_link_libraries       (${PROJECT_NAME}   PRIVATE   spdlog)
 target_link_libraries       (${PROJECT_NAME}   PRIVATE   jsoncpp_lib)
+target_link_libraries       (${PROJECT_NAME}   PRIVATE   boost_algorithm)
 target_link_libraries       (${PROJECT_NAME}   INTERFACE spdlog)
 target_link_libraries       (${PROJECT_NAME}   INTERFACE jsoncpp_lib)
+target_link_libraries       (${PROJECT_NAME}   INTERFACE boost_algorithm)
 
 # Tests configuration
 if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
@@ -88,7 +99,7 @@ if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
 endif()
 
 # Install configuration
-set(${PROJECT_NAME}_libs ${PROJECT_NAME} spdlog jsoncpp_lib)
+set(${PROJECT_NAME}_libs ${PROJECT_NAME} spdlog jsoncpp_lib boost_algorithm)
 install(
   TARGETS     ${${PROJECT_NAME}_libs}
   DESTINATION lib
@@ -96,10 +107,13 @@ install(
 )
 install(FILES   ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE                                  DESTINATION share/licenses/improc/jsoncpp)
 install(FILES   ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE                                   DESTINATION share/licenses/improc/spdlog)
+install(FILES   ${PROJECT_SOURCE_DIR}/external/boost/LICENSE_1_0.txt                            DESTINATION share/licenses/improc/boost)
 
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/file.hpp                    DESTINATION include/improc/infrastructure)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/string.hpp                  DESTINATION include/improc/infrastructure)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_singleton.hpp        DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark_singleton.hpp     DESTINATION include/improc/infrastructure)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_infrastructure.hpp   DESTINATION include/improc/infrastructure)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/file.hpp                    DESTINATION include/improc/infrastructure)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/folder_policies.hpp         DESTINATION include/improc/infrastructure)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/folder.hpp                  DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/jsonfile_parser.hpp         DESTINATION include/improc/infrastructure)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_infrastructure.hpp   DESTINATION include/improc/infrastructure)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_singleton.hpp        DESTINATION include/improc/infrastructure)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/string.hpp                  DESTINATION include/improc/infrastructure)
