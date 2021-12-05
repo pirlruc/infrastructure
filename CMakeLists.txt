@@ -95,7 +95,7 @@ target_link_libraries       (${PROJECT_NAME}   INTERFACE boost_algorithm)
 
 # Tests configuration
 if(IMPROC_WITH_TESTS)
-  add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/test)
+  add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/infrastructure_test)
 endif()
 
 if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
