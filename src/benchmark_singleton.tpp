@@ -33,7 +33,10 @@ improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(const std::shared_
 }
 
 template <typename BenchmarkType>
-void improc::BenchmarkSingleton<BenchmarkType>::AddFieldsToLine() {}
+improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::AddFieldsToLine() 
+{
+    return (*this);
+}
 
 /**
  * @brief Add fields to benchmark line. The line is not written in the benchmark.
@@ -48,22 +51,24 @@ void improc::BenchmarkSingleton<BenchmarkType>::AddFieldsToLine() {}
  */
 template <typename BenchmarkType>
 template<typename Arg, typename ... Args>
-void improc::BenchmarkSingleton<BenchmarkType>::AddFieldsToLine(Arg field_1, Args ... field_n)
+improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::AddFieldsToLine(Arg field_1, Args ... field_n)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Adding field to line..." );
     this->line_msg_ += fmt::format(";{}",std::move(field_1));
     this->AddFieldsToLine(field_n ...);
+    return (*this);
 }
 
 template <typename BenchmarkType>
-void improc::BenchmarkSingleton<BenchmarkType>::WriteFields() 
+improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteFields() 
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Writing fields on benchmark..." );
     this->WriteLine();
+    return (*this);
 }
 
 /**
@@ -77,13 +82,14 @@ void improc::BenchmarkSingleton<BenchmarkType>::WriteFields()
  */
 template <typename BenchmarkType>
 template<typename Arg, typename ... Args>
-void improc::BenchmarkSingleton<BenchmarkType>::WriteFields(Arg field_1, Args ... field_n)
+improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteFields(Arg field_1, Args ... field_n)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Formatting fields to write on benchmark..." );
     this->line_msg_ += fmt::format(";{}",std::move(field_1));
     this->WriteFields(field_n ...);
+    return (*this);
 }
 
 /**
@@ -92,7 +98,7 @@ void improc::BenchmarkSingleton<BenchmarkType>::WriteFields(Arg field_1, Args ..
  * @tparam BenchmarkType 
  */
 template <typename BenchmarkType>
-void improc::BenchmarkSingleton<BenchmarkType>::WriteLine()
+improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteLine()
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
@@ -107,4 +113,5 @@ void improc::BenchmarkSingleton<BenchmarkType>::WriteLine()
         this->data()->critical(this->line_msg_);
     }
     this->line_msg_.clear();
+    return (*this);
 }

@@ -29,15 +29,15 @@ namespace improc {
             void operator=(const BenchmarkSingleton&  that) = delete;
             void operator=(const BenchmarkSingleton&& that) = delete;
 
-            void                                AddFieldsToLine ();
-            void                                WriteFields     ();
-            void                                WriteLine       ();
+            BenchmarkSingleton&                 AddFieldsToLine ();
+            BenchmarkSingleton&                 WriteFields     ();
+            BenchmarkSingleton&                 WriteLine       ();
 
             template<typename Arg, typename ... Args>
-            void                                AddFieldsToLine (Arg field_1, Args ... field_n);
+            BenchmarkSingleton&                 AddFieldsToLine (Arg field_1, Args ... field_n);
 
             template<typename Arg, typename ... Args>
-            void                                WriteFields     (Arg field_1, Args ... field_n);
+            BenchmarkSingleton&                 WriteFields     (Arg field_1, Args ... field_n);
     };
 }
 
