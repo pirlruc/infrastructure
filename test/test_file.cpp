@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <improc/infrastructure/file.hpp>
-#include <improc/infrastructure/jsonfile_parser.hpp>
+#include <improc/infrastructure/json_parser.hpp>
 
 TEST(File,TestEmptyFileConstructor) {
     improc::File file_empty {};
@@ -72,16 +72,16 @@ TEST(File,TestRemovingNonExistingFile) {
     std::ofstream("file_tst.txt");
     improc::File file_not_exists {"file_tst.txt"};
     file_not_exists.Remove();
-    EXPECT_NO_THROW(file_not_exists.Remove());
+    EXPECT_FALSE(file_not_exists.Remove());
     EXPECT_FALSE(file_not_exists.Exists());
-    EXPECT_NO_THROW(improc::File::Remove("file_tst.txt"));
+    EXPECT_FALSE(improc::File::Remove("file_tst.txt"));
 }
 
 TEST(File,TestRemovingExistingFile) {
     std::filesystem::copy("../../test/data/test.json","./toremove.json");
     improc::File file_exists {"./toremove.json"};
     EXPECT_TRUE(file_exists.Exists());
-    EXPECT_NO_THROW(file_exists.Remove());
+    EXPECT_TRUE(file_exists.Remove());
     EXPECT_FALSE(file_exists.Exists());
 }
 
@@ -158,26 +158,26 @@ TEST(JsonFile,TestReadingNonJsonFile) {
 
 TEST(JsonFile,TestReadingNonStringContent) {
     improc::JsonFile file_exists {"../../test/data/test.json"};
-    EXPECT_THROW(improc::jsonfile::ReadElement<int>(file_exists.Read()),improc::not_supported_data_type);
+    EXPECT_THROW(improc::json::ReadElement<int>(file_exists.Read()),improc::not_supported_data_type);
 }
 
 TEST(JsonFile,TestReadingStringContent) {
     improc::JsonFile file_exists {"../../test/data/test.json"};
-    std::string content = improc::jsonfile::ReadElement<std::string>(file_exists.Read()["content"]);
+    std::string content = improc::json::ReadElement<std::string>(file_exists.Read()["content"]);
     EXPECT_FALSE(content.empty());
     EXPECT_STREQ(content.c_str(),"test");
 }
 
 TEST(JsonFile,TestReadingStringElemAsArrayContent) {
     improc::JsonFile file_exists {"../../test/data/test.json"};
-    std::vector<std::string> content = improc::jsonfile::ReadVector<std::string>(file_exists.Read()["content"]);
+    std::vector<std::string> content = improc::json::ReadVector<std::string>(file_exists.Read()["content"]);
     EXPECT_EQ(content.size(),1);
     EXPECT_STREQ(content[0].c_str(),"test");
 }
 
 TEST(JsonFile,TestReadingStringArrayContent) {
     improc::JsonFile file_exists {"../../test/data/test.json"};
-    std::vector<std::string> content = improc::jsonfile::ReadVector<std::string>(file_exists.Read()["content_array"]);
+    std::vector<std::string> content = improc::json::ReadVector<std::string>(file_exists.Read()["content_array"]);
     EXPECT_EQ(content.size(),2);
     EXPECT_STREQ(content[0].c_str(),"test_1");
     EXPECT_STREQ(content[1].c_str(),"test_2");

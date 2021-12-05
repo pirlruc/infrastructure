@@ -3,8 +3,10 @@
 
 #include <improc/improc_defs.hpp>
 #include <improc/infrastructure/logger_infrastructure.hpp>
+#include <improc/exception.hpp>
 
 #include <string>
+#include <json/json.h>
 #include <boost/algorithm/string.hpp>
 
 namespace improc {
@@ -21,14 +23,32 @@ namespace improc {
             String();
             String(const std::string& str_data);
 
-            void                        set_string(const std::string& str_data);
+            String&                     set_string(const std::string& str_data);
             std::string                 get_data() const;
 
-            void                        ToLower();
-            void                        ToUpper();
+            String&                     ToLower();
+            String&                     ToUpper();
 
             static const std::string    ToLower(const std::string& upper_str);
             static const std::string    ToUpper(const std::string& lower_str);
+    };
+
+
+    class IMPROC_EXPORTS JsonString
+    {
+        private:
+            std::unique_ptr<Json::CharReader*>  char_reader_;
+            std::string                         json_string_;
+
+        public:
+            JsonString();
+            JsonString(const std::string& json_string);
+
+            JsonString&                         set_json_string(const std::string& json_string);
+
+            Json::Value                         Parse() const;
+
+            static Json::Value                  Parse(const std::string& json_string);
     };
 }
 

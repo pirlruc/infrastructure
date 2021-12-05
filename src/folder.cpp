@@ -24,7 +24,7 @@ improc::Folder::Folder(const std::string& folder_path)
  * 
  * @param folder_path
  */
-void improc::Folder::set_folder_path(const std::string& folder_path)
+improc::Folder& improc::Folder::set_folder_path(const std::string& folder_path)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
@@ -37,6 +37,7 @@ void improc::Folder::set_folder_path(const std::string& folder_path)
         throw improc::invalid_folder_path();
     }
     this->folder_path_ = std::filesystem::path(std::move(folder_path));
+    return (*this);
 }
 
 /**

@@ -24,7 +24,7 @@ improc::File::File(const std::string& filepath)
  * 
  * @param filepath 
  */
-void improc::File::set_filepath(const std::string& filepath)
+improc::File& improc::File::set_filepath(const std::string& filepath)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
@@ -37,6 +37,7 @@ void improc::File::set_filepath(const std::string& filepath)
         throw improc::invalid_filepath();
     }
     this->filepath_ = std::filesystem::path(std::move(filepath));
+    return (*this);
 }
 
 /**
@@ -91,10 +92,12 @@ std::string improc::File::Read() const
 /**
  * @brief Remove a file
  * 
+ * @return true if the file was deleted
+ * @return false if the file did not exist
  */
-void improc::File::Remove() const
+bool improc::File::Remove() const
 {
-    std::filesystem::remove(this->filepath_);
+    return std::filesystem::remove(this->filepath_);
 }
 
 /**
@@ -145,12 +148,12 @@ std::string improc::File::Read(const std::string& filepath)
  * 
  * @param filepath 
  */
-void improc::File::Remove(const std::string& filepath)
+bool improc::File::Remove(const std::string& filepath)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
                       , "Removing filepath {}...",filepath );
-    std::filesystem::remove(std::move(filepath));
+    return std::filesystem::remove(std::move(filepath));
 }
 
 /**
@@ -207,7 +210,7 @@ improc::JsonFile::JsonFile(const std::string& filepath)
  * 
  * @param filepath 
  */
-void improc::JsonFile::set_filepath(const std::string& filepath)
+improc::JsonFile& improc::JsonFile::set_filepath(const std::string& filepath)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
@@ -221,6 +224,7 @@ void improc::JsonFile::set_filepath(const std::string& filepath)
         throw improc::invalid_filepath();
     }
     this->File::operator=(std::move(json_file));
+    return (*this);
 }
 
 /**
@@ -253,25 +257,9 @@ Json::Value improc::JsonFile::Read(const std::string& filepath)
         throw improc::invalid_filepath();
     }
 
-    std::string json_content = json_file.Read();
-    
-    Json::Value             json_root;
-    Json::CharReaderBuilder json_char_builder;
- 
-    std::unique_ptr<Json::CharReader> json_reader(json_char_builder.newCharReader());
-    std::string error;
-    bool is_parse_successful = json_reader->parse( json_content.c_str()
-                                                 , json_content.c_str() + json_content.length()
-                                                 , &json_root
-                                                 , &error );
- 
-    if (is_parse_successful == false) {
-        SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                          , spdlog::level::err
-                          , "ERROR_03: Error parsing json file {}: {}.",json_file.get_filepath(),error );
-        throw improc::file_processing_error();
-    }
-    return json_root;
+    std::string json_content_str = json_file.Read();
+    Json::Value json_content     = improc::JsonString::Parse(json_content_str);
+    return json_content;
 }
 
 /**

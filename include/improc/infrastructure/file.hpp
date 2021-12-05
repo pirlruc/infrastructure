@@ -3,6 +3,7 @@
 
 #include <improc/improc_defs.hpp>
 #include <improc/exception.hpp>
+#include <improc/infrastructure/string.hpp>
 #include <improc/infrastructure/logger_infrastructure.hpp>
 
 #include <json/json.h>
@@ -26,18 +27,18 @@ namespace improc {
             File();
             File(const std::string& filepath);
 
-            void                    set_filepath(const std::string& filepath);
+            File&                   set_filepath(const std::string& filepath);
             
             std::string             get_filepath () const;
             std::string             get_filename () const;
             std::string             get_extension() const;
 
             std::string             Read()   const;
-            void                    Remove() const;
+            bool                    Remove() const;
             bool                    Exists() const;
 
             static std::string      Read    (const std::string& filepath);
-            static void             Remove  (const std::string& filepath);
+            static bool             Remove  (const std::string& filepath);
             static bool             Exists  (const std::string& filepath);
             static bool             IsFile  (const std::string& filepath);
     };
@@ -52,7 +53,7 @@ namespace improc {
             JsonFile();
             JsonFile(const std::string& filepath);
 
-            void                    set_filepath(const std::string& filepath);
+            JsonFile&               set_filepath(const std::string& filepath);
 
             Json::Value             Read() const;
             static Json::Value      Read(const std::string& filepath);

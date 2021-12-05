@@ -6,7 +6,7 @@
  * @return KeyType 
  */
 template<typename KeyType>
-KeyType improc::jsonfile::ReadElement(const Json::Value& json_elem)
+KeyType improc::json::ReadElement(const Json::Value& json_elem)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::critical
@@ -22,7 +22,7 @@ KeyType improc::jsonfile::ReadElement(const Json::Value& json_elem)
  * @return std::string 
  */
 template<>
-inline std::string improc::jsonfile::ReadElement(const Json::Value& json_elem)
+inline std::string improc::json::ReadElement(const Json::Value& json_elem)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
@@ -32,7 +32,7 @@ inline std::string improc::jsonfile::ReadElement(const Json::Value& json_elem)
 
 
 template<typename KeyType>
-std::vector<KeyType> improc::jsonfile::ReadVector(const Json::Value& json_vector)
+std::vector<KeyType> improc::json::ReadVector(const Json::Value& json_vector)
 {
     SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
                       , spdlog::level::trace
@@ -42,12 +42,12 @@ std::vector<KeyType> improc::jsonfile::ReadVector(const Json::Value& json_vector
     {
         for (Json::Value::const_iterator elem_iter = json_vector.begin(); elem_iter != json_vector.end(); ++elem_iter)
         {
-            list_elems.push_back(improc::jsonfile::ReadElement<KeyType>(*elem_iter));
+            list_elems.push_back(improc::json::ReadElement<KeyType>(*elem_iter));
         }
     }
     else
     {
-        list_elems.push_back(improc::jsonfile::ReadElement<KeyType>(json_vector));
+        list_elems.push_back(improc::json::ReadElement<KeyType>(json_vector));
     }
     return std::move(list_elems);
 }

@@ -23,7 +23,7 @@ namespace improc {
             Folder();
             Folder(const std::string& folder_path);
 
-            void                                set_folder_path(const std::string& folder_path);
+            Folder&                             set_folder_path(const std::string& folder_path);
 
             std::vector<std::filesystem::path>  GetFilesInFolder()              const;
             std::vector<std::filesystem::path>  GetFilesInFolderAndSubfolders() const;

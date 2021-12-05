@@ -20,8 +20,9 @@ if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"      CACHE PATH "Library output dir.")
   set(CMAKE_PDB_OUTPUT_DIRECTORY     "${CMAKE_BINARY_DIR}/bin"      CACHE PATH "PDB (MSVC debug symbol)output dir.")
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"      CACHE PATH "Executable/dll output dir.")
-  option(BUILD_SHARED_LIBS           "Build using shared libraries" ON)
   set(CMAKE_DEBUG_POSTFIX d)
+  option(BUILD_SHARED_LIBS           "Build using shared libraries" ON)
+  option(IMPROC_WITH_TESTS 			     "Building library with tests"  ON)
 endif()
 
 # Add external dependencies
@@ -93,8 +94,11 @@ target_link_libraries       (${PROJECT_NAME}   INTERFACE jsoncpp_lib)
 target_link_libraries       (${PROJECT_NAME}   INTERFACE boost_algorithm)
 
 # Tests configuration
-if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
+if(IMPROC_WITH_TESTS)
   add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/test)
+endif()
+
+if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
   add_subdirectory(${PROJECT_SOURCE_DIR}/version  ${CMAKE_BINARY_DIR}/version)
 endif()
 
@@ -113,7 +117,7 @@ install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark_si
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/file.hpp                    DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/folder_policies.hpp         DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/folder.hpp                  DESTINATION include/improc/infrastructure)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/jsonfile_parser.hpp         DESTINATION include/improc/infrastructure)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/json_parser.hpp             DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_infrastructure.hpp   DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_singleton.hpp        DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/string.hpp                  DESTINATION include/improc/infrastructure)

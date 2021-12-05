@@ -48,6 +48,13 @@ namespace improc {
         }
     };
 
+    class json_parsing_error: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Error parsing json structure";
+        }
+    };
+
     class not_supported_data_type: public std::exception {
     public:
         virtual const char* what() const throw() {
