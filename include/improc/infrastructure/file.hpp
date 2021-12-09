@@ -13,7 +13,8 @@
 #include <sys/stat.h>
 #include <filesystem>
 
-namespace improc {
+namespace improc 
+{
     /**
      * @brief File object and utilities
      * 

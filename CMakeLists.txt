@@ -120,4 +120,5 @@ install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/folder.hpp  
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/json_parser.hpp             DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_infrastructure.hpp   DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_singleton.hpp        DESTINATION include/improc/infrastructure)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/math_utils.hpp              DESTINATION include/improc/infrastructure)
 install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/string.hpp                  DESTINATION include/improc/infrastructure)

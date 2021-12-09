@@ -6,7 +6,8 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-namespace improc {
+namespace improc 
+{
     /**
      * @brief Singleton template for loggers
      * 

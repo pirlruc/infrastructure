@@ -6,7 +6,8 @@
 
 #include <json/json.h>
 
-namespace improc {
+namespace improc 
+{
     namespace json
     {
         template<typename KeyType>

@@ -9,7 +9,8 @@
 #include <json/json.h>
 #include <boost/algorithm/string.hpp>
 
-namespace improc {
+namespace improc 
+{
     /**
      * @brief String object and utilities
      * 

@@ -4,7 +4,8 @@
 #include <improc/improc_defs.hpp>
 #include <improc/infrastructure/logger_singleton.hpp>
 
-namespace improc {
+namespace improc 
+{
     /**
      * @brief Logger used for infrastructure library
      * 

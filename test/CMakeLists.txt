@@ -20,12 +20,19 @@ mark_as_advanced(
 set_target_properties(gtest      PROPERTIES FOLDER extern)
 set_target_properties(gtest_main PROPERTIES FOLDER extern)
 
+# Create executable file to get folder with test
+configure_file(
+  ${PROJECT_SOURCE_DIR}/test/improc_infrastructure_test_config.hpp.in 
+  ${PROJECT_SOURCE_DIR}/test/${PROJECT_NAME}_test_config.hpp
+)
+
 add_executable(
   ${PROJECT_NAME}_test
     
   ${PROJECT_SOURCE_DIR}/test/test_file.cpp
   ${PROJECT_SOURCE_DIR}/test/test_folder.cpp
   ${PROJECT_SOURCE_DIR}/test/test_string.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_math_utils.cpp
   ${PROJECT_SOURCE_DIR}/test/test_benchmark.cpp
   ${PROJECT_SOURCE_DIR}/test/test_logger.cpp
 )
@@ -34,6 +41,8 @@ set_target_properties(${PROJECT_NAME}_test PROPERTIES CXX_STANDARD_REQUIRED  TRU
 set_target_properties(${PROJECT_NAME}_test PROPERTIES LINKER_LANGUAGE        CXX)
 set_target_properties(${PROJECT_NAME}_test PROPERTIES FOLDER                 ${PROJECT_SOURCE_DIR}/test)
 set_target_properties(${PROJECT_NAME}_test PROPERTIES DEBUG_POSTFIX          ${CMAKE_DEBUG_POSTFIX})
+
+target_include_directories(${PROJECT_NAME}_test   PRIVATE   ${PROJECT_SOURCE_DIR}/test)
 
 target_link_libraries(${PROJECT_NAME}_test  PRIVATE ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}_test  PRIVATE gtest gtest_main)

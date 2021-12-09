@@ -1,7 +1,8 @@
 #ifndef IMPROC_INFRASTRUCTURE_FOLDER_POLICIES_HPP
 #define IMPROC_INFRASTRUCTURE_FOLDER_POLICIES_HPP
 
-namespace improc {
+namespace improc 
+{
     namespace folder 
     {
         /**

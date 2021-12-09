@@ -5,7 +5,8 @@
 #include <improc/infrastructure/logger_singleton.hpp>
 #include <improc/infrastructure/logger_infrastructure.hpp>
 
-namespace improc {
+namespace improc 
+{
     /**
      * @brief Singleton template for benchmarks
      * It considers a specific pattern to create the information to write on the

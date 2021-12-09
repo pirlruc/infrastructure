@@ -9,7 +9,8 @@
 
 #include <filesystem>
 
-namespace improc {
+namespace improc 
+{
     /**
      * @brief Folder object and utilities
      * 
