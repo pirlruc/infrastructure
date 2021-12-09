@@ -20,9 +20,9 @@ mark_as_advanced(
 set_target_properties(gtest      PROPERTIES FOLDER extern)
 set_target_properties(gtest_main PROPERTIES FOLDER extern)
 
-# Create executable file to get folder with test
+# Create file to get folder with test
 configure_file(
-  ${PROJECT_SOURCE_DIR}/test/improc_infrastructure_test_config.hpp.in 
+  ${PROJECT_SOURCE_DIR}/test/${PROJECT_NAME}_test_config.hpp.in 
   ${PROJECT_SOURCE_DIR}/test/${PROJECT_NAME}_test_config.hpp
 )
 

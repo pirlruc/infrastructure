@@ -15,7 +15,7 @@ set_target_properties     (${PROJECT_NAME}_version PROPERTIES CXX_STANDARD      
 set_target_properties     (${PROJECT_NAME}_version PROPERTIES CXX_STANDARD_REQUIRED  TRUE)
 set_target_properties     (${PROJECT_NAME}_version PROPERTIES DEBUG_POSTFIX          ${CMAKE_DEBUG_POSTFIX})
 
-target_include_directories(${PROJECT_NAME}_version PRIVATE  ${PROJECT_SOURCE_DIR}/version)
+target_include_directories(${PROJECT_NAME}_version PRIVATE    ${PROJECT_SOURCE_DIR}/version)
 
 # Install configuration
 install(TARGETS ${PROJECT_NAME}_version                                   DESTINATION bin)
