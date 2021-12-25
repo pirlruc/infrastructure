@@ -2,6 +2,8 @@
 
 #include <improc/infrastructure/logger_singleton.hpp>
 
+#include <spdlog/sinks/stdout_color_sinks.h>
+
 class TestLoggerReference : public improc::LoggerSingleton<TestLoggerReference>
 {
     friend std::shared_ptr<TestLoggerReference> LoggerSingleton::get(const std::string& logger_name);

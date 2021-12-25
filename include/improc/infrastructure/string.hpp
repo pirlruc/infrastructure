@@ -30,8 +30,8 @@ namespace improc
             String&                     ToLower();
             String&                     ToUpper();
 
-            static const std::string    ToLower(const std::string& upper_str);
-            static const std::string    ToUpper(const std::string& lower_str);
+            static std::string          ToLower(const std::string& upper_str);
+            static std::string          ToUpper(const std::string& lower_str);
     };
 
 

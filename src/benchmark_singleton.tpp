@@ -8,9 +8,8 @@ template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(std::shared_ptr<spdlog::logger>&& benchmark_logger) 
 : LoggerSingleton<BenchmarkType>(std::move(benchmark_logger)) 
 {
-    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                      , spdlog::level::trace
-                      , "Creating benchmark logger..." );
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Creating benchmark logger..." );
     this->data()->set_level(spdlog::level::critical);
     this->data()->set_pattern("%n;%v");
 }
@@ -25,9 +24,8 @@ template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(const std::shared_ptr<spdlog::logger>& benchmark_logger) 
 : LoggerSingleton<BenchmarkType>(std::move(benchmark_logger)) 
 {
-    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                      , spdlog::level::trace
-                      , "Creating benchmark logger..." );
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Creating benchmark logger..." );
     this->data()->set_level(spdlog::level::critical);
     this->data()->set_pattern("%n;%v");
 }
@@ -53,9 +51,8 @@ template <typename BenchmarkType>
 template<typename Arg, typename ... Args>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::AddFieldsToLine(Arg field_1, Args ... field_n)
 {
-    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                      , spdlog::level::trace
-                      , "Adding field to line..." );
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Adding field to line..." );
     this->line_msg_ += fmt::format(";{}",std::move(field_1));
     this->AddFieldsToLine(field_n ...);
     return (*this);
@@ -64,9 +61,8 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteFields() 
 {
-    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                      , spdlog::level::trace
-                      , "Writing fields on benchmark..." );
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Writing fields on benchmark..." );
     this->WriteLine();
     return (*this);
 }
@@ -84,9 +80,8 @@ template <typename BenchmarkType>
 template<typename Arg, typename ... Args>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteFields(Arg field_1, Args ... field_n)
 {
-    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                      , spdlog::level::trace
-                      , "Formatting fields to write on benchmark..." );
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Formatting fields to write on benchmark..." );
     this->line_msg_ += fmt::format(";{}",std::move(field_1));
     this->WriteFields(field_n ...);
     return (*this);
@@ -100,9 +95,8 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteLine()
 {
-    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                      , spdlog::level::trace
-                      , "Writing line on benchmark..." );
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Writing line on benchmark..." );
     if (this->line_msg_.size() > 0)
     {
         // Remove first character since there is an additional ";" at the beginning

@@ -23,9 +23,9 @@ improc::LoggerSingleton<LoggerType>::LoggerSingleton(const std::shared_ptr<spdlo
  * @return std::shared_ptr<spdlog::logger> 
  */
 template<typename LoggerType>
-std::shared_ptr<spdlog::logger> improc::LoggerSingleton<LoggerType>::data()
+std::shared_ptr<spdlog::logger> improc::LoggerSingleton<LoggerType>::data() const
 {
-    SPDLOG_LOGGER_CALL(spdlog::default_logger(),spdlog::level::trace,"Obtaining spdlog logger...");
+    SPDLOG_LOGGER_TRACE(spdlog::default_logger(),"Obtaining default spdlog logger...");
     return this->data_;
 }
 
@@ -42,7 +42,7 @@ std::shared_ptr<spdlog::logger> improc::LoggerSingleton<LoggerType>::data()
 template<typename LoggerType> 
 std::shared_ptr<LoggerType> improc::LoggerSingleton<LoggerType>::get(const std::string& logger_name)
 {
-    SPDLOG_LOGGER_CALL(spdlog::default_logger(),spdlog::level::trace,"Creating logger...");
+    SPDLOG_LOGGER_TRACE(spdlog::default_logger(),"Creating logger...");
     static std::shared_ptr<LoggerType> singleton = nullptr;
     if (singleton == nullptr)
     {
@@ -56,7 +56,7 @@ std::shared_ptr<LoggerType> improc::LoggerSingleton<LoggerType>::get(const std::
             logger = spdlog::get(logger_name);
             if (logger == nullptr)
             {
-                logger = spdlog::stdout_color_mt(std::move(logger_name));
+                logger = spdlog::stdout_logger_mt(std::move(logger_name));
                 logger->set_level(spdlog::level::debug);
                 logger->set_pattern("[%Y-%m-%d %H:%M:%S.%f] [%n] [%^%-8l%$] [%!:%@] %v");
             }

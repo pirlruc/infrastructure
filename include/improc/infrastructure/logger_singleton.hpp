@@ -4,7 +4,7 @@
 #include <improc/improc_defs.hpp>
 
 #include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/stdout_sinks.h>
 
 namespace improc 
 {
@@ -30,7 +30,7 @@ namespace improc
             void operator= (const LoggerSingleton&& that) = delete;
 
             static std::shared_ptr<LoggerType>  get(const std::string& logger_name = "");
-            std::shared_ptr<spdlog::logger>     data();
+            std::shared_ptr<spdlog::logger>     data() const;
     };
 }
 

@@ -11,9 +11,8 @@
 template <class ListFileType, class PathType>
 std::vector<PathType> improc::folder::ListFiles<ListFileType,PathType>::GetFiles(const PathType& folder_path)
 {
-    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                      , spdlog::level::trace
-                      , "Obtain files in folder {}...", std::filesystem::path(folder_path).string() );
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Obtain files in folder {}...", std::filesystem::path(folder_path).string() );
     std::vector<PathType> files {};
     for (auto& folder_entry : ListFileType(folder_path))
     {
@@ -36,18 +35,16 @@ std::vector<PathType> improc::folder::ListFiles<ListFileType,PathType>::GetFiles
 template <class PathType>
 std::vector<PathType> improc::folder::SortFilesByAscendingFilename<PathType>::Sort(std::vector<PathType> filepaths)
 {
-    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                      , spdlog::level::critical
-                      , "ERROR_01: File sorting not supported for data type {}.",typeid(PathType).name() );
+    SPDLOG_LOGGER_ERROR ( improc::InfrastructureLogger::get()->data()
+                        , "ERROR_01: File sorting not supported for data type {}.",typeid(PathType).name() );
     throw improc::not_supported_data_type();
 }
 
 template <>
 std::vector<std::filesystem::path> improc::folder::SortFilesByAscendingFilename<std::filesystem::path>::Sort(std::vector<std::filesystem::path> filepaths)
 {
-    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                      , spdlog::level::trace
-                      , "Sorting files by ascending filename..." );
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Sorting files by ascending filename..." );
     std::sort   ( filepaths.begin()
                 , filepaths.end()
                 , [] (const std::filesystem::path& left_filepath, const std::filesystem::path& right_filepath) 
@@ -61,9 +58,8 @@ std::vector<std::filesystem::path> improc::folder::SortFilesByAscendingFilename<
 template <>
 std::vector<std::string> improc::folder::SortFilesByAscendingFilename<std::string>::Sort(std::vector<std::string> filepaths)
 {
-    SPDLOG_LOGGER_CALL( improc::InfrastructureLogger::get()->data()
-                      , spdlog::level::trace
-                      , "Sorting files by ascending filename..." );
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Sorting files by ascending filename..." );
     std::sort   ( filepaths.begin()
                 , filepaths.end()
                 , [] (const std::filesystem::path& left_filepath, const std::filesystem::path& right_filepath) 

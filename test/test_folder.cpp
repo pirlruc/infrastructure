@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <improc/infrastructure/folder.hpp>
+#include <improc/infrastructure/filesystem/folder.hpp>
 
 #include <improc_infrastructure_test_config.hpp>
 

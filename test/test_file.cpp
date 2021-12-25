@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <improc/infrastructure/file.hpp>
+#include <improc/infrastructure/filesystem/file.hpp>
 #include <improc/infrastructure/json_parser.hpp>
 
 #include <improc_infrastructure_test_config.hpp>

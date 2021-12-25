@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <improc/infrastructure/math_utils.hpp>
+#include <improc/infrastructure/math.hpp>
 
 TEST(MathUtils,TestEven) {
     EXPECT_TRUE(improc::math::IsEven<int>(2));

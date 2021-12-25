@@ -11,7 +11,8 @@ namespace improc
          * @tparam ListFileType - rules to get files in folder
          * @tparam PathType     - type considered for paths
          */
-        template <class ListFileType = std::filesystem::recursive_directory_iterator, class PathType = std::filesystem::path>
+        template    < class ListFileType    = std::filesystem::recursive_directory_iterator
+                    , class PathType        = std::filesystem::path>
         struct ListFiles
         {
             static std::vector<PathType> GetFiles(const PathType& folder_path);
