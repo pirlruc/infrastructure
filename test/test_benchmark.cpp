@@ -12,6 +12,13 @@ class TestBenchmarkReference : public improc::BenchmarkSingleton<TestBenchmarkRe
         TestBenchmarkReference(std::shared_ptr<spdlog::logger>&& logger) : BenchmarkSingleton(logger) {}
 };
 
+class TestBenchmarkReferenceKeys : public improc::BenchmarkSingleton<TestBenchmarkReferenceKeys>
+{
+    friend std::shared_ptr<TestBenchmarkReferenceKeys> LoggerSingleton::get(const std::string& logger_name);
+    private:
+        TestBenchmarkReferenceKeys(std::shared_ptr<spdlog::logger>&& logger) : BenchmarkSingleton(logger) {}
+};
+
 class TestBenchmarkMove : public improc::BenchmarkSingleton<TestBenchmarkMove>
 {
     friend std::shared_ptr<TestBenchmarkMove> LoggerSingleton::get(const std::string& logger_name);
@@ -26,71 +33,56 @@ class TestBenchmarkDiff : public improc::BenchmarkSingleton<TestBenchmarkDiff>
         TestBenchmarkDiff(std::shared_ptr<spdlog::logger>&& logger) : BenchmarkSingleton(std::move(logger)) {}
 };
 
-class TestBenchmarkAddSame : public improc::BenchmarkSingleton<TestBenchmarkAddSame>
-{
-    friend std::shared_ptr<TestBenchmarkAddSame> LoggerSingleton::get(const std::string& logger_name);
-    private:
-        TestBenchmarkAddSame(std::shared_ptr<spdlog::logger>&& logger) : BenchmarkSingleton(std::move(logger)) {}
-};
-
-class TestBenchmarkAddDiff : public improc::BenchmarkSingleton<TestBenchmarkAddDiff>
-{
-    friend std::shared_ptr<TestBenchmarkAddDiff> LoggerSingleton::get(const std::string& logger_name);
-    private:
-        TestBenchmarkAddDiff(std::shared_ptr<spdlog::logger>&& logger) : BenchmarkSingleton(std::move(logger)) {}
-};
-
 TEST(Benchmark,TestBenchmarkLevelAndPattern) {
     improc::File::Remove("./benchmark_1.csv");
     spdlog::basic_logger_st("benchmark1","./benchmark_1.csv");
     TestBenchmarkReference::get("benchmark1")->WriteLine();
     TestBenchmarkReference::get()->data()->flush();
     EXPECT_EQ(TestBenchmarkReference::get()->data()->level(),spdlog::level::critical);
-    EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark1;\n");
+    EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark1;\nbenchmark1;\n");
+}
+
+TEST(Benchmark,TestBenchmarkKeys) {
+    improc::File::Remove("./benchmark_1.csv");
+    spdlog::basic_logger_st("benchmark2","./benchmark_1.csv");
+    std::unordered_set<std::string> keys {"test1","test2"};
+    TestBenchmarkReferenceKeys::get("benchmark2")->AddKeys(keys);
+    TestBenchmarkReferenceKeys::get()->SetKeyContent("test1",true);
+    TestBenchmarkReferenceKeys::get()->WriteLine();
+    TestBenchmarkReferenceKeys::get()->data()->flush();
+    EXPECT_EQ(TestBenchmarkReferenceKeys::get()->data()->level(),spdlog::level::critical);
+    EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark2;test1;test2\nbenchmark2;true;\n");
+    EXPECT_THROW(TestBenchmarkReferenceKeys::get()->AddKeys(keys),improc::benchmark_keys_cannot_change);
 }
 
 TEST(Benchmark,TestBenchmarkWriteSameTypeFields) {
     improc::File::Remove("./benchmark_1.csv");
-    spdlog::basic_logger_st("benchmark2","./benchmark_1.csv");
+    spdlog::basic_logger_st("benchmark3","./benchmark_1.csv");
+    std::unordered_set<std::string> keys {"test1","test2"};
+    TestBenchmarkMove::get("benchmark3")->AddKeys(keys);
     EXPECT_NO_THROW (
-        TestBenchmarkMove::get("benchmark2")->WriteFields(1);
-        TestBenchmarkMove::get()->WriteFields(1,2,3);
+        TestBenchmarkMove::get()->SetKeyContent("test1",1);
+        TestBenchmarkMove::get()->SetKeyContent("test2",2);
+        TestBenchmarkMove::get()->WriteLine();
+        TestBenchmarkMove::get()->WriteLine();
     );
     TestBenchmarkMove::get()->data()->flush();
-    EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark2;1\nbenchmark2;1;2;3\n");
+    EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark3;test1;test2\nbenchmark3;1;2\nbenchmark3;;\n");
 }
 
 TEST(Benchmark,TestBenchmarkWriteDiffTypeFields) {
     improc::File::Remove("./benchmark_1.csv");
-    spdlog::basic_logger_st("benchmark3","./benchmark_1.csv");
+    spdlog::basic_logger_st("benchmark4","./benchmark_1.csv");
+    std::unordered_set<std::string> keys_1 {"test1","test2"};
+    std::unordered_set<std::string> keys_2 {"test3"};
+    TestBenchmarkDiff::get("benchmark4")->AddKeys(keys_1);
+    TestBenchmarkDiff::get()->AddKeys(keys_2);
     EXPECT_NO_THROW (
-        TestBenchmarkDiff::get("benchmark3")->WriteFields(false);
-        TestBenchmarkDiff::get()->WriteFields("test1",2,3.14);
+        TestBenchmarkDiff::get()->SetKeyContent("test1",false);
+        TestBenchmarkDiff::get()->SetKeyContent("test2",3.14);
+        TestBenchmarkDiff::get()->SetKeyContent("test3","test");
+        TestBenchmarkDiff::get()->WriteLine();
     );
     TestBenchmarkDiff::get()->data()->flush();
-    EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark3;false\nbenchmark3;test1;2;3.14\n");
-}
-
-TEST(Benchmark,TestBenchmarkAddSameTypeFields) {
-    improc::File::Remove("./benchmark_1.csv");
-    spdlog::basic_logger_st("benchmark4","./benchmark_1.csv");
-    EXPECT_NO_THROW (
-        TestBenchmarkAddSame::get("benchmark4")->AddFieldsToLine(1);
-        TestBenchmarkAddSame::get()->AddFieldsToLine(2,3,4);
-        TestBenchmarkAddSame::get()->WriteLine();
-    );
-    TestBenchmarkAddSame::get()->data()->flush();
-    EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark4;1;2;3;4\n");
-}
-
-TEST(Benchmark,TestBenchmarkAddDiffTypeFields) {
-    improc::File::Remove("./benchmark_1.csv");
-    spdlog::basic_logger_st("benchmark5","./benchmark_1.csv");
-    EXPECT_NO_THROW (
-        TestBenchmarkAddDiff::get("benchmark5")->AddFieldsToLine(false);
-        TestBenchmarkAddDiff::get()->AddFieldsToLine("test1",2,3.14);
-        TestBenchmarkAddDiff::get()->WriteLine();
-    );
-    TestBenchmarkAddDiff::get()->data()->flush();
-    EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark5;false;test1;2;3.14\n");
+    EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark4;test3;test1;test2\nbenchmark4;test;false;3.14\n");
 }

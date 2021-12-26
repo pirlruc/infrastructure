@@ -61,6 +61,13 @@ namespace improc {
             return "Not supported data type";
         }
     };
+
+    class benchmark_keys_cannot_change: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Cannot change benchmark keys after creation";
+        }
+    };
 }
  
 #endif

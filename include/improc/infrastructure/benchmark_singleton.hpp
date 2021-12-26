@@ -5,6 +5,8 @@
 #include <improc/infrastructure/logger_singleton.hpp>
 #include <improc/infrastructure/logger_infrastructure.hpp>
 
+#include <unordered_set>
+
 namespace improc 
 {
     /**
@@ -18,27 +20,31 @@ namespace improc
     class IMPROC_EXPORTS BenchmarkSingleton : public LoggerSingleton<BenchmarkType>
     {
         private:
-            std::string                         line_msg_;
+            bool                                        is_created_;
+            std::unordered_set<std::string>             keys_;
+            std::unordered_map<std::string,std::string> line_content_;
 
         protected:
             BenchmarkSingleton(std::shared_ptr<spdlog::logger>&&      benchmark_logger);
             BenchmarkSingleton(const std::shared_ptr<spdlog::logger>& benchmark_logger);
             
         public:
-            BenchmarkSingleton(BenchmarkSingleton&  that)   = delete;
-            BenchmarkSingleton(BenchmarkSingleton&& that)   = delete;
+            BenchmarkSingleton(BenchmarkSingleton&    that) = delete;
+            BenchmarkSingleton(BenchmarkSingleton&&   that) = delete;
             void operator=(const BenchmarkSingleton&  that) = delete;
             void operator=(const BenchmarkSingleton&& that) = delete;
 
-            BenchmarkSingleton&                 AddFieldsToLine ();
-            BenchmarkSingleton&                 WriteFields     ();
-            BenchmarkSingleton&                 WriteLine       ();
+            BenchmarkSingleton&         AddKeys         (const std::unordered_set<std::string>& keys);
+            BenchmarkSingleton&         WriteLine       ();
 
-            template<typename Arg, typename ... Args>
-            BenchmarkSingleton&                 AddFieldsToLine (Arg field_1, Args ... field_n);
+            template<typename ContentType>
+            BenchmarkSingleton&         SetKeyContent   (const std::string& key, const ContentType& content);
 
-            template<typename Arg, typename ... Args>
-            BenchmarkSingleton&                 WriteFields     (Arg field_1, Args ... field_n);
+        private:
+            BenchmarkSingleton&         WriteHeader          ();
+            BenchmarkSingleton&         WriteContent         ();
+            BenchmarkSingleton&         WriteLineOnBenchmark (const std::string& line);
+            BenchmarkSingleton&         InitializeLineContent(const std::unordered_set<std::string>& keys);
     };
 }
 

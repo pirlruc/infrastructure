@@ -7,6 +7,9 @@
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(std::shared_ptr<spdlog::logger>&& benchmark_logger) 
 : LoggerSingleton<BenchmarkType>(std::move(benchmark_logger)) 
+, is_created_(false)
+, keys_(std::unordered_set<std::string>())
+, line_content_(std::unordered_map<std::string,std::string>())
 {
     SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
                         , "Creating benchmark logger..." );
@@ -23,6 +26,9 @@ improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(std::shared_ptr<sp
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(const std::shared_ptr<spdlog::logger>& benchmark_logger) 
 : LoggerSingleton<BenchmarkType>(std::move(benchmark_logger)) 
+, is_created_(false)
+, keys_(std::unordered_set<std::string>())
+, line_content_(std::unordered_map<std::string,std::string>())
 {
     SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
                         , "Creating benchmark logger..." );
@@ -31,59 +37,40 @@ improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(const std::shared_
 }
 
 template <typename BenchmarkType>
-improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::AddFieldsToLine() 
-{
-    return (*this);
-}
-
-/**
- * @brief Add fields to benchmark line. The line is not written in the benchmark.
- * If you want to write on the benchmark use the method WriteFields or use the
- * method WriteLine after defining the line to write in the benchmark.
- * 
- * @tparam BenchmarkType 
- * @tparam Arg 
- * @tparam Args 
- * @param field_1 
- * @param field_n 
- */
-template <typename BenchmarkType>
-template<typename Arg, typename ... Args>
-improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::AddFieldsToLine(Arg field_1, Args ... field_n)
+improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::AddKeys(const std::unordered_set<std::string>& keys) 
 {
     SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Adding field to line..." );
-    this->line_msg_ += fmt::format(";{}",std::move(field_1));
-    this->AddFieldsToLine(field_n ...);
+                        , "Adding keys to benchmark..." );
+    if (this->is_created_ == true)
+    {
+        SPDLOG_LOGGER_ERROR ( improc::InfrastructureLogger::get()->data()
+                            , "Cannot change keys after benchmark has been created..." );
+        throw improc::benchmark_keys_cannot_change();
+    }
+    this->keys_.insert(keys.begin(),keys.end());
+    this->InitializeLineContent(std::move(keys));
     return (*this);
 }
 
 template <typename BenchmarkType>
-improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteFields() 
+improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::InitializeLineContent(const std::unordered_set<std::string>& keys) 
 {
     SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Writing fields on benchmark..." );
-    this->WriteLine();
+                        , "Initializing keys for line content..." );
+    for (const std::string& key : keys)
+    {
+        this->line_content_[key] = "";
+    }
     return (*this);
 }
 
-/**
- * @brief Add fields to benchmark line. The line is written in the benchmark.
- * 
- * @tparam BenchmarkType 
- * @tparam Arg 
- * @tparam Args 
- * @param field_1 
- * @param field_n 
- */
 template <typename BenchmarkType>
-template<typename Arg, typename ... Args>
-improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteFields(Arg field_1, Args ... field_n)
+template <typename ContentType>
+improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::SetKeyContent(const std::string& key, const ContentType& content)
 {
     SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Formatting fields to write on benchmark..." );
-    this->line_msg_ += fmt::format(";{}",std::move(field_1));
-    this->WriteFields(field_n ...);
+                        , "Setting content to key {}...", key );
+    this->line_content_[key] = fmt::format("{}",std::move(content));
     return (*this);
 }
 
@@ -97,15 +84,57 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
 {
     SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
                         , "Writing line on benchmark..." );
-    if (this->line_msg_.size() > 0)
+    if (this->is_created_ == false)
+    {
+        this->WriteHeader();
+        this->is_created_ = true;
+    }
+    this->WriteContent();
+    return (*this);
+}
+
+template <typename BenchmarkType>
+improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteHeader()
+{
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Writing header on benchmark..." );
+    std::string header_line {};
+    for (auto& content_iter : this->line_content_)
+    {
+        header_line += ";" + content_iter.first;
+    }
+    this->WriteLineOnBenchmark(header_line);
+    return (*this);
+}
+
+template <typename BenchmarkType>
+improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteContent()
+{
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Writing content on benchmark..." );
+    std::string line_msg {};
+    for (auto& content_iter : this->line_content_)
+    {
+        line_msg += ";" + content_iter.second;
+    }
+    this->WriteLineOnBenchmark(line_msg);
+    this->InitializeLineContent(this->keys_);
+    return (*this);
+}
+
+template <typename BenchmarkType>
+improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteLineOnBenchmark(const std::string& line)
+{
+    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
+                        , "Writing line on benchmark..." );
+    if (line.size() > 0)
     {
         // Remove first character since there is an additional ";" at the beginning
-        this->data()->critical(this->line_msg_.substr(1,std::string::npos));
+        this->data()->critical(line.substr(1,std::string::npos));
     }
     else
     {
-        this->data()->critical(this->line_msg_);
+        this->data()->critical(line);
     }
-    this->line_msg_.clear();
     return (*this);
 }
