@@ -34,8 +34,6 @@ namespace improc
     };
 }
 
-#include <logger_singleton.tpp>
-
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
 #    define IMPROC_LOGGER_TRACE(logger_singleton, ...) SPDLOG_LOGGER_TRACE((logger_singleton)->data(), __VA_ARGS__)
 #else
@@ -71,5 +69,7 @@ namespace improc
 #else
 #    define IMPROC_LOGGER_CRITICAL(logger_singleton, ...) (void)0
 #endif
+
+#include <logger_singleton.tpp>
 
 #endif

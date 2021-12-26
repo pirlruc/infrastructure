@@ -1,6 +1,7 @@
 #ifndef IMPROC_INFRASTRUCTURE_BENCHMARK_SINGLETON_HPP
 #define IMPROC_INFRASTRUCTURE_BENCHMARK_SINGLETON_HPP
 
+#include <improc/exception.hpp>
 #include <improc/improc_defs.hpp>
 #include <improc/infrastructure/logger_singleton.hpp>
 #include <improc/infrastructure/logger_infrastructure.hpp>
@@ -48,8 +49,6 @@ namespace improc
     };
 }
 
-#include <benchmark_singleton.tpp>
-
 #ifdef IMPROC_BENCHMARK_DISABLED
 #    define IMPROC_BENCHMARK_SET_CONTENT(benchmark, key, content)  (void)0
 #    define IMPROC_BENCHMARK_WRITE_LINE(benchmark)                 (void)0
@@ -57,5 +56,7 @@ namespace improc
 #    define IMPROC_BENCHMARK_SET_CONTENT(benchmark, key, content)  (benchmark)->SetKeyContent(key,content)
 #    define IMPROC_BENCHMARK_WRITE_LINE(benchmark)                 (benchmark)->WriteLine()
 #endif
+
+#include <benchmark_singleton.tpp>
 
 #endif
