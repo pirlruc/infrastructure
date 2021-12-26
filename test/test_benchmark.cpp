@@ -33,6 +33,13 @@ class TestBenchmarkDiff : public improc::BenchmarkSingleton<TestBenchmarkDiff>
         TestBenchmarkDiff(std::shared_ptr<spdlog::logger>&& logger) : BenchmarkSingleton(std::move(logger)) {}
 };
 
+class TestBenchmarkMacro : public improc::BenchmarkSingleton<TestBenchmarkMacro>
+{
+    friend std::shared_ptr<TestBenchmarkMacro> LoggerSingleton::get(const std::string& logger_name);
+    private:
+        TestBenchmarkMacro(std::shared_ptr<spdlog::logger>&& logger) : BenchmarkSingleton(std::move(logger)) {}
+};
+
 TEST(Benchmark,TestBenchmarkLevelAndPattern) {
     improc::File::Remove("./benchmark_1.csv");
     spdlog::basic_logger_st("benchmark1","./benchmark_1.csv");
@@ -85,4 +92,21 @@ TEST(Benchmark,TestBenchmarkWriteDiffTypeFields) {
     );
     TestBenchmarkDiff::get()->data()->flush();
     EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark4;test3;test1;test2\nbenchmark4;test;false;3.14\n");
+}
+
+TEST(Benchmark,TestBenchmarkWriteWithMacros) {
+    improc::File::Remove("./benchmark_1.csv");
+    spdlog::basic_logger_st("benchmark5","./benchmark_1.csv");
+    std::unordered_set<std::string> keys_1 {"test1","test2"};
+    std::unordered_set<std::string> keys_2 {"test3"};
+    TestBenchmarkMacro::get("benchmark5")->AddKeys(keys_1);
+    TestBenchmarkMacro::get()->AddKeys(keys_2);
+    EXPECT_NO_THROW (
+        IMPROC_BENCHMARK_SET_CONTENT(TestBenchmarkMacro::get(),"test1",false);
+        IMPROC_BENCHMARK_SET_CONTENT(TestBenchmarkMacro::get(),"test2",3.14);
+        IMPROC_BENCHMARK_SET_CONTENT(TestBenchmarkMacro::get(),"test3","macro");
+        IMPROC_BENCHMARK_WRITE_LINE (TestBenchmarkMacro::get());
+    );
+    TestBenchmarkMacro::get()->data()->flush();
+    EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark5;test3;test1;test2\nbenchmark5;macro;false;3.14\n");
 }

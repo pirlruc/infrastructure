@@ -50,4 +50,12 @@ namespace improc
 
 #include <benchmark_singleton.tpp>
 
+#ifdef IMPROC_BENCHMARK_DISABLED
+#    define IMPROC_BENCHMARK_SET_CONTENT(benchmark, key, content)  (void)0
+#    define IMPROC_BENCHMARK_WRITE_LINE(benchmark)                 (void)0
+#else
+#    define IMPROC_BENCHMARK_SET_CONTENT(benchmark, key, content)  (benchmark)->SetKeyContent(key,content)
+#    define IMPROC_BENCHMARK_WRITE_LINE(benchmark)                 (benchmark)->WriteLine()
+#endif
+
 #endif
