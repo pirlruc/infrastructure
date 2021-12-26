@@ -13,8 +13,7 @@ improc::Folder::Folder() {}
  */
 improc::Folder::Folder(const std::string& folder_path) 
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Creating Folder object..." );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating Folder object...");
     this->set_folder_path(std::move(folder_path));
 }
 
@@ -25,12 +24,10 @@ improc::Folder::Folder(const std::string& folder_path)
  */
 improc::Folder& improc::Folder::set_folder_path(const std::string& folder_path)
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Setting folder path {}...",folder_path);
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Setting folder path {}...",folder_path);
     if (improc::Folder::IsFolder(folder_path) == false)
     {
-        SPDLOG_LOGGER_ERROR ( improc::InfrastructureLogger::get()->data()
-                            , "ERROR_01: Invalid folder path {}.",folder_path );
+        IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_01: Invalid folder path {}.",folder_path);
         throw improc::invalid_folder_path();
     }
     this->folder_path_ = std::filesystem::path(std::move(folder_path));
@@ -44,8 +41,7 @@ improc::Folder& improc::Folder::set_folder_path(const std::string& folder_path)
  */
 std::vector<std::filesystem::path> improc::Folder::GetFilesInFolder() const
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Obtain files in folder {}...",this->folder_path_.string());
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Obtain files in folder {}...",this->folder_path_.string());
     improc::folder::ListFilesInFolder<std::filesystem::path> folder_list {};
     return folder_list.GetFiles(this->folder_path_);
 }
@@ -57,8 +53,8 @@ std::vector<std::filesystem::path> improc::Folder::GetFilesInFolder() const
  */
 std::vector<std::filesystem::path> improc::Folder::GetFilesInFolderAndSubfolders() const
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Obtain files in folder and subfolders {}...",this->folder_path_.string());
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE  ( "Obtain files in folder and subfolders {}..."
+                                        , this->folder_path_.string() );
     improc::folder::ListFilesInFolderAndSubfolders<std::filesystem::path> folder_list {};
     return folder_list.GetFiles(this->folder_path_);
 }
@@ -72,8 +68,7 @@ std::vector<std::filesystem::path> improc::Folder::GetFilesInFolderAndSubfolders
  */
 bool improc::Folder::IsFolder(const std::string& folder_path)
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Checking if folder path {} exists and is a folder...",folder_path );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Checking if folder path {} exists and is a folder...",folder_path);
     return std::filesystem::is_directory(std::move(folder_path));
 }
 
@@ -85,7 +80,6 @@ bool improc::Folder::IsFolder(const std::string& folder_path)
  */
 std::vector<std::filesystem::path> improc::Folder::SortFilesByAscendingFilename(const std::vector<std::filesystem::path>& filepaths)
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Sort files by ascending filename..." );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Sort files by ascending filename...");
     return std::move(improc::folder::SortFilesByAscendingFilename<std::filesystem::path>().Sort(filepaths));
 }

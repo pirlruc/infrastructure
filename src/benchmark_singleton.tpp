@@ -11,8 +11,7 @@ improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(std::shared_ptr<sp
 , keys_(std::unordered_set<std::string>())
 , line_content_(std::unordered_map<std::string,std::string>())
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Creating benchmark logger..." );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating benchmark logger...");
     this->data()->set_level(spdlog::level::critical);
     this->data()->set_pattern("%n;%v");
 }
@@ -30,8 +29,7 @@ improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(const std::shared_
 , keys_(std::unordered_set<std::string>())
 , line_content_(std::unordered_map<std::string,std::string>())
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Creating benchmark logger..." );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating benchmark logger...");
     this->data()->set_level(spdlog::level::critical);
     this->data()->set_pattern("%n;%v");
 }
@@ -39,12 +37,10 @@ improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(const std::shared_
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::AddKeys(const std::unordered_set<std::string>& keys) 
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Adding keys to benchmark..." );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Adding keys to benchmark...");
     if (this->is_created_ == true)
     {
-        SPDLOG_LOGGER_ERROR ( improc::InfrastructureLogger::get()->data()
-                            , "Cannot change keys after benchmark has been created..." );
+        IMPROC_INFRASTRUCTURE_LOGGER_ERROR ("ERROR_01: Cannot change keys after benchmark has been created.");
         throw improc::benchmark_keys_cannot_change();
     }
     this->keys_.insert(keys.begin(),keys.end());
@@ -55,8 +51,7 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::InitializeLineContent(const std::unordered_set<std::string>& keys) 
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Initializing keys for line content..." );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Initializing keys for line content...");
     for (const std::string& key : keys)
     {
         this->line_content_[key] = "";
@@ -68,8 +63,7 @@ template <typename BenchmarkType>
 template <typename ContentType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::SetKeyContent(const std::string& key, const ContentType& content)
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Setting content to key {}...", key );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Setting content to key {}...", key);
     this->line_content_[key] = fmt::format("{}",std::move(content));
     return (*this);
 }
@@ -82,8 +76,6 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteLine()
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Writing line on benchmark..." );
     if (this->is_created_ == false)
     {
         this->WriteHeader();
@@ -96,8 +88,7 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteHeader()
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Writing header on benchmark..." );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Writing header on benchmark...");
     std::string header_line {};
     for (auto& content_iter : this->line_content_)
     {
@@ -110,8 +101,7 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteContent()
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Writing content on benchmark..." );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Writing content on benchmark...");
     std::string line_msg {};
     for (auto& content_iter : this->line_content_)
     {
@@ -125,8 +115,7 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteLineOnBenchmark(const std::string& line)
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Writing line on benchmark..." );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Writing line on benchmark...");
     if (line.size() > 0)
     {
         // Remove first character since there is an additional ";" at the beginning

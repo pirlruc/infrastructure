@@ -8,8 +8,8 @@
 template<typename KeyType>
 KeyType improc::json::ReadElement(const Json::Value& json_elem)
 {
-    SPDLOG_LOGGER_ERROR ( improc::InfrastructureLogger::get()->data()
-                        , "ERROR_01: Parsing not defined for element {}.",typeid(KeyType).name() );
+    IMPROC_INFRASTRUCTURE_LOGGER_ERROR  ( "ERROR_01: Parsing not defined for element {}."
+                                        , typeid(KeyType).name() );
     throw improc::not_supported_data_type();
 }
 
@@ -23,8 +23,7 @@ KeyType improc::json::ReadElement(const Json::Value& json_elem)
 template<>
 inline std::string improc::json::ReadElement(const Json::Value& json_elem)
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Reading string json element..." );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading string json element...");
     return json_elem.asString();
 }
 
@@ -32,8 +31,8 @@ inline std::string improc::json::ReadElement(const Json::Value& json_elem)
 template<typename KeyType>
 std::vector<KeyType> improc::json::ReadVector(const Json::Value& json_vector)
 {
-    SPDLOG_LOGGER_TRACE ( improc::InfrastructureLogger::get()->data()
-                        , "Reading array json element with type {}...",typeid(KeyType).name() );
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE  ( "Reading array json element with type {}..."
+                                        , typeid(KeyType).name() );
     std::vector<KeyType> list_elems;
     if (json_vector.isArray() == true)
     {

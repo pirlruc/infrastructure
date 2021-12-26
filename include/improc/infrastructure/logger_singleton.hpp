@@ -36,4 +36,40 @@ namespace improc
 
 #include <logger_singleton.tpp>
 
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
+#    define IMPROC_LOGGER_TRACE(logger_singleton, ...) SPDLOG_LOGGER_TRACE((logger_singleton)->data(), __VA_ARGS__)
+#else
+#    define IMPROC_LOGGER_TRACE(logger_singleton, ...) (void)0
+#endif
+
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_DEBUG
+#    define IMPROC_LOGGER_DEBUG(logger_singleton, ...) SPDLOG_LOGGER_DEBUG((logger_singleton)->data(), __VA_ARGS__)
+#else
+#    define IMPROC_LOGGER_DEBUG(logger_singleton, ...) (void)0
+#endif
+
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_INFO
+#    define IMPROC_LOGGER_INFO(logger_singleton, ...) SPDLOG_LOGGER_INFO((logger_singleton)->data(), __VA_ARGS__)
+#else
+#    define IMPROC_LOGGER_INFO(logger_singleton, ...) (void)0
+#endif
+
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_WARN
+#    define IMPROC_LOGGER_WARN(logger_singleton, ...) SPDLOG_LOGGER_WARN((logger_singleton)->data(), __VA_ARGS__)
+#else
+#    define IMPROC_LOGGER_WARN(logger_singleton, ...) (void)0
+#endif
+
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_ERROR
+#    define IMPROC_LOGGER_ERROR(logger_singleton, ...) SPDLOG_LOGGER_ERROR((logger_singleton)->data(), __VA_ARGS__)
+#else
+#    define IMPROC_LOGGER_ERROR(logger_singleton, ...) (void)0
+#endif
+
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_CRITICAL
+#    define IMPROC_LOGGER_CRITICAL(logger_singleton, ...) SPDLOG_LOGGER_CRITICAL((logger_singleton)->data(), __VA_ARGS__)
+#else
+#    define IMPROC_LOGGER_CRITICAL(logger_singleton, ...) (void)0
+#endif
+
 #endif
