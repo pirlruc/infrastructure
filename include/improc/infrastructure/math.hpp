@@ -1,7 +1,7 @@
 #ifndef IMPROC_MATH_HPP
 #define IMPROC_MATH_HPP
 
-#include <improc/infrastructure/logger_infrastructure.hpp>
+#include <improc/infrastructure/logging/logger_infrastructure.hpp>
 #include <improc/improc_defs.hpp>
 
 namespace improc 

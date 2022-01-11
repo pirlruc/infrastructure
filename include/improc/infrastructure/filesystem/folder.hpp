@@ -3,7 +3,7 @@
 
 #include <improc/improc_defs.hpp>
 #include <improc/exception.hpp>
-#include <improc/infrastructure/logger_infrastructure.hpp>
+#include <improc/infrastructure/logging/logger_infrastructure.hpp>
 #include <improc/infrastructure/filesystem/file.hpp>
 #include <improc/infrastructure/filesystem/folder_policies.hpp>
 

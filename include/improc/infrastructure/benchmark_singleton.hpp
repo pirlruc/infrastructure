@@ -3,8 +3,8 @@
 
 #include <improc/exception.hpp>
 #include <improc/improc_defs.hpp>
-#include <improc/infrastructure/logger_singleton.hpp>
-#include <improc/infrastructure/logger_infrastructure.hpp>
+#include <improc/infrastructure/logging/logger_singleton.hpp>
+#include <improc/infrastructure/logging/logger_infrastructure.hpp>
 
 #include <unordered_set>
 

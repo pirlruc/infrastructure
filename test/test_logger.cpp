@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <improc/infrastructure/logger_singleton.hpp>
+#include <improc/infrastructure/logging/logger_singleton.hpp>
 
 #include <spdlog/sinks/stdout_color_sinks.h>
 

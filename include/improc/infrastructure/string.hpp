@@ -2,7 +2,7 @@
 #define IMPROC_INFRASTRUCTURE_STRING_HPP
 
 #include <improc/improc_defs.hpp>
-#include <improc/infrastructure/logger_infrastructure.hpp>
+#include <improc/infrastructure/logging/logger_infrastructure.hpp>
 #include <improc/exception.hpp>
 
 #include <string>

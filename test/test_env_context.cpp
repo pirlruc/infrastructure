@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <improc/infrastructure/environment_context.hpp>
+#include <improc/infrastructure/context/environment_context.hpp>
 
 class TestEnvironmentGet : public improc::EnvironmentContext<TestEnvironmentGet>
 {

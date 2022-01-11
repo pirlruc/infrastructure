@@ -69,6 +69,7 @@ add_library(
   ${PROJECT_SOURCE_DIR}/src/folder.cpp
   ${PROJECT_SOURCE_DIR}/src/file.cpp
   ${PROJECT_SOURCE_DIR}/src/string.cpp
+  ${PROJECT_SOURCE_DIR}/src/application_context.cpp
 )
 add_library(improc::infrastructure ALIAS ${PROJECT_NAME})
 

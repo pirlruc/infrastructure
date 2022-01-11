@@ -1,7 +1,7 @@
 #ifndef IMPROC_INFRASTRUCTURE_JSON_PARSER_HPP
 #define IMPROC_INFRASTRUCTURE_JSON_PARSER_HPP
 
-#include <improc/infrastructure/logger_infrastructure.hpp>
+#include <improc/infrastructure/logging/logger_infrastructure.hpp>
 #include <improc/improc_defs.hpp>
 
 #include <json/json.h>

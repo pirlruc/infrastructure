@@ -4,7 +4,7 @@
 #include <improc/improc_defs.hpp>
 #include <improc/exception.hpp>
 #include <improc/infrastructure/string.hpp>
-#include <improc/infrastructure/logger_infrastructure.hpp>
+#include <improc/infrastructure/logging/logger_infrastructure.hpp>
 
 #include <json/json.h>
 
