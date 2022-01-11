@@ -35,6 +35,7 @@ add_executable(
   ${PROJECT_SOURCE_DIR}/test/test_math.cpp
   ${PROJECT_SOURCE_DIR}/test/test_benchmark.cpp
   ${PROJECT_SOURCE_DIR}/test/test_logger.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_env_context.cpp
 )
 set_target_properties(${PROJECT_NAME}_test PROPERTIES CXX_STANDARD           17)
 set_target_properties(${PROJECT_NAME}_test PROPERTIES CXX_STANDARD_REQUIRED  TRUE)

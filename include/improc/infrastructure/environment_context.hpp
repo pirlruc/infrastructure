@@ -1,0 +1,27 @@
+#ifndef IMPROC_INFRASTRUCTURE_ENVIRONMENT_CONTEXT_HPP
+#define IMPROC_INFRASTRUCTURE_ENVIRONMENT_CONTEXT_HPP
+
+#include <improc/improc_defs.hpp>
+#include <improc/infrastructure/logger_infrastructure.hpp>
+
+namespace improc 
+{
+    template <typename ContextType>
+    class IMPROC_EXPORTS EnvironmentContext
+    {
+        protected:
+            EnvironmentContext();
+
+        public:
+            EnvironmentContext(EnvironmentContext&     that) = delete;
+            EnvironmentContext(EnvironmentContext&&    that) = delete;
+            void operator= (const EnvironmentContext&  that) = delete;
+            void operator= (const EnvironmentContext&& that) = delete;
+
+            static std::shared_ptr<ContextType>         get();
+    };
+
+    #include <environment_context.tpp>
+}
+
+#endif
