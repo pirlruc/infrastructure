@@ -13,16 +13,18 @@ std::vector<PathType> improc::folder::ListFiles<ListFileType,PathType>::GetFiles
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE  ( "Obtain files in folder {}..."
                                         , std::filesystem::path(folder_path).string() );
-    std::vector<PathType> files {};
-    for (auto& folder_entry : ListFileType(folder_path))
-    {
-        std::filesystem::path filepath = folder_entry.path();
-        if (improc::File::IsFile(filepath.string()) == true)
-        {
-            files.push_back(std::move(filepath));
-        }
-    }
-    return std::move(files);
+    ListFileType directory_iterator = ListFileType(folder_path);
+
+    std::vector<std::filesystem::path> filepaths {};
+    std::transform  ( std::filesystem::begin(directory_iterator),std::filesystem::end(directory_iterator)
+                    , std::back_inserter(filepaths)
+                    , [] (const std::filesystem::directory_entry& directory_entry) -> PathType {return directory_entry.path();} );
+
+    std::vector<PathType> filtered_files {};
+    std::copy_if( filepaths.begin(), filepaths.end()
+                , std::back_inserter(filtered_files)
+                , [] (const std::filesystem::path& path) {return improc::File::IsFile(path.string()) == true;} );
+    return std::move(filtered_files);
 }
 
 /**
