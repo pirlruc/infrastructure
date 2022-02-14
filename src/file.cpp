@@ -225,7 +225,7 @@ Json::Value improc::JsonFile::Read(const std::string& filepath)
     }
 
     std::string json_content_str = json_file.Read();
-    Json::Value json_content     = improc::JsonString::Parse(json_content_str);
+    Json::Value json_content     = improc::JsonString().Parse(json_content_str);
     return json_content;
 }
 

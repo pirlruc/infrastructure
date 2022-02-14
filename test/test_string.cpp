@@ -37,3 +37,23 @@ TEST(String,TestStringStaticToLower) {
 TEST(String,TestStringStaticToUpper) {
     EXPECT_STREQ(improc::String::ToUpper("test").c_str(),"TEST");
 }
+
+TEST(JsonString,TestEmptyJsonStringConstructor) {
+    improc::JsonString str_empty {};
+    EXPECT_THROW(str_empty.Parse(""),improc::json_parsing_error);
+}
+
+TEST(JsonString,TestJsonStringConstructor) {
+    improc::JsonString str_not_empty {};
+    EXPECT_EQ(str_not_empty.Parse("{\"content\": \"test.txt\"}")["content"],"test.txt");
+}
+
+TEST(JsonString,TestSetJsonString) {
+    improc::JsonString str_empty {};
+    EXPECT_EQ(str_empty.Parse("{\"content\": \"test.txt\"}")["content"],"test.txt");
+}
+
+TEST(JsonString,TestJsonStringParse) {
+    improc::JsonString str_empty {};
+    EXPECT_EQ(str_empty.Parse("{\"content\": \"test.txt\"}")["content"],"test.txt");
+}

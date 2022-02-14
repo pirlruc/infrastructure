@@ -39,17 +39,11 @@ namespace improc
     {
         private:
             std::unique_ptr<Json::CharReader*>  char_reader_;
-            std::string                         json_string_;
 
         public:
             JsonString();
-            JsonString(const std::string& json_string);
 
-            JsonString&                         set_json_string(const std::string& json_string);
-
-            Json::Value                         Parse() const;
-
-            static Json::Value                  Parse(const std::string& json_string);
+            Json::Value                         Parse(const std::string& json_string) const;
     };
 }
 

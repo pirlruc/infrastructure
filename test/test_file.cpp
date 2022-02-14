@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <improc/infrastructure/filesystem/file.hpp>
-#include <improc/infrastructure/json_parser.hpp>
+#include <improc/infrastructure/parsers/json_parser.hpp>
 
 #include <improc_infrastructure_test_config.hpp>
 
@@ -169,35 +169,4 @@ TEST(JsonFile,TestReadingExistingFile) {
 TEST(JsonFile,TestReadingNonJsonFile) {
     std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.txt";
     EXPECT_THROW(improc::JsonFile::Read(filepath),improc::invalid_filepath);
-}
-
-TEST(JsonFile,TestReadingNonStringContent) {
-    std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
-    improc::JsonFile file_exists {filepath};
-    EXPECT_THROW(improc::json::ReadElement<int>(file_exists.Read()),improc::not_supported_data_type);
-}
-
-TEST(JsonFile,TestReadingStringContent) {
-    std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
-    improc::JsonFile file_exists {filepath};
-    std::string content = improc::json::ReadElement<std::string>(file_exists.Read()["content"]);
-    EXPECT_FALSE(content.empty());
-    EXPECT_EQ(content,"test");
-}
-
-TEST(JsonFile,TestReadingStringElemAsArrayContent) {
-    std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
-    improc::JsonFile file_exists {filepath};
-    std::vector<std::string> content = improc::json::ReadVector<std::string>(file_exists.Read()["content"]);
-    EXPECT_EQ(content.size(),1);
-    EXPECT_EQ(content[0],"test");
-}
-
-TEST(JsonFile,TestReadingStringArrayContent) {
-    std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
-    improc::JsonFile file_exists {filepath};
-    std::vector<std::string> content = improc::json::ReadVector<std::string>(file_exists.Read()["content_array"]);
-    EXPECT_EQ(content.size(),2);
-    EXPECT_EQ(content[0],"test_1");
-    EXPECT_EQ(content[1],"test_2");
 }
