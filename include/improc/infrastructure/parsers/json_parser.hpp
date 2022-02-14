@@ -21,6 +21,6 @@ namespace improc
     }
 }
 
-#include <json_parser.tpp>
+#include <improc/infrastructure/parsers/json_parser.tpp>
 
 #endif

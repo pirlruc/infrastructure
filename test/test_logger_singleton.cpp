@@ -75,10 +75,10 @@ TEST(Logger,TestLoggerDoubleConstructor) {
 TEST(Logger,TestLoggerLogging) {
     TestLogging::get("log_console");
     EXPECT_STREQ(TestLogging::get()->data()->name().c_str(),"log_console");
-    SPDLOG_LOGGER_CALL(TestLogging::get()->data(),spdlog::level::trace   ,"Test {} {}",1,2);
-    SPDLOG_LOGGER_CALL(TestLogging::get()->data(),spdlog::level::debug   ,"Test {} {}",2,3);
-    SPDLOG_LOGGER_CALL(TestLogging::get()->data(),spdlog::level::info    ,"Test {} {}",3,4);
-    SPDLOG_LOGGER_CALL(TestLogging::get()->data(),spdlog::level::err     ,"Test {} {}",4,5);
-    SPDLOG_LOGGER_CALL(TestLogging::get()->data(),spdlog::level::warn    ,"Test {} {}",5,6);
-    SPDLOG_LOGGER_CALL(TestLogging::get()->data(),spdlog::level::critical,"Test {} {}",6,7);
+    IMPROC_LOGGER_TRACE(TestLogging::get(),"Test {} {}",1,2);
+    IMPROC_LOGGER_DEBUG(TestLogging::get(),"Test {} {}",2,3);
+    IMPROC_LOGGER_INFO (TestLogging::get(),"Test {} {}",3,4);
+    IMPROC_LOGGER_ERROR(TestLogging::get(),"Test {} {}",4,5);
+    IMPROC_LOGGER_WARN (TestLogging::get(),"Test {} {}",5,6);
+    IMPROC_LOGGER_CRITICAL(TestLogging::get(),"Test {} {}",6,7);
 }

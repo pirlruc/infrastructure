@@ -42,6 +42,6 @@ namespace improc
     }
 }
 
-#include <folder_policies.tpp>
+#include <improc/infrastructure/filesystem/folder_policies.tpp>
 
 #endif

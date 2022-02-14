@@ -16,6 +16,6 @@ namespace improc
     }
 }
 
-#include <math.tpp>
+#include <improc/infrastructure/math/math.tpp>
 
 #endif

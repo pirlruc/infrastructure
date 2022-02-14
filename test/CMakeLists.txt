@@ -29,14 +29,16 @@ configure_file(
 add_executable(
   ${PROJECT_NAME}_test
     
-  ${PROJECT_SOURCE_DIR}/test/test_file.cpp
-  ${PROJECT_SOURCE_DIR}/test/test_folder.cpp
-  ${PROJECT_SOURCE_DIR}/test/test_string.cpp
-  ${PROJECT_SOURCE_DIR}/test/test_math.cpp
-  ${PROJECT_SOURCE_DIR}/test/test_benchmark.cpp
-  ${PROJECT_SOURCE_DIR}/test/test_logger.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_logger_singleton.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_logger_infrastructure.cpp
   ${PROJECT_SOURCE_DIR}/test/test_env_context.cpp
   ${PROJECT_SOURCE_DIR}/test/test_app_context.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_math.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_json_parser.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_string.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_benchmark_singleton.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_file.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_folder.cpp
 )
 set_target_properties(${PROJECT_NAME}_test PROPERTIES CXX_STANDARD           17)
 set_target_properties(${PROJECT_NAME}_test PROPERTIES CXX_STANDARD_REQUIRED  TRUE)

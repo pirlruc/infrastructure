@@ -18,19 +18,19 @@ namespace improc
     class IMPROC_EXPORTS Folder
     {
         private:
-            std::filesystem::path               folder_path_;
+            std::filesystem::path                       folder_path_;
 
         public:
             Folder();
             Folder(const std::string& folder_path);
 
-            Folder&                             set_folder_path(const std::string& folder_path);
+            Folder&                                     set_folder_path(const std::string& folder_path);
 
-            std::vector<std::filesystem::path>  GetFilesInFolder()              const;
-            std::vector<std::filesystem::path>  GetFilesInFolderAndSubfolders() const;
+            std::vector<std::filesystem::path>          GetFilesInFolder()              const;
+            std::vector<std::filesystem::path>          GetFilesInFolderAndSubfolders() const;
 
-            static bool                               IsFolder(const std::string& folder_path);
-            static std::vector<std::filesystem::path> SortFilesByAscendingFilename(const std::vector<std::filesystem::path>& filepaths);
+            static bool                                 IsFolder(const std::string& folder_path);
+            static std::vector<std::filesystem::path>   SortFilesByAscendingFilename(const std::vector<std::filesystem::path>& filepaths);
     };
 }
 

@@ -21,7 +21,7 @@ namespace improc
             static std::shared_ptr<ContextType>         get();
     };
 
-    #include <environment_context.tpp>
+    #include <improc/infrastructure/context/environment_context.tpp>
 }
 
 #endif

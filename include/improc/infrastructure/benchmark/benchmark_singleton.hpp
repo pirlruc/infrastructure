@@ -57,6 +57,6 @@ namespace improc
 #    define IMPROC_BENCHMARK_WRITE_LINE(benchmark)                 (benchmark)->WriteLine()
 #endif
 
-#include <benchmark_singleton.tpp>
+#include <improc/infrastructure/benchmark/benchmark_singleton.tpp>
 
 #endif

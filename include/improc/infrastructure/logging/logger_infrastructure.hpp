@@ -14,7 +14,8 @@ namespace improc
     {
         friend std::shared_ptr<InfrastructureLogger> LoggerSingleton::get(const std::string& logger_name);
         private:
-            InfrastructureLogger(std::shared_ptr<spdlog::logger>&& logger) : LoggerSingleton(std::move(logger)) {}
+            InfrastructureLogger(std::shared_ptr<spdlog::logger>&&      logger) : LoggerSingleton(std::move(logger)) {}
+            InfrastructureLogger(const std::shared_ptr<spdlog::logger>& logger) : LoggerSingleton(std::move(logger)) {}
 
         public:
             InfrastructureLogger(InfrastructureLogger&  that) = delete;

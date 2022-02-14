@@ -27,19 +27,44 @@ inline std::string improc::json::ReadElement(const Json::Value& json_elem)
     return json_elem.asString();
 }
 
+template<>
+inline double improc::json::ReadElement(const Json::Value& json_elem)
+{
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading double json element...");
+    return json_elem.asDouble();
+}
+
+template<>
+inline float improc::json::ReadElement(const Json::Value& json_elem)
+{
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading float json element...");
+    return json_elem.asFloat();
+}
+
+template<>
+inline unsigned int improc::json::ReadElement(const Json::Value& json_elem)
+{
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading unsigned integer json element...");
+    return json_elem.asUInt();
+}
+
+template<>
+inline int improc::json::ReadElement(const Json::Value& json_elem)
+{
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading integer json element...");
+    return json_elem.asInt();
+}
 
 template<typename KeyType>
 std::vector<KeyType> improc::json::ReadVector(const Json::Value& json_vector)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE  ( "Reading array json element with type {}..."
                                         , typeid(KeyType).name() );
-    std::vector<KeyType> list_elems;
+    std::vector<KeyType> list_elems {};
     if (json_vector.isArray() == true)
     {
-        for (Json::Value::const_iterator elem_iter = json_vector.begin(); elem_iter != json_vector.end(); ++elem_iter)
-        {
-            list_elems.push_back(improc::json::ReadElement<KeyType>(*elem_iter));
-        }
+        std::transform  ( json_vector.begin(), json_vector.end(), std::back_inserter(list_elems)
+                        , [] (const Json::Value& elem) -> KeyType {return improc::json::ReadElement<KeyType>(elem);} );
     }
     else
     {

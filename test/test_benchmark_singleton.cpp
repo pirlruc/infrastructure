@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <improc/infrastructure/filesystem/file.hpp>
-#include <improc/infrastructure/benchmark_singleton.hpp>
+#include <improc/infrastructure/benchmark/benchmark_singleton.hpp>
 
 #include <spdlog/sinks/basic_file_sink.h>
 

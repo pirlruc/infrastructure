@@ -80,10 +80,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES VERSION                ${PROJEC
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX          ${CMAKE_DEBUG_POSTFIX})
 
 target_include_directories  (${PROJECT_NAME}   PRIVATE   ${PROJECT_SOURCE_DIR}/include)
-target_include_directories  (${PROJECT_NAME}   PRIVATE   ${PROJECT_SOURCE_DIR}/src)
 target_include_directories  (${PROJECT_NAME}   INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                                               $<INSTALL_INTERFACE:include> )
-target_include_directories  (${PROJECT_NAME}   INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
                                                $<INSTALL_INTERFACE:include> )
 
 # Link dependencies
@@ -110,16 +107,25 @@ install(
   DESTINATION lib
   EXPORT      ${PROJECT_NAME}_target 
 )
-install(FILES   ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE                                      DESTINATION share/licenses/improc/jsoncpp)
-install(FILES   ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE                                       DESTINATION share/licenses/improc/spdlog)
-install(FILES   ${PROJECT_SOURCE_DIR}/external/boost/LICENSE_1_0.txt                                DESTINATION share/licenses/improc/boost)
+install(FILES   ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE                                        DESTINATION share/licenses/improc/jsoncpp)
+install(FILES   ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE                                         DESTINATION share/licenses/improc/spdlog)
+install(FILES   ${PROJECT_SOURCE_DIR}/external/boost/LICENSE_1_0.txt                                  DESTINATION share/licenses/improc/boost)
 
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark_singleton.hpp         DESTINATION include/improc/infrastructure)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/json_parser.hpp                 DESTINATION include/improc/infrastructure)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_infrastructure.hpp       DESTINATION include/improc/infrastructure)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logger_singleton.hpp            DESTINATION include/improc/infrastructure)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/math.hpp                        DESTINATION include/improc/infrastructure)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/string.hpp                      DESTINATION include/improc/infrastructure)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/file.hpp             DESTINATION include/improc/infrastructure/filesystem)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/folder_policies.hpp  DESTINATION include/improc/infrastructure/filesystem)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/folder.hpp           DESTINATION include/improc/infrastructure/filesystem)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark/benchmark_singleton.hpp DESTINATION include/improc/infrastructure/benchmark)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark/benchmark_singleton.tpp DESTINATION include/improc/infrastructure/benchmark)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/context/application_context.hpp   DESTINATION include/improc/infrastructure/context)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/context/environment_context.hpp   DESTINATION include/improc/infrastructure/context)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/context/environment_context.tpp   DESTINATION include/improc/infrastructure/context)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/file.hpp               DESTINATION include/improc/infrastructure/filesystem)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/folder_policies.hpp    DESTINATION include/improc/infrastructure/filesystem)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/folder_policies.tpp    DESTINATION include/improc/infrastructure/filesystem)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/folder.hpp             DESTINATION include/improc/infrastructure/filesystem)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logging/logger_infrastructure.hpp DESTINATION include/improc/infrastructure/logging)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logging/logger_singleton.hpp      DESTINATION include/improc/infrastructure/logging)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logging/logger_singleton.tpp      DESTINATION include/improc/infrastructure/logging)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/math/math.hpp                     DESTINATION include/improc/infrastructure/math)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/math/math.tpp                     DESTINATION include/improc/infrastructure/math)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.hpp           DESTINATION include/improc/infrastructure/parsers)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.tpp           DESTINATION include/improc/infrastructure/parsers)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/string.hpp                        DESTINATION include/improc/infrastructure)
+install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/exception.hpp                                    DESTINATION include/improc)

@@ -70,6 +70,6 @@ namespace improc
 #    define IMPROC_LOGGER_CRITICAL(logger_singleton, ...) (void)0
 #endif
 
-#include <logger_singleton.tpp>
+#include <improc/infrastructure/logging/logger_singleton.tpp>
 
 #endif
