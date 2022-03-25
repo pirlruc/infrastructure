@@ -47,12 +47,14 @@ TEST(Folder,TestGetFilesInFolderUsingPath) {
     std::string folder_path = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test";
     improc::folder::ListFiles<std::filesystem::directory_iterator,std::filesystem::path> folder_list {};
     EXPECT_EQ(folder_list.GetFiles(folder_path).size(),2);
+    EXPECT_EQ(improc::folder::ListFiles<std::filesystem::directory_iterator>::GetFiles(folder_path).size(),2);
 }
 
 TEST(Folder,TestGetFilesInFolderAndSubfoldersUsingPath) {
     std::string folder_path = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test";
     improc::folder::ListFiles<std::filesystem::recursive_directory_iterator,std::filesystem::path> folder_list {};
     EXPECT_EQ(folder_list.GetFiles(folder_path).size(),4);
+    EXPECT_EQ(improc::folder::ListFiles<std::filesystem::recursive_directory_iterator>::GetFiles(folder_path).size(),4);
 }
 
 TEST(Folder,TestGetFilesInFolderUsingPolicy) {

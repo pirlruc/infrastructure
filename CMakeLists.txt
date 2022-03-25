@@ -41,7 +41,7 @@ target_include_directories(spdlog INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_D
 FetchContent_Declare(
   jsoncpp
   GIT_REPOSITORY https://github.com/open-source-parsers/jsoncpp
-  GIT_TAG        1.9.4
+  GIT_TAG        1.9.5
   SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/jsoncpp
 )
 set(JSONCPP_WITH_TESTS    OFF)
@@ -52,7 +52,7 @@ FetchContent_MakeAvailable(jsoncpp)
 FetchContent_Declare(
   boost
   GIT_REPOSITORY https://github.com/boostorg/boost
-  GIT_TAG        boost-1.77.0
+  GIT_TAG        boost-1.78.0
   SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/boost
 )
 FetchContent_MakeAvailable(boost)
@@ -66,10 +66,10 @@ add_library(
   
   ${PROJECT_SOURCE_DIR}/include
 
-  ${PROJECT_SOURCE_DIR}/src/folder.cpp
-  ${PROJECT_SOURCE_DIR}/src/file.cpp
-  ${PROJECT_SOURCE_DIR}/src/string.cpp
   ${PROJECT_SOURCE_DIR}/src/application_context.cpp
+  ${PROJECT_SOURCE_DIR}/src/file.cpp
+  ${PROJECT_SOURCE_DIR}/src/folder.cpp
+  ${PROJECT_SOURCE_DIR}/src/string.cpp
 )
 add_library(improc::infrastructure ALIAS ${PROJECT_NAME})
 
