@@ -68,6 +68,13 @@ namespace improc {
             return "Cannot change benchmark keys after creation";
         }
     };
+
+    class drawer_not_defined: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Drawer not defined";
+        }
+    };
 }
  
 #endif
