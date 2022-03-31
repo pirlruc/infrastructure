@@ -3,6 +3,7 @@
 
 #include <improc/infrastructure/logging/logger_infrastructure.hpp>
 #include <improc/improc_defs.hpp>
+#include <improc/exception.hpp>
 
 #include <json/json.h>
 
