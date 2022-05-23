@@ -30,7 +30,7 @@ endif()
 FetchContent_Declare(
   spdlog
   GIT_REPOSITORY  https://github.com/gabime/spdlog
-  GIT_TAG         v1.9.2
+  GIT_TAG         v1.10.0
   SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/spdlog
 )
 FetchContent_MakeAvailable(spdlog)
@@ -52,7 +52,7 @@ FetchContent_MakeAvailable(jsoncpp)
 FetchContent_Declare(
   boost
   GIT_REPOSITORY https://github.com/boostorg/boost
-  GIT_TAG        boost-1.78.0
+  GIT_TAG        boost-1.79.0
   SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/boost
 )
 FetchContent_MakeAvailable(boost)
@@ -72,6 +72,7 @@ add_library(
   ${PROJECT_SOURCE_DIR}/src/string.cpp
 )
 add_library(improc::infrastructure ALIAS ${PROJECT_NAME})
+add_dependencies(${PROJECT_NAME} spdlog jsoncpp_lib boost_algorithm)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD           17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED  TRUE)

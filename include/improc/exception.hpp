@@ -75,6 +75,13 @@ namespace improc {
             return "Drawer not defined";
         }
     };
+
+    class no_field_id_drawer_static: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "No context field id for static drawer element";
+        }
+    };
 }
  
 #endif

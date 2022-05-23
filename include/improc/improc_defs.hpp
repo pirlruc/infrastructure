@@ -11,4 +11,6 @@
     #endif
 #endif
 
+#define IMPROC_ENUM_KEY_TYPE unsigned int
+
 #endif
