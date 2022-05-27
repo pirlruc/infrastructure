@@ -3,5 +3,6 @@
 	"content-uint"  : [0,1],
 	"content-int"   : [-2,-1],
 	"content-double": [-2.2,-3.2],
-	"content-float" : [2.2,3.2]
+	"content-float" : [2.2,3.2],
+	"content-bool"  : [true,false]
 }

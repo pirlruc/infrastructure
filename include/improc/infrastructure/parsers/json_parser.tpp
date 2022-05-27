@@ -55,6 +55,13 @@ inline int improc::json::ReadElement(const Json::Value& json_elem)
     return json_elem.asInt();
 }
 
+template<>
+inline bool improc::json::ReadElement(const Json::Value& json_elem)
+{
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading boolean json element...");
+    return json_elem.asBool();
+}
+
 template<typename KeyType>
 std::vector<KeyType> improc::json::ReadVector(const Json::Value& json_vector)
 {

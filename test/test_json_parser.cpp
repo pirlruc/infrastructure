@@ -35,6 +35,11 @@ TEST(JsonParser,TestReadingFloatContent) {
     EXPECT_EQ(improc::json::ReadElement<float>(json_content),3.2f);
 }
 
+TEST(JsonParser,TestReadingBooleanContent) {
+    Json::Value json_content {false};
+    EXPECT_FALSE(improc::json::ReadElement<bool>(json_content));
+}
+
 TEST(JsonParser,TestReadingStringArrayContent) {
     std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/json_parser_types.json";
     improc::JsonFile file_exists {filepath};
@@ -73,4 +78,12 @@ TEST(JsonFile,TestReadingFloatArrayContent) {
     std::vector<float> content = improc::json::ReadVector<float>(file_exists.Read()["content-float"]);
     EXPECT_EQ(content[0],2.2f);
     EXPECT_EQ(content[1],3.2f);
+}
+
+TEST(JsonFile,TestReadingBoolArrayContent) {
+    std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/json_parser_types.json";
+    improc::JsonFile file_exists {filepath};
+    std::vector<bool> content = improc::json::ReadVector<bool>(file_exists.Read()["content-bool"]);
+    EXPECT_TRUE(content[0]);
+    EXPECT_FALSE(content[1]);
 }
