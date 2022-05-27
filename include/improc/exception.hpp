@@ -76,10 +76,10 @@ namespace improc {
         }
     };
 
-    class no_field_id_drawer_static: public std::exception {
+    class context_elem_diff_page_elem: public std::exception {
     public:
         virtual const char* what() const throw() {
-            return "No context field id for static drawer element";
+            return "Number of context elements different than the number of page elements";
         }
     };
 }
