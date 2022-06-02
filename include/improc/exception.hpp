@@ -82,6 +82,20 @@ namespace improc {
             return "Number of context elements different than the number of page elements";
         }
     };
+
+    class freetype_lib_error: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Error executing freetype library method";
+        }
+    };
+
+    class printing_resolution_not_positive: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Printing resolution should be bigger than zero";
+        }
+    };
 }
  
 #endif
