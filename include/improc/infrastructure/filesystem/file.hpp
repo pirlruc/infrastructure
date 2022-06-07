@@ -5,6 +5,7 @@
 #include <improc/exception.hpp>
 #include <improc/infrastructure/string.hpp>
 #include <improc/infrastructure/logging/logger_infrastructure.hpp>
+#include <improc/infrastructure/parsers/json_parser.hpp>
 
 #include <json/json.h>
 
@@ -27,6 +28,7 @@ namespace improc
         public:
             File();
             File(const std::string& filepath);
+            File(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
 
             File&                   set_filepath(const std::string& filepath);
             
@@ -53,6 +55,7 @@ namespace improc
         public:
             JsonFile();
             JsonFile(const std::string& filepath);
+            JsonFile(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
 
             JsonFile&               set_filepath(const std::string& filepath);
 

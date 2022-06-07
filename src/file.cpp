@@ -13,8 +13,17 @@ improc::File::File() {}
  */
 improc::File::File(const std::string& filepath) 
 {
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating File object...");
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating File object using string...");
     this->set_filepath(std::move(filepath));
+}
+
+improc::File::File(const Json::Value& filepath_json,const std::optional<std::string>& application_folder) 
+{
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating File object using json...");
+    std::filesystem::path    filepath     = application_folder.value_or("");
+    std::vector<std::string> folders_json = improc::json::ReadVector<std::string>(filepath_json);
+    std::for_each(folders_json.begin(),folders_json.end(), [&filepath] (const std::string& folder) {filepath /= folder;});
+    this->set_filepath(std::move(filepath.string()));
 }
 
 /**
@@ -175,8 +184,14 @@ improc::JsonFile::JsonFile() : improc::File() {}
  */
 improc::JsonFile::JsonFile(const std::string& filepath)
 {
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating JsonFile object...");
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating JsonFile object using string...");
     this->set_filepath(std::move(filepath));
+}
+
+improc::JsonFile::JsonFile(const Json::Value& filepath_json, const std::optional<std::string>& application_folder)
+{
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating JsonFile object using json...");
+    this->set_filepath(std::move(improc::File(filepath_json,application_folder).get_filepath()));
 }
 
 /**

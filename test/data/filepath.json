@@ -1,0 +1,6 @@
+{
+    "single-json": "test/data/test.json",
+    "multiple-json": ["test","data","test.json"],
+    "single": "test/data/test/test_1.txt",
+    "multiple": ["test","data","test","test_1.txt"]
+}
