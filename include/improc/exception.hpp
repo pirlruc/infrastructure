@@ -76,6 +76,20 @@ namespace improc {
         }
     };
 
+    class page_drawer_not_allocated: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Page drawer not allocated";
+        }
+    };
+
+    class invalid_page_image: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Invalid page image";
+        }
+    };
+
     class context_elem_diff_page_elem: public std::exception {
     public:
         virtual const char* what() const throw() {
