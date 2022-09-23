@@ -9,7 +9,7 @@ TEST(Folder,TestEmptyFolderConstructor) {
 }
 
 TEST(Folder,TestFolderConstructorNonExisting) {
-    EXPECT_THROW(improc::Folder folder_not_exists {"test"},improc::invalid_folder_path);
+    EXPECT_THROW(improc::Folder folder_not_exists {std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "test"},improc::invalid_folder_path);
 }
 
 TEST(Folder,TestSetFolderPath) {
@@ -20,13 +20,13 @@ TEST(Folder,TestSetFolderPath) {
 
 TEST(Folder,TestSetFolderPathNonExisting) {
     improc::Folder folder_not_exists {};
-    EXPECT_THROW(folder_not_exists.set_folder_path("test"),improc::invalid_folder_path);
+    EXPECT_THROW(folder_not_exists.set_folder_path(std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "test"),improc::invalid_folder_path);
 }
 
 TEST(Folder,TestIsFolder) {
     std::string folder_path = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data";
     std::string filepath    = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
-    EXPECT_FALSE(improc::Folder::IsFolder("test"));
+    EXPECT_FALSE(improc::Folder::IsFolder(std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "test"));
     EXPECT_TRUE (improc::Folder::IsFolder(folder_path));
     EXPECT_FALSE(improc::Folder::IsFolder(filepath));
 }
