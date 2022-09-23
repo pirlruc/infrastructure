@@ -15,7 +15,7 @@ namespace improc
      * @brief String object and utilities
      * 
      */
-    class IMPROC_EXPORTS String
+    class IMPROC_API String
     {
         private:
             std::string                 data_;
@@ -34,8 +34,7 @@ namespace improc
             static std::string          ToUpper(const std::string& lower_str);
     };
 
-
-    class IMPROC_EXPORTS JsonString
+    class IMPROC_API JsonString
     {
         private:
             std::unique_ptr<Json::CharReader*>  char_reader_;

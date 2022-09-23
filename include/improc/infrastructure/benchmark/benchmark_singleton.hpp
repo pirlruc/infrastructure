@@ -18,7 +18,7 @@ namespace improc
      * @tparam BenchmarkType 
      */
     template <typename BenchmarkType>
-    class IMPROC_EXPORTS BenchmarkSingleton : public LoggerSingleton<BenchmarkType>
+    class IMPROC_API BenchmarkSingleton : public LoggerSingleton<BenchmarkType>
     {
         private:
             bool                                        is_created_;

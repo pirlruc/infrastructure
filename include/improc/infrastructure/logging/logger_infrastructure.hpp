@@ -10,7 +10,7 @@ namespace improc
      * @brief Logger used for infrastructure library
      * 
      */
-    class IMPROC_EXPORTS InfrastructureLogger : public LoggerSingleton<InfrastructureLogger>
+    class IMPROC_API InfrastructureLogger : public LoggerSingleton<InfrastructureLogger>
     {
         friend std::shared_ptr<InfrastructureLogger> LoggerSingleton::get(const std::string& logger_name);
         private:

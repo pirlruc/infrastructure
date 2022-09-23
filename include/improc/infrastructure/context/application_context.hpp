@@ -6,7 +6,7 @@
 
 namespace improc 
 {
-    class IMPROC_EXPORTS ApplicationContext : public EnvironmentContext<ApplicationContext> 
+    class IMPROC_API ApplicationContext : public EnvironmentContext<ApplicationContext> 
     {
         friend std::shared_ptr<ApplicationContext> EnvironmentContext::get();
 

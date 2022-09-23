@@ -24,7 +24,7 @@ namespace improc
          * @tparam PathType      - type considered for paths
          */
         template <class PathType = std::filesystem::path>
-        class IMPROC_EXPORTS ListFilesInFolder: public ListFiles<std::filesystem::directory_iterator,PathType> {};
+        class IMPROC_API ListFilesInFolder: public ListFiles<std::filesystem::directory_iterator,PathType> {};
 
         /**
          * @brief Policy for listing files in folder and subfolders.
@@ -32,7 +32,7 @@ namespace improc
          * @tparam PathType      - type considered for paths
          */
         template <class PathType = std::filesystem::path>
-        class IMPROC_EXPORTS ListFilesInFolderAndSubfolders : public ListFiles<std::filesystem::recursive_directory_iterator,PathType> {};
+        class IMPROC_API ListFilesInFolderAndSubfolders : public ListFiles<std::filesystem::recursive_directory_iterator,PathType> {};
 
         template <class PathType = std::filesystem::path>
         struct SortFilesByAscendingFilename

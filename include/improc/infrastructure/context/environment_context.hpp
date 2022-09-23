@@ -7,7 +7,7 @@
 namespace improc 
 {
     template <typename ContextType>
-    class IMPROC_EXPORTS EnvironmentContext
+    class IMPROC_API EnvironmentContext
     {
         protected:
             EnvironmentContext();

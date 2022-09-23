@@ -14,7 +14,7 @@ namespace improc
      * @tparam LoggerType 
      */
     template <typename LoggerType>
-    class IMPROC_EXPORTS LoggerSingleton
+    class IMPROC_API LoggerSingleton
     {
         private:
             std::shared_ptr<spdlog::logger> data_;
