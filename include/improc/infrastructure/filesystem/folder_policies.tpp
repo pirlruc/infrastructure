@@ -15,15 +15,15 @@ std::vector<PathType> improc::folder::ListFiles<ListFileType,PathType>::GetFiles
                                         , std::filesystem::path(folder_path).string() );
     ListFileType directory_iterator = ListFileType(folder_path);
 
-    std::vector<std::filesystem::path> filepaths {};
+    std::vector<std::string> filepaths {};
     std::transform  ( std::filesystem::begin(directory_iterator),std::filesystem::end(directory_iterator)
                     , std::back_inserter(filepaths)
-                    , [] (const std::filesystem::directory_entry& directory_entry) -> PathType {return directory_entry.path();} );
+                    , [] (const std::filesystem::directory_entry& directory_entry) -> std::string {return directory_entry.path().string();} );
 
     std::vector<PathType> filtered_files {};
     std::copy_if( filepaths.begin(), filepaths.end()
                 , std::back_inserter(filtered_files)
-                , [] (const std::filesystem::path& path) {return improc::File::IsFile(path.string()) == true;} );
+                , [] (const std::string& path) {return improc::File::IsFile(path) == true;} );
     return std::move(filtered_files);
 }
 

@@ -46,6 +46,7 @@ FetchContent_Declare(
 )
 set(JSONCPP_WITH_TESTS    OFF)
 set(JSONCPP_WITH_EXAMPLE  OFF)
+set(BUILD_STATIC_LIBS     OFF)
 FetchContent_MakeAvailable(jsoncpp)
 
 # BOOST

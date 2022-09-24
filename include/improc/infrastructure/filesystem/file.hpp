@@ -13,6 +13,7 @@
 #include <fstream>
 #include <sys/stat.h>
 #include <filesystem>
+#include <optional>
 
 namespace improc 
 {
@@ -20,7 +21,7 @@ namespace improc
      * @brief File object and utilities
      * 
      */
-    class IMPROC_EXPORTS File
+    class IMPROC_API File
     {
         private:
             std::filesystem::path   filepath_;
@@ -50,7 +51,7 @@ namespace improc
      * @brief Json file object and utilities
      * 
      */
-    class IMPROC_EXPORTS JsonFile : public File
+    class IMPROC_API JsonFile : public File
     {
         public:
             JsonFile();

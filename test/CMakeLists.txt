@@ -11,6 +11,7 @@ FetchContent_Declare(
   GIT_TAG         release-1.11.0
   SOURCE_DIR      ${PROJECT_SOURCE_DIR}/test/external/googletest
 )
+set(BUILD_GMOCK OFF)
 FetchContent_MakeAvailable(googletest)
 
 mark_as_advanced(

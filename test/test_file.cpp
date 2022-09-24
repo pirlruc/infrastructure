@@ -23,9 +23,16 @@ TEST(File,TestFileConstructor) {
 TEST(File,TestFileConstructorFromJson) {
     Json::Value json_file = improc::JsonFile::Read(std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/filepath.json");
     improc::File file_str {json_file["single"],std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER)};
-    EXPECT_EQ(file_str.get_filepath() ,std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test/test_1.txt");
+    std::filesystem::path gt_filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER);
+    gt_filepath /= "test/data/test/test_1.txt";
+    EXPECT_EQ(file_str.get_filepath() ,gt_filepath);
     file_str = improc::File(json_file["multiple"],std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER));
-    EXPECT_EQ(file_str.get_filepath() ,std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test/test_1.txt");
+    gt_filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER);
+    gt_filepath /= "test";
+    gt_filepath /= "data";
+    gt_filepath /= "test";
+    gt_filepath /= "test_1.txt";
+    EXPECT_EQ(file_str.get_filepath() ,gt_filepath);
 }
 
 TEST(File,TestFileConstructorNonExistingFile) {
@@ -120,9 +127,15 @@ TEST(JsonFile,TestFileConstructor) {
 TEST(JsonFile,TestFileConstructorFromJson) {
     Json::Value json_file = improc::JsonFile::Read(std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/filepath.json");
     improc::JsonFile file_str {json_file["single-json"],std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER)};
-    EXPECT_EQ(file_str.get_filepath() ,std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json");
+    std::filesystem::path gt_filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER);
+    gt_filepath /= "test/data/test.json";
+    EXPECT_EQ(file_str.get_filepath() ,gt_filepath);
     file_str = improc::JsonFile(json_file["multiple-json"],std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER));
-    EXPECT_EQ(file_str.get_filepath() ,std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json");
+    gt_filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER);
+    gt_filepath /= "test";
+    gt_filepath /= "data";
+    gt_filepath /= "test.json";
+    EXPECT_EQ(file_str.get_filepath() ,gt_filepath);
 }
 
 TEST(JsonFile,TestFileConstructorNonExistingFile) {

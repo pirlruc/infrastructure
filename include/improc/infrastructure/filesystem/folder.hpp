@@ -15,7 +15,7 @@ namespace improc
      * @brief Folder object and utilities
      * 
      */
-    class IMPROC_EXPORTS Folder
+    class IMPROC_API Folder
     {
         private:
             std::filesystem::path                       folder_path_;
