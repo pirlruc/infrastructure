@@ -25,6 +25,10 @@ if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
   option(BUILD_SHARED_LIBS           "Building shared libraries"    ON)
 endif()
 
+if(NOT DEFINED IMPROC_WITH_BOOST)
+  set(IMPROC_WITH_BOOST OFF)
+endif()
+
 # Add external dependencies
 # SPDLOG
 FetchContent_Declare(
@@ -50,30 +54,60 @@ set(BUILD_STATIC_LIBS     OFF)
 FetchContent_MakeAvailable(jsoncpp)
 
 # BOOST
-FetchContent_Declare(
-  boost
-  GIT_REPOSITORY https://github.com/boostorg/boost
-  GIT_TAG        boost-1.79.0
-  SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/boost
+if(IMPROC_WITH_BOOST)
+  FetchContent_Declare(
+    boost
+    GIT_REPOSITORY https://github.com/boostorg/boost
+    GIT_TAG        boost-1.79.0
+    SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/boost
+  )
+  FetchContent_MakeAvailable(boost)
+  
+  list(APPEND IMPROC_INFRASTRUCTURE_EXTRA_LIBS boost_algorithm)
+endif()
+
+configure_file(
+  ${PROJECT_SOURCE_DIR}/improc_compilation_variables.hpp.in 
+  ${PROJECT_SOURCE_DIR}/include/improc/improc_compilation_variables.hpp
 )
-FetchContent_MakeAvailable(boost)
 
 message(STATUS "Build ${PROJECT_NAME} Version: ${PROJECT_VERSION}")
 message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install Dir: ${CMAKE_INSTALL_PREFIX}")
 
-add_library(
-  ${PROJECT_NAME}
-  
-  ${PROJECT_SOURCE_DIR}/include
+set(
+  IMPROC_INFRASTRUCTURE_LIB_FILES
 
+  ${PROJECT_SOURCE_DIR}/include/improc/exception.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/improc_compilation_variables.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/improc_defs.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/string.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark/benchmark_singleton.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark/benchmark_singleton.tpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/context/application_context.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/context/environment_context.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/context/environment_context.tpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/file.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/folder_policies.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/folder_policies.tpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/folder.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logging/logger_infrastructure.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logging/logger_singleton.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logging/logger_singleton.tpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/math/math.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/math/math.tpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.tpp
+  
   ${PROJECT_SOURCE_DIR}/src/application_context.cpp
   ${PROJECT_SOURCE_DIR}/src/file.cpp
   ${PROJECT_SOURCE_DIR}/src/folder.cpp
   ${PROJECT_SOURCE_DIR}/src/string.cpp
 )
+
+add_library(${PROJECT_NAME} SHARED ${IMPROC_INFRASTRUCTURE_LIB_FILES})
 add_library(improc::infrastructure ALIAS ${PROJECT_NAME})
-add_dependencies(${PROJECT_NAME} spdlog jsoncpp_lib boost_algorithm)
+add_dependencies(${PROJECT_NAME} spdlog jsoncpp_lib ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD           17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED  TRUE)
@@ -88,10 +122,10 @@ target_include_directories  (${PROJECT_NAME}   INTERFACE $<BUILD_INTERFACE:${PRO
 # Link dependencies
 target_link_libraries       (${PROJECT_NAME}   PRIVATE   spdlog)
 target_link_libraries       (${PROJECT_NAME}   PRIVATE   jsoncpp_lib)
-target_link_libraries       (${PROJECT_NAME}   PRIVATE   boost_algorithm)
+target_link_libraries       (${PROJECT_NAME}   PRIVATE   ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
 target_link_libraries       (${PROJECT_NAME}   INTERFACE spdlog)
 target_link_libraries       (${PROJECT_NAME}   INTERFACE jsoncpp_lib)
-target_link_libraries       (${PROJECT_NAME}   INTERFACE boost_algorithm)
+target_link_libraries       (${PROJECT_NAME}   INTERFACE ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
 
 # Tests configuration
 if(IMPROC_WITH_TESTS)
@@ -103,31 +137,17 @@ if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
 endif()
 
 # Install configuration
-set(${PROJECT_NAME}_libs ${PROJECT_NAME} spdlog jsoncpp_lib boost_algorithm)
+set(${PROJECT_NAME}_libs ${PROJECT_NAME} spdlog jsoncpp_lib ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
 install(
   TARGETS     ${${PROJECT_NAME}_libs}
   DESTINATION lib
   EXPORT      ${PROJECT_NAME}_target 
 )
-install(FILES   ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE                                        DESTINATION share/licenses/improc/jsoncpp)
-install(FILES   ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE                                         DESTINATION share/licenses/improc/spdlog)
-install(FILES   ${PROJECT_SOURCE_DIR}/external/boost/LICENSE_1_0.txt                                  DESTINATION share/licenses/improc/boost)
+install(FILES   ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE          DESTINATION share/licenses/improc/jsoncpp)
+install(FILES   ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE           DESTINATION share/licenses/improc/spdlog)
 
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark/benchmark_singleton.hpp DESTINATION include/improc/infrastructure/benchmark)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark/benchmark_singleton.tpp DESTINATION include/improc/infrastructure/benchmark)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/context/application_context.hpp   DESTINATION include/improc/infrastructure/context)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/context/environment_context.hpp   DESTINATION include/improc/infrastructure/context)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/context/environment_context.tpp   DESTINATION include/improc/infrastructure/context)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/file.hpp               DESTINATION include/improc/infrastructure/filesystem)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/folder_policies.hpp    DESTINATION include/improc/infrastructure/filesystem)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/folder_policies.tpp    DESTINATION include/improc/infrastructure/filesystem)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/filesystem/folder.hpp             DESTINATION include/improc/infrastructure/filesystem)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logging/logger_infrastructure.hpp DESTINATION include/improc/infrastructure/logging)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logging/logger_singleton.hpp      DESTINATION include/improc/infrastructure/logging)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/logging/logger_singleton.tpp      DESTINATION include/improc/infrastructure/logging)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/math/math.hpp                     DESTINATION include/improc/infrastructure/math)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/math/math.tpp                     DESTINATION include/improc/infrastructure/math)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.hpp           DESTINATION include/improc/infrastructure/parsers)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.tpp           DESTINATION include/improc/infrastructure/parsers)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/string.hpp                        DESTINATION include/improc/infrastructure)
-install(FILES   ${PROJECT_SOURCE_DIR}/include/improc/exception.hpp                                    DESTINATION include/improc)
+if(IMPROC_WITH_BOOST)
+  install(FILES   ${PROJECT_SOURCE_DIR}/external/boost/LICENSE_1_0.txt  DESTINATION share/licenses/improc/boost)
+endif()
+
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/improc                  DESTINATION include)

@@ -7,7 +7,11 @@
 
 #include <string>
 #include <json/json.h>
-#include <boost/algorithm/string.hpp>
+
+#include <improc/improc_compilation_variables.hpp>
+#ifdef IMPROC_WITH_BOOST
+    #include <boost/algorithm/string.hpp>
+#endif
 
 namespace improc 
 {

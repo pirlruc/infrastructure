@@ -1,4 +1,4 @@
-#include <improc_infrastructure_config.hpp>
+#include <improc/improc_infrastructure_config.hpp>
 
 #include <iostream>
 

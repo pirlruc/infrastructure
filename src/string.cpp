@@ -43,7 +43,12 @@ std::string improc::String::get_data() const
 improc::String& improc::String::ToLower()
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Transforming string to lower case...");
-    boost::algorithm::to_lower(this->data_);
+    #ifdef IMPROC_WITH_BOOST
+        boost::algorithm::to_lower(this->data_);
+    #else
+        std::transform  ( this->data_.begin(),this->data_.end(),this->data_.begin()
+                        , [] (unsigned char character){ return std::tolower(character); });
+    #endif
     return (*this);
 }
 
@@ -54,7 +59,12 @@ improc::String& improc::String::ToLower()
 improc::String& improc::String::ToUpper()
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Transforming string to upper case...");
-    boost::algorithm::to_upper(this->data_);
+    #ifdef IMPROC_WITH_BOOST
+        boost::algorithm::to_upper(this->data_);
+    #else
+        std::transform  ( this->data_.begin(),this->data_.end(),this->data_.begin()
+                        , [] (unsigned char character){ return std::toupper(character); });
+    #endif
     return (*this);
 }
 
@@ -66,7 +76,14 @@ improc::String& improc::String::ToUpper()
 std::string improc::String::ToLower(const std::string& str_data)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Transforming string to lower case...");
-    return boost::algorithm::to_lower_copy(str_data);
+    #ifdef IMPROC_WITH_BOOST
+        return boost::algorithm::to_lower_copy(str_data);
+    #else
+        std::string result {str_data};
+        std::transform  ( result.begin(),result.end(),result.begin()
+                        , [] (unsigned char character){ return std::towlower(character); });
+        return result;
+    #endif
 }
 
 /**
@@ -77,7 +94,14 @@ std::string improc::String::ToLower(const std::string& str_data)
 std::string improc::String::ToUpper(const std::string& str_data)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Transforming string to upper case...");
-    return boost::algorithm::to_upper_copy(str_data);
+    #ifdef IMPROC_WITH_BOOST
+        return boost::algorithm::to_upper_copy(str_data);
+    #else
+        std::string result {str_data};
+        std::transform  ( result.begin(),result.end(),result.begin()
+                        , [] (unsigned char character){ return std::toupper(character); });
+        return result;
+    #endif
 }
 
 improc::JsonString::JsonString()
