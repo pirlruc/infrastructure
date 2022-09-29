@@ -15,27 +15,26 @@ on:
 jobs:
   build:
     # The type of runner that the job will run on
-    name: ${{ matrix.config.name }}
+    name: ${{ matrix.config.name }} _boost_ ${{ matrix.boost }}
     runs-on: ${{ matrix.config.os }}
     strategy:
       fail-fast: false
       matrix:
+        boost: ["ON","OFF"]
         config:
         - {
             name: "ubuntu_latest_gcc",
             os: ubuntu-latest,
             build_type: "Release",
             cc: "gcc-11",
-            cxx: "g++-11",
-            boost: ["ON","OFF"]
+            cxx: "g++-11"
           }
         - {
             name: "ubuntu_latest_clang",
             os: ubuntu-latest,
             build_type: "Release",
             cc: "clang-10",
-            cxx: "clang++-10",
-            boost: ["ON","OFF"]
+            cxx: "clang++-10"
           }
 
     steps:
@@ -72,7 +71,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
             -DCMAKE_C_COMPILER=${{ matrix.config.cc }} \
             -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} \
-            -DIMPROC_WITH_BOOST=${{ matrix.config.boost }}
+            -DIMPROC_WITH_BOOST=${{ matrix.boost }}
       
       - name: Build
         shell: bash
