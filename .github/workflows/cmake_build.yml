@@ -15,7 +15,7 @@ on:
 jobs:
   build:
     # The type of runner that the job will run on
-    name: ${{ matrix.config.name }} _boost_ ${{ matrix.boost }}
+    name: ${{ matrix.config.name }} - Boost ${{ matrix.boost }}
     runs-on: ${{ matrix.config.os }}
     strategy:
       fail-fast: false
