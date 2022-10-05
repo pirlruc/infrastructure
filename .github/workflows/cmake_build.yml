@@ -36,7 +36,21 @@ jobs:
             cc: "clang-10",
             cxx: "clang++-10"
           }
-
+        - {
+            name: "windows_latest_gcc",
+            os: windows-latest,
+            build_type: "Release",
+            cc: "gcc",
+            cxx: "g++"
+          }
+        - {
+            name: "windows_latest_clang",
+            os: windows-latest,
+            build_type: "Release",
+            cc: "clang",
+            cxx: "clang++"
+          }
+          
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@main
@@ -48,7 +62,7 @@ jobs:
           echo github.event.action: ${{ github.event.action }}
           echo github.event_name: ${{ github.event_name }}
           
-      - name: Install Dependencies
+      - name: Install Dependencies Linux
         if: startsWith(matrix.config.name, 'ubuntu_latest')
         run: |
           sudo apt-get update
@@ -59,6 +73,13 @@ jobs:
           gcc      --version
           gcc-11   --version
           clang-10 --version
+
+      - name: Install Dependencies Windows
+        if: startsWith(matrix.config.name, 'windows_latest')
+        run: |
+          cmake    --version
+          gcc      --version
+          clang    --version
           
       - name: Configure
         shell: bash
