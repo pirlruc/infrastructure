@@ -81,7 +81,7 @@ std::string improc::String::ToLower(const std::string& str_data)
     #else
         std::string result {str_data};
         std::transform  ( result.begin(),result.end(),result.begin()
-                        , [] (unsigned char character){ return std::towlower(character); });
+                        , [] (unsigned char character){ return std::tolower(character); });
         return result;
     #endif
 }

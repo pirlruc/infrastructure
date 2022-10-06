@@ -6,6 +6,7 @@
 #include <improc/exception.hpp>
 
 #include <string>
+#include <algorithm>
 #include <json/json.h>
 
 #include <improc/improc_compilation_variables.hpp>
