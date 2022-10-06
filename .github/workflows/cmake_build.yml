@@ -47,8 +47,8 @@ jobs:
             name: "windows_latest_clang",
             os: windows-latest,
             build_type: "Release",
-            cc: "C:\Program Files\LLVM\bin\clang.exe",
-            cxx: "C:\Program Files\LLVM\bin\clang++.exe"
+            cc: "C:\Program Files\LLVM\bin/clang.exe",
+            cxx: "C:\Program Files\LLVM\bin/clang++.exe"
           }
           
     steps:
