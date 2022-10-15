@@ -41,8 +41,9 @@ class TestLogging : public improc::LoggerSingleton<TestLogging>
 
 TEST(Logger,TestLogging) {
     EXPECT_NO_THROW (
-        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%n] [%-5l] [%@ >> %!] %v");
-        spdlog::set_level(spdlog::level::level_enum::trace);
+        std::shared_ptr<spdlog::logger> logger = spdlog::default_logger();
+        logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%n] [%-5l] [%@ >> %!] %v");
+        logger->set_level(spdlog::level::level_enum::trace);
     );
 }
 
