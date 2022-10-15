@@ -43,13 +43,13 @@ jobs:
             cc: "gcc",
             cxx: "g++"
           }
-        - {
-            name: "windows_latest_clang",
-            os: windows-latest,
-            build_type: "Release",
-            cc: "clang",
-            cxx: "clang++"
-          }
+#        - {
+#            name: "windows_latest_clang",
+#            os: windows-latest,
+#            build_type: "Release",
+#            cc: "clang",
+#            cxx: "clang++"
+#          }
           
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
