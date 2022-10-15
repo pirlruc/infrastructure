@@ -36,13 +36,13 @@ jobs:
 #            cc: "clang-10",
 #            cxx: "clang++-10"
 #          }
-#        - {
-#            name: "windows_latest_gcc",
-#            os: windows-latest,
-#            build_type: "Release",
-#            cc: "gcc",
-#            cxx: "g++"
-#          }
+        - {
+            name: "windows_latest_gcc",
+            os: windows-latest,
+            build_type: "Release",
+            cc: "gcc",
+            cxx: "g++"
+          }
         - {
             name: "windows_latest_clang",
             os: windows-latest,
