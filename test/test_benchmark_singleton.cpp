@@ -41,23 +41,22 @@ class TestBenchmarkMacro : public improc::BenchmarkSingleton<TestBenchmarkMacro>
 };
 
 TEST(Benchmark,TestBenchmarkLevelAndPattern) {
-    improc::File::Remove("./benchmark_1.csv");
-    spdlog::basic_logger_st("benchmark1","./benchmark_1.csv");
+    improc::File::Remove("./benchmark_level_pattern.csv");
+    spdlog::basic_logger_st("benchmark1","./benchmark_level_pattern.csv");
     TestBenchmarkReference::get("benchmark1")->WriteLine();
     TestBenchmarkReference::get()->data()->flush();
     EXPECT_EQ(TestBenchmarkReference::get()->data()->level(),spdlog::level::critical);
     #if defined _WIN32 || defined _WIN64 || defined _WIN32_WCE
-        EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark1;\r\nbenchmark1;\r\n");
+        EXPECT_STREQ(improc::File::Read("./benchmark_level_pattern.csv").c_str(),"benchmark1;\r\nbenchmark1;\r\n");
     #else
-        EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark1;\nbenchmark1;\n");
+        EXPECT_STREQ(improc::File::Read("./benchmark_level_pattern.csv").c_str(),"benchmark1;\nbenchmark1;\n");
     #endif
     spdlog::drop("benchmark1");
-    improc::File::Remove("./benchmark_1.csv");
 }
 
 TEST(Benchmark,TestBenchmarkKeys) {
-    improc::File::Remove("./benchmark_1.csv");
-    spdlog::basic_logger_st("benchmark2","./benchmark_1.csv");
+    improc::File::Remove("./benchmark_keys.csv");
+    spdlog::basic_logger_st("benchmark2","./benchmark_keys.csv");
     std::unordered_set<std::string> keys {"test1","test2"};
     TestBenchmarkReferenceKeys::get("benchmark2")->AddKeys(keys);
     TestBenchmarkReferenceKeys::get()->SetKeyContent("test1",true);
@@ -65,18 +64,17 @@ TEST(Benchmark,TestBenchmarkKeys) {
     TestBenchmarkReferenceKeys::get()->data()->flush();
     EXPECT_EQ(TestBenchmarkReferenceKeys::get()->data()->level(),spdlog::level::critical);
     #if defined _WIN32 || defined _WIN64 || defined _WIN32_WCE
-        EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark2;test1;test2\r\nbenchmark2;true;\r\n");
+        EXPECT_STREQ(improc::File::Read("./benchmark_keys.csv").c_str(),"benchmark2;test1;test2\r\nbenchmark2;true;\r\n");
     #else
-        EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark2;test1;test2\nbenchmark2;true;\n");
+        EXPECT_STREQ(improc::File::Read("./benchmark_keys.csv").c_str(),"benchmark2;test1;test2\nbenchmark2;true;\n");
     #endif
     EXPECT_THROW(TestBenchmarkReferenceKeys::get()->AddKeys(keys),improc::benchmark_keys_cannot_change);
     spdlog::drop("benchmark2");
-    improc::File::Remove("./benchmark_1.csv");
 }
 
 TEST(Benchmark,TestBenchmarkWriteSameTypeFields) {
-    improc::File::Remove("./benchmark_1.csv");
-    spdlog::basic_logger_st("benchmark3","./benchmark_1.csv");
+    improc::File::Remove("./benchmark_write_same_type_fields.csv");
+    spdlog::basic_logger_st("benchmark3","./benchmark_write_same_type_fields.csv");
     std::unordered_set<std::string> keys {"test1","test2"};
     TestBenchmarkMove::get("benchmark3")->AddKeys(keys);
     EXPECT_NO_THROW (
@@ -87,17 +85,16 @@ TEST(Benchmark,TestBenchmarkWriteSameTypeFields) {
     );
     TestBenchmarkMove::get()->data()->flush();
     #if defined _WIN32 || defined _WIN64 || defined _WIN32_WCE
-        EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark3;test1;test2\r\nbenchmark3;1;2\r\nbenchmark3;;\r\n");
+        EXPECT_STREQ(improc::File::Read("./benchmark_write_same_type_fields.csv").c_str(),"benchmark3;test1;test2\r\nbenchmark3;1;2\r\nbenchmark3;;\r\n");
     #else
-        EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark3;test1;test2\nbenchmark3;1;2\nbenchmark3;;\n");
+        EXPECT_STREQ(improc::File::Read("./benchmark_write_same_type_fields.csv").c_str(),"benchmark3;test1;test2\nbenchmark3;1;2\nbenchmark3;;\n");
     #endif
     spdlog::drop("benchmark3");
-    improc::File::Remove("./benchmark_1.csv");
 }
 
 TEST(Benchmark,TestBenchmarkWriteDiffTypeFields) {
-    improc::File::Remove("./benchmark_1.csv");
-    spdlog::basic_logger_st("benchmark4","./benchmark_1.csv");
+    improc::File::Remove("./benchmark_write_diff_type_fields.csv");
+    spdlog::basic_logger_st("benchmark4","./benchmark_write_diff_type_fields.csv");
     std::unordered_set<std::string> keys_1 {"test1","test2"};
     std::unordered_set<std::string> keys_2 {"test3"};
     TestBenchmarkDiff::get("benchmark4")->AddKeys(keys_1);
@@ -111,17 +108,16 @@ TEST(Benchmark,TestBenchmarkWriteDiffTypeFields) {
     TestBenchmarkDiff::get()->data()->flush();
     #if defined _WIN32 || defined _WIN64 || defined _WIN32_WCE
         // Ordering is different between windows and linux since the unordered_set std::hash is different
-        EXPECT_FALSE(improc::File::Read("./benchmark_1.csv").empty());
+        EXPECT_FALSE(improc::File::Read("./benchmark_write_diff_type_fields.csv").empty());
     #else
-        EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark4;test3;test1;test2\nbenchmark4;test;false;3.14\n");
+        EXPECT_STREQ(improc::File::Read("./benchmark_write_diff_type_fields.csv").c_str(),"benchmark4;test3;test1;test2\nbenchmark4;test;false;3.14\n");
     #endif
     spdlog::drop("benchmark4");
-    improc::File::Remove("./benchmark_1.csv");
 }
 
 TEST(Benchmark,TestBenchmarkWriteWithMacros) {
-    improc::File::Remove("./benchmark_1.csv");
-    spdlog::basic_logger_st("benchmark5","./benchmark_1.csv");
+    improc::File::Remove("./benchmark_write_with_macros.csv");
+    spdlog::basic_logger_st("benchmark5","./benchmark_write_with_macros.csv");
     std::unordered_set<std::string> keys_1 {"test1","test2"};
     std::unordered_set<std::string> keys_2 {"test3"};
     TestBenchmarkMacro::get("benchmark5")->AddKeys(keys_1);
@@ -135,10 +131,9 @@ TEST(Benchmark,TestBenchmarkWriteWithMacros) {
     TestBenchmarkMacro::get()->data()->flush();
    #if defined _WIN32 || defined _WIN64 || defined _WIN32_WCE
         // Ordering is different between windows and linux since the unordered_set std::hash is different
-        EXPECT_FALSE(improc::File::Read("./benchmark_1.csv").empty());
+        EXPECT_FALSE(improc::File::Read("./benchmark_write_with_macros.csv").empty());
     #else
-        EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark5;test3;test1;test2\nbenchmark5;macro;false;3.14\n");
+        EXPECT_STREQ(improc::File::Read("./benchmark_write_with_macros.csv").c_str(),"benchmark5;test3;test1;test2\nbenchmark5;macro;false;3.14\n");
     #endif
     spdlog::drop("benchmark5");
-    improc::File::Remove("./benchmark_1.csv");
 }
