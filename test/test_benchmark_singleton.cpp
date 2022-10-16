@@ -51,7 +51,7 @@ TEST(Benchmark,TestBenchmarkLevelAndPattern) {
     #else
         EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark1;\nbenchmark1;\n");
     #endif
-    TestBenchmarkReference::get()->data()->~logger();
+    improc::File::Remove("./benchmark_1.csv");
 }
 
 TEST(Benchmark,TestBenchmarkKeys) {
@@ -69,7 +69,7 @@ TEST(Benchmark,TestBenchmarkKeys) {
         EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark2;test1;test2\nbenchmark2;true;\n");
     #endif
     EXPECT_THROW(TestBenchmarkReferenceKeys::get()->AddKeys(keys),improc::benchmark_keys_cannot_change);
-    TestBenchmarkReferenceKeys::get()->data()->~logger();
+    improc::File::Remove("./benchmark_1.csv");
 }
 
 TEST(Benchmark,TestBenchmarkWriteSameTypeFields) {
@@ -89,7 +89,7 @@ TEST(Benchmark,TestBenchmarkWriteSameTypeFields) {
     #else
         EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark3;test1;test2\nbenchmark3;1;2\nbenchmark3;;\n");
     #endif
-    TestBenchmarkMove::get()->data()->~logger();
+    improc::File::Remove("./benchmark_1.csv");
 }
 
 TEST(Benchmark,TestBenchmarkWriteDiffTypeFields) {
@@ -112,7 +112,7 @@ TEST(Benchmark,TestBenchmarkWriteDiffTypeFields) {
     #else
         EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark4;test3;test1;test2\nbenchmark4;test;false;3.14\n");
     #endif
-    TestBenchmarkDiff::get()->data()->~logger();
+    improc::File::Remove("./benchmark_1.csv");
 }
 
 TEST(Benchmark,TestBenchmarkWriteWithMacros) {
@@ -135,4 +135,5 @@ TEST(Benchmark,TestBenchmarkWriteWithMacros) {
     #else
         EXPECT_STREQ(improc::File::Read("./benchmark_1.csv").c_str(),"benchmark5;test3;test1;test2\nbenchmark5;macro;false;3.14\n");
     #endif
+    improc::File::Remove("./benchmark_1.csv");
 }
