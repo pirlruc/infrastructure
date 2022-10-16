@@ -22,20 +22,20 @@ jobs:
       matrix:
         boost: ["ON","OFF"]
         config:
-#        - {
-#            name: "ubuntu_latest_gcc",
-#            os: ubuntu-latest,
-#            build_type: "Release",
-#            cc: "gcc-11",
-#            cxx: "g++-11"
-#          }
-#        - {
-#            name: "ubuntu_latest_clang",
-#            os: ubuntu-latest,
-#            build_type: "Release",
-#            cc: "clang-10",
-#            cxx: "clang++-10"
-#          }
+        - {
+            name: "ubuntu_latest_gcc",
+            os: ubuntu-latest,
+            build_type: "Release",
+            cc: "gcc-11",
+            cxx: "g++-11"
+          }
+        - {
+            name: "ubuntu_latest_clang",
+            os: ubuntu-latest,
+            build_type: "Release",
+            cc: "clang-10",
+            cxx: "clang++-10"
+          }
         - {
             name: "windows_latest_gcc",
             os: windows-latest,
