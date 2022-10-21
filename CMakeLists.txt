@@ -23,8 +23,9 @@ if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
   set(CMAKE_PDB_OUTPUT_DIRECTORY     "${CMAKE_BINARY_DIR}/bin"      CACHE PATH "PDB (MSVC debug symbol)output dir.")
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"      CACHE PATH "Executable/dll output dir.")
   set(CMAKE_DEBUG_POSTFIX d)
-  option(IMPROC_WITH_TESTS 			     "Building library with tests"  ON)
-  option(BUILD_SHARED_LIBS           "Building shared libraries"    ON)
+  option(IMPROC_WITH_TESTS 			     "Building library with tests"          OFF)
+  option(IMPROC_WITH_COVERAGE  	     "Building library with code coverage"  OFF)
+  option(BUILD_SHARED_LIBS           "Building shared libraries"            ON)
 endif()
 
 if(NOT DEFINED IMPROC_WITH_BOOST)
@@ -131,7 +132,7 @@ target_link_libraries       (${PROJECT_NAME}   INTERFACE ${IMPROC_INFRASTRUCTURE
 
 # Tests configuration
 if(IMPROC_WITH_TESTS)
-  add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/infrastructure_test)
+  add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/improc_infrastructure_test)
 endif()
 
 if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)

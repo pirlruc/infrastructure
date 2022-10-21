@@ -27,6 +27,46 @@ configure_file(
   ${PROJECT_SOURCE_DIR}/test/${PROJECT_NAME}_test_config.hpp
 )
 
+if(IMPROC_WITH_COVERAGE AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
+  set(ENV{LLVM_PROFILE_FILE} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
+  find_program(LLVM_PROFDATA llvm-profdata-10 REQUIRED)
+  find_program(LLVM_COV      llvm-cov-10      REQUIRED)
+  find_program(GENHTML       genhtml          REQUIRED)
+  
+  add_custom_target(
+    coverage
+
+    COMMAND ${LLVM_PROFDATA} merge --sparse ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/default.profraw 
+                                   -o ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.profdata
+    COMMAND ${LLVM_COV} export --format=lcov --instr-profile ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.profdata 
+                                                             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}_testd 
+                                                           > ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.lcov
+    COMMAND ${GENHTML} --demangle-cpp -o ${PROJECT_NAME}_coverage ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.lcov
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
+endif()
+
+if(IMPROC_WITH_COVERAGE AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Og --coverage")
+  set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
+
+  find_program(GCOV    gcov-11 REQUIRED)
+  find_program(LCOV    lcov    REQUIRED)
+  find_program(GENHTML genhtml REQUIRED)
+  
+  add_custom_target(
+    coverage
+
+    COMMAND ${LCOV}    --directory ${CMAKE_BINARY_DIR}/improc_infrastructure_test/CMakeFiles/${PROJECT_NAME}_test.dir
+                       --capture --output-file ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.info
+                       --gcov-tool ${GCOV}
+    COMMAND ${GENHTML} --demangle-cpp -o ${PROJECT_NAME}_coverage ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.info
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
+endif()
+
 add_executable(
   ${PROJECT_NAME}_test
     
