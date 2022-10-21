@@ -58,7 +58,7 @@ jobs:
             coverage: "OFF"
           }
         - {
-            name: "code_coverage",
+            name: "ubuntu_latest_code_coverage",
             os: ubuntu-latest,
             build_type: "Debug",
             cc: "clang-10",
