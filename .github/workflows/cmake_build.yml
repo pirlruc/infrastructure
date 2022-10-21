@@ -138,12 +138,12 @@ jobs:
         run: cmake --build build --config ${{ matrix.config.build_type }} --target all
 
       - name: Test
-        if: ${{ matrix.config.coverage }} == "OFF"
+        if: startsWith(matrix.config.coverage, 'OFF')
         shell: bash
         run: ./build/bin/improc_infrastructure_test
 
       - name: Code Coverage
-        if: ${{ matrix.config.coverage }} == "ON"
+        if: startsWith(matrix.config.coverage, 'ON')
         shell: bash
         run: |
           ./build/bin/improc_infrastructure_testd
