@@ -58,7 +58,7 @@ jobs:
             coverage: "OFF"
           }
         - {
-            name: "code_coverage",
+            name: "ubuntu_latest_code_coverage",
             os: ubuntu-latest,
             build_type: "Debug",
             cc: "clang-10",
@@ -66,7 +66,7 @@ jobs:
             boost: "OFF",
             coverage: "ON"
           }
-       -  {
+        - {
             name: "windows_latest_gcc_boost_off",
             os: windows-latest,
             build_type: "Release",
@@ -138,12 +138,14 @@ jobs:
         run: cmake --build build --config ${{ matrix.config.build_type }} --target all
 
       - name: Test
+        if: startsWith(matrix.config.coverage, 'OFF')
         shell: bash
-        if: ${{ matrix.config.coverage }} == "OFF"
         run: ./build/bin/improc_infrastructure_test
 
       - name: Code Coverage
+        if: startsWith(matrix.config.coverage, 'ON')
         shell: bash
-        if: ${{ matrix.config.coverage }} == "ON"
-        run: ./build/bin/improc_infrastructure_testd
-        run: ./build/make coverage
+        run: |
+          ./build/bin/improc_infrastructure_testd
+          ./build/make coverage
+
