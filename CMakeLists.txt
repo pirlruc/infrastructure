@@ -8,6 +8,10 @@ if(NOT DEFINED IMPROC_SUPERPROJECT_VERSION)
   set(IMPROC_SUPERPROJECT_VERSION 1.0.0)
 endif()
 
+if(NOT DEFINED IMPROC_WITH_BOOST)
+  set(IMPROC_WITH_BOOST OFF)
+endif()
+
 project(
   improc_infrastructure
   VERSION     ${IMPROC_SUPERPROJECT_VERSION}
@@ -28,16 +32,12 @@ if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
   option(BUILD_SHARED_LIBS           "Building shared libraries"            ON)
 endif()
 
-if(NOT DEFINED IMPROC_WITH_BOOST)
-  set(IMPROC_WITH_BOOST OFF)
-endif()
-
 # Add external dependencies
 # SPDLOG
 FetchContent_Declare(
   spdlog
   GIT_REPOSITORY  https://github.com/gabime/spdlog
-  GIT_TAG         v1.10.0
+  GIT_TAG         v1.11.0
   SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/spdlog
 )
 FetchContent_MakeAvailable(spdlog)
@@ -61,7 +61,7 @@ if(IMPROC_WITH_BOOST)
   FetchContent_Declare(
     boost
     GIT_REPOSITORY https://github.com/boostorg/boost
-    GIT_TAG        boost-1.79.0
+    GIT_TAG        boost-1.80.0
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/boost
   )
   FetchContent_MakeAvailable(boost)
@@ -133,10 +133,6 @@ target_link_libraries       (${PROJECT_NAME}   INTERFACE ${IMPROC_INFRASTRUCTURE
 # Tests configuration
 if(IMPROC_WITH_TESTS)
   add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/improc_infrastructure_test)
-endif()
-
-if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
-  add_subdirectory(${PROJECT_SOURCE_DIR}/version  ${CMAKE_BINARY_DIR}/version)
 endif()
 
 # Install configuration
