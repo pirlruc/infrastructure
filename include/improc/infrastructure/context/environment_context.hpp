@@ -4,8 +4,15 @@
 #include <improc/improc_defs.hpp>
 #include <improc/infrastructure/logging/logger_infrastructure.hpp>
 
+#include <type_traits>
+
 namespace improc 
 {
+    /**
+     * @brief Singleton template for application contexts
+     * 
+     * @tparam ContextType - Data type of the application context being created
+     */
     template <typename ContextType>
     class IMPROC_API EnvironmentContext
     {

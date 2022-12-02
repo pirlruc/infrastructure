@@ -10,12 +10,12 @@ namespace improc
      * @brief Logger used for infrastructure library
      * 
      */
-    class IMPROC_API InfrastructureLogger : public LoggerSingleton<InfrastructureLogger>
+    class IMPROC_API InfrastructureLogger final : public LoggerSingleton<InfrastructureLogger>
     {
         friend std::shared_ptr<InfrastructureLogger> LoggerSingleton::get(const std::string& logger_name);
         private:
-            InfrastructureLogger(std::shared_ptr<spdlog::logger>&&      logger) : LoggerSingleton(std::move(logger)) {}
-            InfrastructureLogger(const std::shared_ptr<spdlog::logger>& logger) : LoggerSingleton(std::move(logger)) {}
+            explicit InfrastructureLogger(std::shared_ptr<spdlog::logger>&&      logger) : LoggerSingleton(std::move(logger)) {}
+            explicit InfrastructureLogger(const std::shared_ptr<spdlog::logger>& logger) : LoggerSingleton(std::move(logger)) {}
 
         public:
             InfrastructureLogger(InfrastructureLogger&  that) = delete;

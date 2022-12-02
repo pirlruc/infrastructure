@@ -1,8 +1,8 @@
 /**
  * @brief Construct a new improc::LoggerSingleton<LoggerType> object
  * 
- * @tparam LoggerType 
- * @param logger 
+ * @tparam LoggerType - Data type of the logger being created
+ * @param logger
  */
 template<typename LoggerType>
 improc::LoggerSingleton<LoggerType>::LoggerSingleton(std::shared_ptr<spdlog::logger>&&        logger) : data_(std::move(logger)) {}
@@ -10,7 +10,7 @@ improc::LoggerSingleton<LoggerType>::LoggerSingleton(std::shared_ptr<spdlog::log
 /**
  * @brief Construct a new improc::LoggerSingleton<LoggerType> object
  * 
- * @tparam LoggerType 
+ * @tparam LoggerType - Data type of the logger being created
  * @param logger 
  */
 template<typename LoggerType>
@@ -19,7 +19,7 @@ improc::LoggerSingleton<LoggerType>::LoggerSingleton(const std::shared_ptr<spdlo
 /**
  * @brief Obtain spdlog::logger object associated with improc::LoggerSingleton<LoggerType> object
  * 
- * @tparam LoggerType 
+ * @tparam LoggerType - Data type of the logger being created
  * @return std::shared_ptr<spdlog::logger> 
  */
 template<typename LoggerType>
@@ -35,13 +35,14 @@ std::shared_ptr<spdlog::logger> improc::LoggerSingleton<LoggerType>::data() cons
  * the logger logger_name. If the logger_name is not provided, the default logger of spdlog is 
  * used. If the logger_name is provided and the logger is not defined, the console is used. 
  * 
- * @tparam LoggerType 
+ * @tparam LoggerType - Data type of the logger being created
  * @param logger_name 
  * @return std::shared_ptr<LoggerType> 
  */
 template<typename LoggerType> 
 std::shared_ptr<LoggerType> improc::LoggerSingleton<LoggerType>::get(const std::string& logger_name)
 {
+    static_assert(std::is_base_of_v<improc::LoggerSingleton<LoggerType>,LoggerType>, "improc::LoggerSingleton must be base of LoggerType");
     SPDLOG_LOGGER_TRACE(spdlog::default_logger(),"Creating logger...");
     static std::shared_ptr<LoggerType> singleton = nullptr;
     if (singleton == nullptr)

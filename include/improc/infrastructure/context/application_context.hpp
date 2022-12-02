@@ -6,7 +6,11 @@
 
 namespace improc 
 {
-    class IMPROC_API ApplicationContext : public EnvironmentContext<ApplicationContext> 
+    /**
+     * @brief Application context for improc library
+     * 
+     */
+    class IMPROC_API ApplicationContext final : public EnvironmentContext<ApplicationContext> 
     {
         friend std::shared_ptr<ApplicationContext> EnvironmentContext::get();
 

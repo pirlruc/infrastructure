@@ -5,13 +5,14 @@
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_sinks.h>
+#include <type_traits>
 
 namespace improc 
 {
     /**
      * @brief Singleton template for loggers
      * 
-     * @tparam LoggerType 
+     * @tparam LoggerType - Data type of the logger being created
      */
     template <typename LoggerType>
     class IMPROC_API LoggerSingleton
@@ -20,8 +21,8 @@ namespace improc
             std::shared_ptr<spdlog::logger> data_;
 
         protected:
-            LoggerSingleton(std::shared_ptr<spdlog::logger>&&       logger);
-            LoggerSingleton(const std::shared_ptr<spdlog::logger>&  logger);
+            explicit LoggerSingleton(std::shared_ptr<spdlog::logger>&&       logger);
+            explicit LoggerSingleton(const std::shared_ptr<spdlog::logger>&  logger);
     
         public:
             LoggerSingleton(LoggerSingleton&        that) = delete;

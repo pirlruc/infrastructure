@@ -1,7 +1,7 @@
 /**
  * @brief Construct a new improc::BenchmarkSingleton<BenchmarkType> object
  * 
- * @tparam BenchmarkType 
+ * @tparam BenchmarkType - Data type of the benchmark being created
  * @param benchmark_logger 
  */
 template <typename BenchmarkType>
@@ -19,7 +19,7 @@ improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(std::shared_ptr<sp
 /**
  * @brief Construct a new improc::BenchmarkSingleton<BenchmarkType> object
  * 
- * @tparam BenchmarkType 
+ * @tparam BenchmarkType - Data type of the benchmark being created
  * @param benchmark_logger 
  */
 template <typename BenchmarkType>
@@ -34,6 +34,12 @@ improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(const std::shared_
     this->data()->set_pattern("%n;%v");
 }
 
+/**
+ * @brief Construct a new improc::BenchmarkSingleton<BenchmarkType> object
+ * 
+ * @tparam BenchmarkType - Data type of the benchmark being created
+ * @param keys - Benchmark keys. Must be defined before writing information to the benchmark
+ */
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::AddKeys(const std::unordered_set<std::string>& keys) 
 {
@@ -48,6 +54,12 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
     return (*this);
 }
 
+/**
+ * @brief Initialize benchmark line content
+ * 
+ * @tparam BenchmarkType - Data type of the benchmark being created
+ * @param keys - Benchmark keys
+ */
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::InitializeLineContent(const std::unordered_set<std::string>& keys) 
 {
@@ -59,6 +71,13 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
     return (*this);
 }
 
+/**
+ * @brief Sets the content for a specific benchmark key
+ * 
+ * @tparam BenchmarkType - Data type of the benchmark being created
+ * @param key - Benchmark key
+ * @param content - Benchmark key content
+ */
 template <typename BenchmarkType>
 template <typename ContentType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::SetKeyContent(const std::string& key, const ContentType& content)
@@ -69,9 +88,9 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
 }
 
 /**
- * @brief Write benchmark line in the benchmark.
+ * @brief Write benchmark line
  * 
- * @tparam BenchmarkType 
+ * @tparam BenchmarkType - Data type of the benchmark being created
  */
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteLine()
@@ -85,6 +104,11 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
     return (*this);
 }
 
+/**
+ * @brief Write benchmark header line
+ * 
+ * @tparam BenchmarkType - Data type of the benchmark being created
+ */
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteHeader()
 {
@@ -94,10 +118,15 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
     {
         header_line += ";" + content_iter.first;
     }
-    this->WriteLineOnBenchmark(header_line);
+    this->WriteLineOnBenchmark(std::move(header_line));
     return (*this);
 }
 
+/**
+ * @brief Write benchmark line content
+ * 
+ * @tparam BenchmarkType - Data type of the benchmark being created
+ */
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteContent()
 {
@@ -107,11 +136,17 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
     {
         line_msg += ";" + content_iter.second;
     }
-    this->WriteLineOnBenchmark(line_msg);
+    this->WriteLineOnBenchmark(std::move(line_msg));
     this->InitializeLineContent(this->keys_);
     return (*this);
 }
 
+/**
+ * @brief Write benchmark line using logger
+ * 
+ * @tparam BenchmarkType - Data type of the benchmark being created
+ * @param line - Benchmark line content
+ */
 template <typename BenchmarkType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::WriteLineOnBenchmark(const std::string& line)
 {
@@ -119,11 +154,11 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
     if (line.size() > 0)
     {
         // Remove first character since there is an additional ";" at the beginning
-        this->data()->critical(line.substr(1,std::string::npos));
+        this->data()->critical(std::move(line.substr(1,std::string::npos)));
     }
     else
     {
-        this->data()->critical(line);
+        this->data()->critical(std::move(line));
     }
     return (*this);
 }

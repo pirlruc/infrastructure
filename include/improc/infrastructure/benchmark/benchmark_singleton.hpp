@@ -15,7 +15,7 @@ namespace improc
      * It considers a specific pattern to create the information to write on the
      * benchmark: logger_name and message. 
      * 
-     * @tparam BenchmarkType 
+     * @tparam BenchmarkType - Data type of the benchmark being created
      */
     template <typename BenchmarkType>
     class IMPROC_API BenchmarkSingleton : public LoggerSingleton<BenchmarkType>
@@ -26,8 +26,8 @@ namespace improc
             std::unordered_map<std::string,std::string> line_content_;
 
         protected:
-            BenchmarkSingleton(std::shared_ptr<spdlog::logger>&&      benchmark_logger);
-            BenchmarkSingleton(const std::shared_ptr<spdlog::logger>& benchmark_logger);
+            explicit BenchmarkSingleton(std::shared_ptr<spdlog::logger>&&      benchmark_logger);
+            explicit BenchmarkSingleton(const std::shared_ptr<spdlog::logger>& benchmark_logger);
             
         public:
             BenchmarkSingleton(BenchmarkSingleton&    that) = delete;
