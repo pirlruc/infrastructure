@@ -14,7 +14,7 @@ improc::String::String() {}
 improc::String::String(const std::string& str_data) : data_(std::move(str_data)) {}
 
 /**
- * @brief Set the string object
+ * @brief Set the string data into object
  * 
  * @param str_data - string data
  */
@@ -26,7 +26,7 @@ improc::String& improc::String::set_string(const std::string& str_data)
 }
 
 /**
- * @brief Get the string object data
+ * @brief Get the string data from object
  * 
  * @return std::string
  */
@@ -37,7 +37,7 @@ std::string improc::String::get_data() const
 }
 
 /**
- * @brief Converting string to lower case
+ * @brief Converting string data to lower case
  * 
  */
 improc::String& improc::String::ToLower()
@@ -53,7 +53,7 @@ improc::String& improc::String::ToLower()
 }
 
 /**
- * @brief Converting string to upper case
+ * @brief Converting string data to upper case
  * 
  */
 improc::String& improc::String::ToUpper()
@@ -71,15 +71,16 @@ improc::String& improc::String::ToUpper()
 /**
  * @brief Converting a string to lower case
  * 
- * @return std::string
+ * @param str_data - string data
+ * @return std::string - string data in lower case
  */
 std::string improc::String::ToLower(const std::string& str_data)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Transforming string to lower case...");
     #ifdef IMPROC_WITH_BOOST
-        return boost::algorithm::to_lower_copy(str_data);
+        return boost::algorithm::to_lower_copy(std::move(str_data));
     #else
-        std::string result {str_data};
+        std::string result {std::move(str_data)};
         std::transform  ( result.begin(),result.end(),result.begin()
                         , [] (unsigned char character){ return std::tolower(character); });
         return result;
@@ -89,21 +90,26 @@ std::string improc::String::ToLower(const std::string& str_data)
 /**
  * @brief Converting a string to upper case
  * 
- * @return std::string
+ * @param str_data - string data
+ * @return std::string - string data in upper case
  */
 std::string improc::String::ToUpper(const std::string& str_data)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Transforming string to upper case...");
     #ifdef IMPROC_WITH_BOOST
-        return boost::algorithm::to_upper_copy(str_data);
+        return boost::algorithm::to_upper_copy(std::move(str_data));
     #else
-        std::string result {str_data};
+        std::string result {std::move(str_data)};
         std::transform  ( result.begin(),result.end(),result.begin()
                         , [] (unsigned char character){ return std::toupper(character); });
         return result;
     #endif
 }
 
+/**
+ * @brief Construct a new improc::JsonString object
+ * 
+ */
 improc::JsonString::JsonString()
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating json string reader...");
@@ -111,6 +117,12 @@ improc::JsonString::JsonString()
     this->char_reader_ = std::make_unique<Json::CharReader*>(char_reader_builder.newCharReader());
 }
 
+/**
+ * @brief Construct a new improc::JsonString object
+ * 
+ * @param json_string - json string data
+ * @return Json::Value - result of parsing the json string
+ */
 Json::Value improc::JsonString::Parse(const std::string& json_string) const
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Parsing json string...");

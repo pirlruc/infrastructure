@@ -4,6 +4,8 @@
 #include <improc/infrastructure/logging/logger_infrastructure.hpp>
 #include <improc/improc_defs.hpp>
 
+#include <type_traits>
+
 namespace improc 
 {
     namespace math

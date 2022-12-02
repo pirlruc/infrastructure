@@ -5,11 +5,6 @@
 
 #include <improc_infrastructure_test_config.hpp>
 
-TEST(JsonParser,TestReadingInvalidContent) {
-    Json::Value json_content {"test"};
-    EXPECT_THROW(improc::json::ReadElement<size_t>(json_content),improc::not_supported_data_type);
-}
-
 TEST(JsonParser,TestReadingStringContent) {
     Json::Value json_content {"test"};
     EXPECT_EQ(improc::json::ReadElement<std::string>(json_content),"test");

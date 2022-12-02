@@ -6,6 +6,7 @@
 #include <improc/exception.hpp>
 
 #include <json/json.h>
+#include <type_traits>
 
 namespace improc 
 {
@@ -13,9 +14,6 @@ namespace improc
     {
         template<typename KeyType>
         IMPROC_API KeyType                  ReadElement (const Json::Value& json_elem);
-
-        template<>
-        IMPROC_API inline std::string       ReadElement (const Json::Value& json_elem);
 
         template<typename KeyType>
         IMPROC_API std::vector<KeyType>     ReadVector  (const Json::Value& json_vector);

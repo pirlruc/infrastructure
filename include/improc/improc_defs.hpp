@@ -17,4 +17,9 @@
 
 #define IMPROC_ENUM_KEY_TYPE unsigned int
 
+namespace improc {
+    template<class>
+    inline constexpr bool dependent_false_v = false;
+}
+
 #endif

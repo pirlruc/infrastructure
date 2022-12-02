@@ -20,14 +20,14 @@ namespace improc
      * @brief String object and utilities
      * 
      */
-    class IMPROC_API String
+    class IMPROC_API String final
     {
         private:
             std::string                 data_;
 
         public:
             String();
-            String(const std::string& str_data);
+            explicit String(const std::string& str_data);
 
             String&                     set_string(const std::string& str_data);
             std::string                 get_data() const;
@@ -39,7 +39,11 @@ namespace improc
             static std::string          ToUpper(const std::string& lower_str);
     };
 
-    class IMPROC_API JsonString
+    /**
+     * @brief Json string object and utilities
+     * 
+     */
+    class IMPROC_API JsonString final
     {
         private:
             std::unique_ptr<Json::CharReader*>  char_reader_;

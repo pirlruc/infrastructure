@@ -1,67 +1,52 @@
 /**
- * @brief Read <KeyType> element in json
+ * @brief Read KeyType element in json
  * 
- * @tparam KeyType 
- * @param json_elem 
- * @return KeyType 
+ * @tparam KeyType - data type of the element in the json element
+ * @param json_elem - json element
+ * @return KeyType - parsed json element into KeyType data type
  */
 template<typename KeyType>
 KeyType improc::json::ReadElement(const Json::Value& json_elem)
 {
-    IMPROC_INFRASTRUCTURE_LOGGER_ERROR  ( "ERROR_01: Parsing not defined for element {}."
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE  ( "Reading json element with type {}..."
                                         , typeid(KeyType).name() );
-    throw improc::not_supported_data_type();
+    if constexpr (std::is_same_v<KeyType,std::string>)
+    {
+        return json_elem.asString();
+    }
+    else if constexpr (std::is_same_v<KeyType,bool>)
+    {
+        return json_elem.asBool();
+    }
+    else if constexpr (std::is_same_v<KeyType,unsigned int>)
+    {
+        return json_elem.asUInt();
+    }
+    else if constexpr (std::is_same_v<KeyType,int>)
+    {
+        return json_elem.asInt();
+    }
+    else if constexpr (std::is_same_v<KeyType,float>)
+    {
+        return json_elem.asFloat();
+    }
+    else if constexpr (std::is_same_v<KeyType,double>)
+    {
+        return json_elem.asDouble();
+    }
+    else
+    {
+        static_assert(improc::dependent_false_v<KeyType>,"Parsing not defined for element data type");
+    }
 }
 
 /**
- * @brief Read string element in json
+ * @brief Read KeyType array in json
  * 
- * @tparam  
- * @param json_elem 
- * @return std::string 
+ * @tparam KeyType - data type of the elements in the json array
+ * @param json_vector - json array
+ * @return std::vector<KeyType> - parsed json array into an array of KeyType elements
  */
-template<>
-inline std::string improc::json::ReadElement(const Json::Value& json_elem)
-{
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading string json element...");
-    return json_elem.asString();
-}
-
-template<>
-inline double improc::json::ReadElement(const Json::Value& json_elem)
-{
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading double json element...");
-    return json_elem.asDouble();
-}
-
-template<>
-inline float improc::json::ReadElement(const Json::Value& json_elem)
-{
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading float json element...");
-    return json_elem.asFloat();
-}
-
-template<>
-inline unsigned int improc::json::ReadElement(const Json::Value& json_elem)
-{
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading unsigned integer json element...");
-    return json_elem.asUInt();
-}
-
-template<>
-inline int improc::json::ReadElement(const Json::Value& json_elem)
-{
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading integer json element...");
-    return json_elem.asInt();
-}
-
-template<>
-inline bool improc::json::ReadElement(const Json::Value& json_elem)
-{
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading boolean json element...");
-    return json_elem.asBool();
-}
-
 template<typename KeyType>
 std::vector<KeyType> improc::json::ReadVector(const Json::Value& json_vector)
 {
@@ -75,7 +60,7 @@ std::vector<KeyType> improc::json::ReadVector(const Json::Value& json_vector)
     }
     else
     {
-        list_elems.push_back(improc::json::ReadElement<KeyType>(json_vector));
+        list_elems.push_back(improc::json::ReadElement<KeyType>(std::move(json_vector)));
     }
     return std::move(list_elems);
 }
