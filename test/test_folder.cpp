@@ -45,14 +45,14 @@ TEST(Folder,TestGetFilesInFolderAndSubfolders) {
 
 TEST(Folder,TestGetFilesInFolderUsingPath) {
     std::string folder_path = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test";
-    improc::folder::ListFiles<std::filesystem::directory_iterator,std::filesystem::path> folder_list {};
+    improc::folder::ListFiles<std::filesystem::directory_iterator> folder_list {};
     EXPECT_EQ(folder_list.GetFiles(folder_path).size(),2);
     EXPECT_EQ(improc::folder::ListFiles<std::filesystem::directory_iterator>::GetFiles(folder_path).size(),2);
 }
 
 TEST(Folder,TestGetFilesInFolderAndSubfoldersUsingPath) {
     std::string folder_path = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test";
-    improc::folder::ListFiles<std::filesystem::recursive_directory_iterator,std::filesystem::path> folder_list {};
+    improc::folder::ListFiles<std::filesystem::recursive_directory_iterator> folder_list {};
     EXPECT_EQ(folder_list.GetFiles(folder_path).size(),4);
     EXPECT_EQ(improc::folder::ListFiles<std::filesystem::recursive_directory_iterator>::GetFiles(folder_path).size(),4);
 }
@@ -66,18 +66,6 @@ TEST(Folder,TestGetFilesInFolderUsingPolicy) {
 TEST(Folder,TestGetFilesInFolderAndSubfoldersUsingPolicy) {
     std::string folder_path = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test";
     improc::folder::ListFilesInFolderAndSubfolders folder_list {};
-    EXPECT_EQ(folder_list.GetFiles(folder_path).size(),4);
-}
-
-TEST(Folder,TestGetFilesInFolderUsingStrings) {
-    std::string folder_path = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test";
-    improc::folder::ListFiles<std::filesystem::directory_iterator,std::string> folder_list {};
-    EXPECT_EQ(folder_list.GetFiles(folder_path).size(),2);
-}
-
-TEST(Folder,TestGetFilesInFolderAndSubfoldersUsingStrings) {
-    std::string folder_path = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test";
-    improc::folder::ListFiles<std::filesystem::recursive_directory_iterator,std::string> folder_list {};
     EXPECT_EQ(folder_list.GetFiles(folder_path).size(),4);
 }
 
@@ -96,24 +84,9 @@ TEST(Folder,TestSortFilesByAscendingFilenamePolicy) {
     std::string folder_path = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test";
     improc::Folder folder_exists {folder_path};
     std::vector<std::filesystem::path> files        = folder_exists.GetFilesInFolderAndSubfolders();
-    std::vector<std::filesystem::path> sorted_files = improc::folder::SortFilesByAscendingFilename().Sort(files);
+    std::vector<std::filesystem::path> sorted_files = improc::Folder::SortFilesByAscendingFilename(files);
     EXPECT_STREQ(sorted_files[0].filename().string().c_str(),"test_1.txt");
     EXPECT_STREQ(sorted_files[1].filename().string().c_str(),"test_12.txt");
     EXPECT_STREQ(sorted_files[2].filename().string().c_str(),"test_2.txt");
     EXPECT_STREQ(sorted_files[3].filename().string().c_str(),"test_3.txt");
-}
-
-TEST(Folder,TestSortFilesByAscendingFilenamePolicyUsingString) {
-    std::string folder_path = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test";
-    std::vector<std::string> files        = improc::folder::ListFilesInFolderAndSubfolders<std::string>().GetFiles(folder_path);
-    std::vector<std::string> sorted_files = improc::folder::SortFilesByAscendingFilename<std::string>().Sort(files);
-    EXPECT_STREQ(std::filesystem::path(sorted_files[0]).filename().string().c_str(),"test_1.txt");
-    EXPECT_STREQ(std::filesystem::path(sorted_files[1]).filename().string().c_str(),"test_12.txt");
-    EXPECT_STREQ(std::filesystem::path(sorted_files[2]).filename().string().c_str(),"test_2.txt");
-    EXPECT_STREQ(std::filesystem::path(sorted_files[3]).filename().string().c_str(),"test_3.txt");
-}
-
-TEST(Folder,TestSortFilesByAscendingFilenamePolicyUsingUnknown) {
-    std::vector<int> array_int {0,2,21,1,3};
-    EXPECT_THROW(improc::folder::SortFilesByAscendingFilename<int>().Sort(array_int),improc::not_supported_data_type);
 }

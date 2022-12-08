@@ -15,14 +15,14 @@ namespace improc
      * @brief Folder object and utilities
      * 
      */
-    class IMPROC_API Folder
+    class IMPROC_API Folder final
     {
         private:
             std::filesystem::path                       folder_path_;
 
         public:
             Folder();
-            Folder(const std::string& folder_path);
+            explicit Folder(const std::string& folder_path);
 
             Folder&                                     set_folder_path(const std::string& folder_path);
 
@@ -30,7 +30,7 @@ namespace improc
             std::vector<std::filesystem::path>          GetFilesInFolderAndSubfolders() const;
 
             static bool                                 IsFolder(const std::string& folder_path);
-            static std::vector<std::filesystem::path>   SortFilesByAscendingFilename(const std::vector<std::filesystem::path>& filepaths);
+            static std::vector<std::filesystem::path>   SortFilesByAscendingFilename(std::vector<std::filesystem::path> filepaths);
     };
 }
 

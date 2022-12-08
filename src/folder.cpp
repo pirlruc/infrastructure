@@ -42,8 +42,7 @@ improc::Folder& improc::Folder::set_folder_path(const std::string& folder_path)
 std::vector<std::filesystem::path> improc::Folder::GetFilesInFolder() const
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Obtain files in folder {}...",this->folder_path_.string());
-    improc::folder::ListFilesInFolder<std::filesystem::path> folder_list {};
-    return folder_list.GetFiles(this->folder_path_);
+    return improc::folder::ListFilesInFolder::GetFiles(this->folder_path_);
 }
 
 /**
@@ -55,16 +54,14 @@ std::vector<std::filesystem::path> improc::Folder::GetFilesInFolderAndSubfolders
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE  ( "Obtain files in folder and subfolders {}..."
                                         , this->folder_path_.string() );
-    improc::folder::ListFilesInFolderAndSubfolders<std::filesystem::path> folder_list {};
-    return folder_list.GetFiles(this->folder_path_);
+    return improc::folder::ListFilesInFolderAndSubfolders::GetFiles(this->folder_path_);
 }
 
 /**
  * @brief Check if folder path exists and is a folder
  * 
  * @param folder_path
- * @return true 
- * @return false 
+ * @return bool - true if folder exists and false otherwise
  */
 bool improc::Folder::IsFolder(const std::string& folder_path)
 {
@@ -78,8 +75,15 @@ bool improc::Folder::IsFolder(const std::string& folder_path)
  * @param filepaths 
  * @return std::vector<std::filesystem::path> 
  */
-std::vector<std::filesystem::path> improc::Folder::SortFilesByAscendingFilename(const std::vector<std::filesystem::path>& filepaths)
+std::vector<std::filesystem::path> improc::Folder::SortFilesByAscendingFilename(std::vector<std::filesystem::path> filepaths)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Sort files by ascending filename...");
-    return std::move(improc::folder::SortFilesByAscendingFilename<std::filesystem::path>().Sort(filepaths));
+    std::sort   ( filepaths.begin()
+                , filepaths.end()
+                , [] (const std::filesystem::path& left_filepath, const std::filesystem::path& right_filepath) 
+                    {
+                        return left_filepath.filename() < right_filepath.filename();
+                    }
+                );
+    return std::move(filepaths);
 }
