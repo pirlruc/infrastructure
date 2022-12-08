@@ -8,15 +8,6 @@ template<typename LoggerType>
 improc::LoggerSingleton<LoggerType>::LoggerSingleton(std::shared_ptr<spdlog::logger>&&        logger) : data_(std::move(logger)) {}
 
 /**
- * @brief Construct a new improc::LoggerSingleton<LoggerType> object
- * 
- * @tparam LoggerType - Data type of the logger being created
- * @param logger 
- */
-template<typename LoggerType>
-improc::LoggerSingleton<LoggerType>::LoggerSingleton(const std::shared_ptr<spdlog::logger>&   logger) : data_(std::move(logger)) {}
-
-/**
  * @brief Obtain spdlog::logger object associated with improc::LoggerSingleton<LoggerType> object
  * 
  * @tparam LoggerType - Data type of the logger being created

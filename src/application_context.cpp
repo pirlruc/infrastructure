@@ -15,7 +15,7 @@ improc::ApplicationContext::ApplicationContext(): EnvironmentContext<Application
 improc::ApplicationContext& improc::ApplicationContext::set_application_folder(const std::string& application_folder)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Setting application folder...");
-    this->application_folder_ = application_folder;
+    this->application_folder_ = std::move(application_folder);
     return (*this);
 }
 

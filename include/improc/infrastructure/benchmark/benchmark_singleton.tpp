@@ -20,24 +20,6 @@ improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(std::shared_ptr<sp
  * @brief Construct a new improc::BenchmarkSingleton<BenchmarkType> object
  * 
  * @tparam BenchmarkType - Data type of the benchmark being created
- * @param benchmark_logger 
- */
-template <typename BenchmarkType>
-improc::BenchmarkSingleton<BenchmarkType>::BenchmarkSingleton(const std::shared_ptr<spdlog::logger>& benchmark_logger) 
-: LoggerSingleton<BenchmarkType>(std::move(benchmark_logger)) 
-, is_created_(false)
-, keys_(std::unordered_set<std::string>())
-, line_content_(std::unordered_map<std::string,std::string>())
-{
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating benchmark logger...");
-    this->data()->set_level(spdlog::level::critical);
-    this->data()->set_pattern("%n;%v");
-}
-
-/**
- * @brief Construct a new improc::BenchmarkSingleton<BenchmarkType> object
- * 
- * @tparam BenchmarkType - Data type of the benchmark being created
  * @param keys - Benchmark keys. Must be defined before writing information to the benchmark
  */
 template <typename BenchmarkType>
@@ -66,7 +48,7 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Initializing keys for line content...");
     for (const std::string& key : keys)
     {
-        this->line_content_[key] = "";
+        this->line_content_[std::move(key)] = "";
     }
     return (*this);
 }
@@ -83,7 +65,7 @@ template <typename ContentType>
 improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkType>::SetKeyContent(const std::string& key, const ContentType& content)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Setting content to key {}...", key);
-    this->line_content_[key] = fmt::format("{}",std::move(content));
+    this->line_content_[std::move(key)] = fmt::format("{}",std::move(content));
     return (*this);
 }
 

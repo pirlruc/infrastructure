@@ -9,14 +9,14 @@ class TestBenchmarkReference : public improc::BenchmarkSingleton<TestBenchmarkRe
 {
     friend std::shared_ptr<TestBenchmarkReference> LoggerSingleton::get(const std::string& logger_name);
     private:
-        TestBenchmarkReference(std::shared_ptr<spdlog::logger>&& logger) : BenchmarkSingleton(logger) {}
+        TestBenchmarkReference(std::shared_ptr<spdlog::logger>&& logger) : BenchmarkSingleton(std::move(logger)) {}
 };
 
 class TestBenchmarkReferenceKeys : public improc::BenchmarkSingleton<TestBenchmarkReferenceKeys>
 {
     friend std::shared_ptr<TestBenchmarkReferenceKeys> LoggerSingleton::get(const std::string& logger_name);
     private:
-        TestBenchmarkReferenceKeys(std::shared_ptr<spdlog::logger>&& logger) : BenchmarkSingleton(logger) {}
+        TestBenchmarkReferenceKeys(std::shared_ptr<spdlog::logger>&& logger) : BenchmarkSingleton(std::move(logger)) {}
 };
 
 class TestBenchmarkMove : public improc::BenchmarkSingleton<TestBenchmarkMove>

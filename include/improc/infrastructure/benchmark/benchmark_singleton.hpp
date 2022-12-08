@@ -27,7 +27,6 @@ namespace improc
 
         protected:
             explicit BenchmarkSingleton(std::shared_ptr<spdlog::logger>&&      benchmark_logger);
-            explicit BenchmarkSingleton(const std::shared_ptr<spdlog::logger>& benchmark_logger);
             
         public:
             BenchmarkSingleton(BenchmarkSingleton&    that) = delete;

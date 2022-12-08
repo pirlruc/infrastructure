@@ -11,8 +11,8 @@ TEST(JsonParser,TestReadingStringContent) {
 }
 
 TEST(JsonParser,TestReadingUnsignedIntegerContent) {
-    Json::Value json_content {1};
-    EXPECT_EQ(improc::json::ReadElement<unsigned int>(json_content),1);
+    Json::Value json_content {1U};
+    EXPECT_EQ(improc::json::ReadElement<unsigned int>(json_content),1U);
 }
 
 TEST(JsonParser,TestReadingIntegerContent) {

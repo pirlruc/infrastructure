@@ -6,7 +6,7 @@
  * @return KeyType - parsed json element into KeyType data type
  */
 template<typename KeyType>
-KeyType improc::json::ReadElement(const Json::Value& json_elem)
+KeyType inline improc::json::ReadElement(const Json::Value& json_elem)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE  ( "Reading json element with type {}..."
                                         , typeid(KeyType).name() );
@@ -48,7 +48,7 @@ KeyType improc::json::ReadElement(const Json::Value& json_elem)
  * @return std::vector<KeyType> - parsed json array into an array of KeyType elements
  */
 template<typename KeyType>
-std::vector<KeyType> improc::json::ReadVector(const Json::Value& json_vector)
+std::vector<KeyType> inline improc::json::ReadVector(const Json::Value& json_vector)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE  ( "Reading array json element with type {}..."
                                         , typeid(KeyType).name() );
@@ -56,7 +56,7 @@ std::vector<KeyType> improc::json::ReadVector(const Json::Value& json_vector)
     if (json_vector.isArray() == true)
     {
         std::transform  ( json_vector.begin(), json_vector.end(), std::back_inserter(list_elems)
-                        , [] (const Json::Value& elem) -> KeyType {return improc::json::ReadElement<KeyType>(elem);} );
+                        , [] (const Json::Value& elem) -> KeyType {return improc::json::ReadElement<KeyType>(std::move(elem));} );
     }
     else
     {

@@ -22,7 +22,6 @@ namespace improc
 
         protected:
             explicit LoggerSingleton(std::shared_ptr<spdlog::logger>&&       logger);
-            explicit LoggerSingleton(const std::shared_ptr<spdlog::logger>&  logger);
     
         public:
             LoggerSingleton(LoggerSingleton&        that) = delete;

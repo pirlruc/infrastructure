@@ -47,7 +47,7 @@ improc::String& improc::String::ToLower()
         boost::algorithm::to_lower(this->data_);
     #else
         std::transform  ( this->data_.begin(),this->data_.end(),this->data_.begin()
-                        , [] (unsigned char character){ return std::tolower(character); });
+                        , [] (unsigned char character){ return std::tolower(std::move(character)); });
     #endif
     return (*this);
 }
@@ -63,7 +63,7 @@ improc::String& improc::String::ToUpper()
         boost::algorithm::to_upper(this->data_);
     #else
         std::transform  ( this->data_.begin(),this->data_.end(),this->data_.begin()
-                        , [] (unsigned char character){ return std::toupper(character); });
+                        , [] (unsigned char character){ return std::toupper(std::move(character)); });
     #endif
     return (*this);
 }
@@ -82,7 +82,7 @@ std::string improc::String::ToLower(const std::string& str_data)
     #else
         std::string result {std::move(str_data)};
         std::transform  ( result.begin(),result.end(),result.begin()
-                        , [] (unsigned char character){ return std::tolower(character); });
+                        , [] (unsigned char character){ return std::tolower(std::move(character)); });
         return result;
     #endif
 }
@@ -101,7 +101,7 @@ std::string improc::String::ToUpper(const std::string& str_data)
     #else
         std::string result {std::move(str_data)};
         std::transform  ( result.begin(),result.end(),result.begin()
-                        , [] (unsigned char character){ return std::toupper(character); });
+                        , [] (unsigned char character){ return std::toupper(std::move(character)); });
         return result;
     #endif
 }
@@ -134,7 +134,7 @@ Json::Value improc::JsonString::Parse(const std::string& json_string) const
     if (is_parse_successful == false)
     {
         IMPROC_INFRASTRUCTURE_LOGGER_ERROR  ( "ERROR_01: Error parsing json string {}: {}."
-                                            , json_string, parse_errors );
+                                            , std::move(json_string), std::move(parse_errors) );
         throw improc::json_parsing_error();
     }
     return json_parsed;

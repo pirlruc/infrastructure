@@ -8,7 +8,7 @@ class TestLoggerReference : public improc::LoggerSingleton<TestLoggerReference>
 {
     friend std::shared_ptr<TestLoggerReference> LoggerSingleton::get(const std::string& logger_name);
     private:
-        TestLoggerReference(std::shared_ptr<spdlog::logger>&& logger) : LoggerSingleton(logger) {}
+        TestLoggerReference(std::shared_ptr<spdlog::logger>&& logger) : LoggerSingleton(std::move(logger)) {}
 };
 
 class TestLoggerMove : public improc::LoggerSingleton<TestLoggerMove>
