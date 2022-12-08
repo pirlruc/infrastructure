@@ -23,13 +23,13 @@ namespace improc
      */
     class IMPROC_API File
     {
-        private:
+        protected:
             std::filesystem::path   filepath_;
 
         public:
             File();
-            File(const std::string& filepath);
-            File(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
+            explicit File(const std::string& filepath);
+            explicit File(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
 
             File&                   set_filepath(const std::string& filepath);
             
@@ -51,12 +51,12 @@ namespace improc
      * @brief Json file object and utilities
      * 
      */
-    class IMPROC_API JsonFile : public File
+    class IMPROC_API JsonFile final : public File
     {
         public:
             JsonFile();
-            JsonFile(const std::string& filepath);
-            JsonFile(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
+            explicit JsonFile(const std::string& filepath);
+            explicit JsonFile(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
 
             JsonFile&               set_filepath(const std::string& filepath);
 

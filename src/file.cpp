@@ -17,13 +17,19 @@ improc::File::File(const std::string& filepath)
     this->set_filepath(std::move(filepath));
 }
 
+/**
+ * @brief Construct a new improc::File object
+ * 
+ * @param filepath_json - json structure with filepath
+ * @param application_folder
+ */
 improc::File::File(const Json::Value& filepath_json,const std::optional<std::string>& application_folder) 
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating File object using json...");
-    std::filesystem::path    filepath     = application_folder.value_or("");
-    std::vector<std::string> folders_json = improc::json::ReadVector<std::string>(filepath_json);
-    std::for_each(folders_json.begin(),folders_json.end(), [&filepath] (const std::string& folder) {filepath /= folder;});
-    this->set_filepath(std::move(filepath.string()));
+    std::filesystem::path    filepath     = std::move(application_folder.value_or(""));
+    std::vector<std::string> folders_json = improc::json::ReadVector<std::string>(std::move(filepath_json));
+    std::for_each(folders_json.begin(),folders_json.end(), [&filepath] (const std::string& folder) {filepath /= std::move(folder);});
+    this->set_filepath(std::move(filepath));
 }
 
 /**
@@ -83,7 +89,7 @@ std::string improc::File::get_extension() const
  */
 std::string improc::File::Read() const
 {
-    return improc::File::Read(this->filepath_.string());
+    return improc::File::Read(this->filepath_);
 }
 
 /**
@@ -94,7 +100,7 @@ std::string improc::File::Read() const
  */
 bool improc::File::Remove() const
 {
-    return std::filesystem::remove(this->filepath_);
+    return improc::File::Remove(this->filepath_);
 }
 
 /**
@@ -105,7 +111,7 @@ bool improc::File::Remove() const
  */
 bool improc::File::Exists() const
 {
-    return std::filesystem::exists(this->filepath_);
+    return improc::File::Exists(this->filepath_);
 }
 
 /**
@@ -188,10 +194,16 @@ improc::JsonFile::JsonFile(const std::string& filepath)
     this->set_filepath(std::move(filepath));
 }
 
+/**
+ * @brief Construct a new improc::JsonFile object
+ * 
+ * @param filepath_json - json structure with filepath
+ * @param application_folder
+ */
 improc::JsonFile::JsonFile(const Json::Value& filepath_json, const std::optional<std::string>& application_folder)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating JsonFile object using json...");
-    this->set_filepath(std::move(improc::File(filepath_json,application_folder).get_filepath()));
+    this->set_filepath(improc::File(std::move(filepath_json),std::move(application_folder)).get_filepath());
 }
 
 /**
@@ -219,7 +231,7 @@ improc::JsonFile& improc::JsonFile::set_filepath(const std::string& filepath)
  */
 Json::Value improc::JsonFile::Read() const
 {
-    return improc::JsonFile::Read(this->get_filepath());
+    return improc::JsonFile::Read(this->filepath_);
 }
 
 /**
@@ -231,24 +243,17 @@ Json::Value improc::JsonFile::Read() const
 Json::Value improc::JsonFile::Read(const std::string& filepath)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading content from json filepath {}...",filepath);
+    improc::JsonFile {filepath};     // Validate if filepath extension is valid
     improc::File json_file {std::move(filepath)};
-    if (improc::JsonFile::IsExtensionValid(json_file) == false)
-    {
-        IMPROC_INFRASTRUCTURE_LOGGER_ERROR  ( "ERROR_02: Invalid json extension {}."
-                                            , json_file.get_extension() );
-        throw improc::invalid_filepath();
-    }
-
     std::string json_content_str = json_file.Read();
-    Json::Value json_content     = improc::JsonString().Parse(json_content_str);
-    return json_content;
+    return improc::JsonString().Parse(std::move(json_content_str));
 }
 
 /**
- * @brief Check if the filepath's extension is a valid json extension
+ * @brief Check if file extension is a valid json extension
  * 
- * @param filepath 
- * @return true 
+ * @param json_file - file object
+ * @return true if file extension is a valid json extension (i.e. .json)
  * @return false 
  */
 inline bool improc::JsonFile::IsExtensionValid(const improc::File& json_file)
