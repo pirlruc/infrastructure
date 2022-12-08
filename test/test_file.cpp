@@ -175,11 +175,11 @@ TEST(JsonFile,TestNonExistingFile) {
 
 TEST(JsonFile,TestExistingFile) {
     std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
-    improc::JsonFile file_exists {filepath};
-    EXPECT_EQ(file_exists.get_filepath() ,filepath);
-    EXPECT_EQ(file_exists.get_filename() ,"test.json");
-    EXPECT_EQ(file_exists.get_extension(),".json");
-    EXPECT_TRUE (file_exists.Exists());
+    improc::JsonFile json_file {filepath};
+    EXPECT_EQ(json_file.get_filepath() ,filepath);
+    EXPECT_EQ(json_file.get_filename() ,"test.json");
+    EXPECT_EQ(json_file.get_extension(),".json");
+    EXPECT_TRUE (json_file.Exists());
 }
 
 TEST(JsonFile,TestReadingNonExistingFile) {

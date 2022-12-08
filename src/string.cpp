@@ -80,10 +80,10 @@ std::string improc::String::ToLower(const std::string& str_data)
     #ifdef IMPROC_WITH_BOOST
         return boost::algorithm::to_lower_copy(std::move(str_data));
     #else
-        std::string result {std::move(str_data)};
-        std::transform  ( result.begin(),result.end(),result.begin()
-                        , [] (unsigned char character){ return std::tolower(std::move(character)); });
-        return result;
+        std::string lower {std::move(str_data)};
+        std::transform  ( lower.begin(),lower.end(),lower.begin()
+                        , [] (unsigned char char_upper){ return std::tolower(std::move(char_upper)); });
+        return lower;
     #endif
 }
 
@@ -99,10 +99,10 @@ std::string improc::String::ToUpper(const std::string& str_data)
     #ifdef IMPROC_WITH_BOOST
         return boost::algorithm::to_upper_copy(std::move(str_data));
     #else
-        std::string result {std::move(str_data)};
-        std::transform  ( result.begin(),result.end(),result.begin()
-                        , [] (unsigned char character){ return std::toupper(std::move(character)); });
-        return result;
+        std::string upper {std::move(str_data)};
+        std::transform  ( upper.begin(),upper.end(),upper.begin()
+                        , [] (unsigned char char_lower){ return std::toupper(std::move(char_lower)); });
+        return upper;
     #endif
 }
 
