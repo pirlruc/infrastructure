@@ -1,31 +1,31 @@
 #include <improc/infrastructure/filesystem/file.hpp>
 
 /**
- * @brief Construct a new improc::File object
+ * @brief Construct a new improc::BaseFile object
  * 
  */
-improc::File::File() {}
+improc::BaseFile::BaseFile() {}
 
 /**
- * @brief Construct a new improc::File object
+ * @brief Construct a new improc::BaseFile object
  * 
  * @param filepath 
  */
-improc::File::File(const std::string& filepath) 
+improc::BaseFile::BaseFile(const std::string& filepath) 
 {
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating File object using string...");
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating BaseFile object using string...");
     this->set_filepath(std::move(filepath));
 }
 
 /**
- * @brief Construct a new improc::File object
+ * @brief Construct a new improc::BaseFile object
  * 
  * @param filepath_json - json structure with filepath
  * @param application_folder
  */
-improc::File::File(const Json::Value& filepath_json,const std::optional<std::string>& application_folder) 
+improc::BaseFile::BaseFile(const Json::Value& filepath_json,const std::optional<std::string>& application_folder) 
 {
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating File object using json...");
+    IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating BaseFile object using json...");
     std::filesystem::path    filepath     = std::move(application_folder.value_or(""));
     std::vector<std::string> folders_json = improc::json::ReadVector<std::string>(std::move(filepath_json));
     std::for_each(folders_json.begin(),folders_json.end(), [&filepath] (const std::string& folder) {filepath /= std::move(folder);});
@@ -37,10 +37,10 @@ improc::File::File(const Json::Value& filepath_json,const std::optional<std::str
  * 
  * @param filepath 
  */
-improc::File& improc::File::set_filepath(const std::string& filepath)
+improc::BaseFile& improc::BaseFile::set_filepath(const std::string& filepath)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Setting filepath {}...",filepath);
-    if (improc::File::IsFile(filepath) == false)
+    if (improc::BaseFile::IsFile(filepath) == false)
     {
         IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_01: Invalid filepath {}.",filepath);
         throw improc::invalid_filepath();
@@ -54,7 +54,7 @@ improc::File& improc::File::set_filepath(const std::string& filepath)
  * 
  * @return std::string
  */
-std::string improc::File::get_filepath() const
+std::string improc::BaseFile::get_filepath() const
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Obtaining filepath...");
     return this->filepath_.string();
@@ -65,7 +65,7 @@ std::string improc::File::get_filepath() const
  * 
  * @return std::string
  */
-std::string improc::File::get_filename() const
+std::string improc::BaseFile::get_filename() const
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Obtaining filename...");
     return this->filepath_.filename().string();
@@ -76,7 +76,7 @@ std::string improc::File::get_filename() const
  * 
  * @return std::string
  */
-std::string improc::File::get_extension() const
+std::string improc::BaseFile::get_extension() const
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Obtaining extension...");
     return this->filepath_.extension().string();
@@ -87,9 +87,9 @@ std::string improc::File::get_extension() const
  * 
  * @return std::string 
  */
-std::string improc::File::Read() const
+std::string improc::BaseFile::Read() const
 {
-    return improc::File::Read(this->filepath_);
+    return improc::BaseFile::Read(this->filepath_);
 }
 
 /**
@@ -98,9 +98,9 @@ std::string improc::File::Read() const
  * @return true if the file was deleted
  * @return false if the file did not exist
  */
-bool improc::File::Remove() const
+bool improc::BaseFile::Remove() const
 {
-    return improc::File::Remove(this->filepath_);
+    return improc::BaseFile::Remove(this->filepath_);
 }
 
 /**
@@ -109,9 +109,9 @@ bool improc::File::Remove() const
  * @return true 
  * @return false 
  */
-bool improc::File::Exists() const
+bool improc::BaseFile::Exists() const
 {
-    return improc::File::Exists(this->filepath_);
+    return improc::BaseFile::Exists(this->filepath_);
 }
 
 /**
@@ -120,10 +120,10 @@ bool improc::File::Exists() const
  * @param filepath 
  * @return std::string 
  */
-std::string improc::File::Read(const std::string& filepath)
+std::string improc::BaseFile::Read(const std::string& filepath)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading content from filepath {}...",filepath);
-    if (improc::File::IsFile(filepath) == false) {
+    if (improc::BaseFile::IsFile(filepath) == false) {
         IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_02: Filepath {} does not exist.",filepath);
         throw improc::invalid_filepath();
     }
@@ -145,7 +145,7 @@ std::string improc::File::Read(const std::string& filepath)
  * 
  * @param filepath 
  */
-bool improc::File::Remove(const std::string& filepath)
+bool improc::BaseFile::Remove(const std::string& filepath)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Removing filepath {}...",filepath);
     return std::filesystem::remove(std::move(filepath));
@@ -158,7 +158,7 @@ bool improc::File::Remove(const std::string& filepath)
  * @return true 
  * @return false 
  */
-bool improc::File::Exists(const std::string& filepath)
+bool improc::BaseFile::Exists(const std::string& filepath)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Checking if filepath {} exists...",filepath);
     return std::filesystem::exists(std::move(filepath));
@@ -171,24 +171,57 @@ bool improc::File::Exists(const std::string& filepath)
  * @return true 
  * @return false 
  */
-bool improc::File::IsFile(const std::string& filepath)
+bool improc::BaseFile::IsFile(const std::string& filepath)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Checking if filepath {} exists and is a file...",filepath);
     return std::filesystem::is_regular_file(std::move(filepath));
 }
 
 /**
+ * @brief Construct a new improc::File object
+ * 
+ */
+improc::File::File() : improc::BaseFile() {}
+
+/**
+ * @brief Construct a new improc::File object
+ * 
+ * @param filepath 
+ */
+improc::File::File(const std::string& filepath) : improc::BaseFile(std::move(filepath)) {}
+
+/**
+ * @brief Construct a new improc::File object
+ * 
+ * @param filepath_json - json structure with filepath
+ * @param application_folder
+ */
+improc::File::File(const Json::Value& filepath_json,const std::optional<std::string>& application_folder) 
+: improc::BaseFile(std::move(filepath_json),std::move(application_folder)) {}
+
+/**
+ * @brief Set the filepath object
+ * 
+ * @param filepath 
+ */
+improc::File& improc::File::set_filepath(const std::string& filepath)
+{
+    this->BaseFile::set_filepath(std::move(filepath));
+    return (*this);
+}
+
+/**
  * @brief Construct a new improc::JsonFile object
  * 
  */
-improc::JsonFile::JsonFile() : improc::File() {}
+improc::JsonFile::JsonFile() : improc::BaseFile() {}
 
 /**
  * @brief Construct a new improc::JsonFile object
  * 
  * @param filepath 
  */
-improc::JsonFile::JsonFile(const std::string& filepath)
+improc::JsonFile::JsonFile(const std::string& filepath) : improc::JsonFile()
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating JsonFile object using string...");
     this->set_filepath(std::move(filepath));
@@ -200,10 +233,10 @@ improc::JsonFile::JsonFile(const std::string& filepath)
  * @param filepath_json - json structure with filepath
  * @param application_folder
  */
-improc::JsonFile::JsonFile(const Json::Value& filepath_json, const std::optional<std::string>& application_folder)
+improc::JsonFile::JsonFile(const Json::Value& filepath_json, const std::optional<std::string>& application_folder) : improc::JsonFile()
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating JsonFile object using json...");
-    this->set_filepath(improc::File(std::move(filepath_json),std::move(application_folder)).get_filepath());
+    this->set_filepath(improc::BaseFile(std::move(filepath_json),std::move(application_folder)).get_filepath());
 }
 
 /**
@@ -214,13 +247,13 @@ improc::JsonFile::JsonFile(const Json::Value& filepath_json, const std::optional
 improc::JsonFile& improc::JsonFile::set_filepath(const std::string& filepath)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Setting json filepath {}...",filepath);
-    improc::File json_file {std::move(filepath)};
+    improc::BaseFile json_file {std::move(filepath)};
     if (improc::JsonFile::IsExtensionValid(json_file) == false)
     {
         IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_01: Invalid json extension {}.",json_file.get_extension());
         throw improc::invalid_filepath();
     }
-    this->File::operator=(std::move(json_file));
+    this->BaseFile::operator=(std::move(json_file));
     return (*this);
 }
 
@@ -244,7 +277,7 @@ Json::Value improc::JsonFile::Read(const std::string& filepath)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading content from json filepath {}...",filepath);
     improc::JsonFile {filepath};     // Validate if filepath extension is valid
-    improc::File json_file {std::move(filepath)};
+    improc::BaseFile json_file {std::move(filepath)};
     std::string json_content_str = json_file.Read();
     return improc::JsonString().Parse(std::move(json_content_str));
 }
@@ -256,7 +289,7 @@ Json::Value improc::JsonFile::Read(const std::string& filepath)
  * @return true if file extension is a valid json extension (i.e. .json)
  * @return false 
  */
-inline bool improc::JsonFile::IsExtensionValid(const improc::File& json_file)
+inline bool improc::JsonFile::IsExtensionValid(const improc::BaseFile& json_file)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE  ( "Checking if json file {} has valid extension..."
                                         , json_file.get_filepath() );

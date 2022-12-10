@@ -4,21 +4,21 @@
 #include <exception>
  
 namespace improc {
-    class duplicated_key: public std::exception {
+    class duplicated_key final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Key already exists";
         }
     };
 
-    class not_found_key: public std::exception {
+    class not_found_key final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Key does not exist";
         }
     };
 
-    class not_found_in_factory : public std::exception
+    class not_found_in_factory final: public std::exception
     {
         public:
             const char* what() const throw()
@@ -27,84 +27,84 @@ namespace improc {
             }
     };
 
-    class invalid_filepath: public std::exception {
+    class invalid_filepath final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Invalid filepath";
         }
     };
 
-    class invalid_folder_path: public std::exception {
+    class invalid_folder_path final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Invalid folder path";
         }
     };
 
-    class file_processing_error: public std::exception {
+    class file_processing_error final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Error processing file";
         }
     };
 
-    class json_parsing_error: public std::exception {
+    class json_parsing_error final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Error parsing json structure";
         }
     };
 
-    class not_supported_data_type: public std::exception {
+    class not_supported_data_type final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Not supported data type";
         }
     };
 
-    class benchmark_keys_cannot_change: public std::exception {
+    class benchmark_keys_cannot_change final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Cannot change benchmark keys after creation";
         }
     };
 
-    class drawer_not_defined: public std::exception {
+    class drawer_not_defined final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Drawer not defined";
         }
     };
 
-    class page_drawer_not_allocated: public std::exception {
+    class page_drawer_not_allocated final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Page drawer not allocated";
         }
     };
 
-    class invalid_page_image: public std::exception {
+    class invalid_page_image final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Invalid page image";
         }
     };
 
-    class context_elem_diff_page_elem: public std::exception {
+    class context_elem_diff_page_elem final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Number of context elements different than the number of page elements";
         }
     };
 
-    class freetype_lib_error: public std::exception {
+    class freetype_lib_error final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Error executing freetype library method";
         }
     };
 
-    class printing_resolution_not_positive: public std::exception {
+    class printing_resolution_not_positive final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Printing resolution should be bigger than zero";

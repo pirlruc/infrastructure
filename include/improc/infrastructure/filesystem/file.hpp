@@ -18,20 +18,20 @@
 namespace improc 
 {
     /**
-     * @brief File object and utilities
+     * @brief Base file object and utilities
      * 
      */
-    class IMPROC_API File
+    class BaseFile
     {
         protected:
             std::filesystem::path   filepath_;
 
         public:
-            File();
-            explicit File(const std::string& filepath);
-            explicit File(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
+            BaseFile();
+            explicit BaseFile(const std::string& filepath);
+            explicit BaseFile(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
 
-            File&                   set_filepath(const std::string& filepath);
+            BaseFile&               set_filepath(const std::string& filepath);
             
             std::string             get_filepath () const;
             std::string             get_filename () const;
@@ -48,10 +48,27 @@ namespace improc
     };
 
     /**
+     * @brief File object and utilities
+     * 
+     */
+    class IMPROC_API File final: public BaseFile
+    {
+        protected:
+            std::filesystem::path   filepath_;
+
+        public:
+            File();
+            explicit File(const std::string& filepath);
+            explicit File(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
+
+            File&               set_filepath(const std::string& filepath);
+    };
+
+    /**
      * @brief Json file object and utilities
      * 
      */
-    class IMPROC_API JsonFile final : public File
+    class IMPROC_API JsonFile final : public BaseFile
     {
         public:
             JsonFile();
@@ -64,7 +81,7 @@ namespace improc
             static Json::Value      Read(const std::string& filepath);
 
         private:
-            static inline bool      IsExtensionValid(const improc::File& json_file);
+            static inline bool      IsExtensionValid(const improc::BaseFile& json_file);
     };
 }
 
