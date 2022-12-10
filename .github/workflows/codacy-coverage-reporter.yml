@@ -71,7 +71,8 @@ jobs:
         shell: bash
         run: |
           ./build/bin/improc_infrastructure_testd
-          ./build/make coverage
+          cd build
+          make coverage
 
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
