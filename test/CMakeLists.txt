@@ -31,8 +31,8 @@ if(IMPROC_WITH_COVERAGE AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
   set(ENV{LLVM_PROFILE_FILE} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-  find_program(LLVM_PROFDATA llvm-profdata-10 REQUIRED)
-  find_program(LLVM_COV      llvm-cov-10      REQUIRED)
+  find_program(LLVM_PROFDATA llvm-profdata-14 REQUIRED)
+  find_program(LLVM_COV      llvm-cov-14      REQUIRED)
   find_program(GENHTML       genhtml          REQUIRED)
   
   add_custom_target(
