@@ -22,7 +22,7 @@ jobs:
       matrix:
         config:
         - {
-            name: "ubuntu_latest_gcc_boost_on",
+            name: "ubuntu-latest-gcc-boost-on",
             os: ubuntu-latest,
             build_type: "Release",
             cc: "gcc-11",
@@ -31,7 +31,7 @@ jobs:
             coverage: "OFF"
           }
         - {
-            name: "ubuntu_latest_gcc_boost_off",
+            name: "ubuntu-latest-gcc-boost-off",
             os: ubuntu-latest,
             build_type: "Release",
             cc: "gcc-11",
@@ -40,7 +40,7 @@ jobs:
             coverage: "OFF"
           }
         - {
-            name: "ubuntu_latest_clang_boost_on",
+            name: "ubuntu-latest-clang-boost-on",
             os: ubuntu-latest,
             build_type: "Release",
             cc: "clang-10",
@@ -49,7 +49,7 @@ jobs:
             coverage: "OFF"
           }
         - {
-            name: "ubuntu_latest_clang_boost_off",
+            name: "ubuntu-latest-clang-boost-off",
             os: ubuntu-latest,
             build_type: "Release",
             cc: "clang-10",
@@ -58,16 +58,7 @@ jobs:
             coverage: "OFF"
           }
         - {
-            name: "ubuntu_latest_code_coverage",
-            os: ubuntu-latest,
-            build_type: "Debug",
-            cc: "clang-10",
-            cxx: "clang++-10",
-            boost: "OFF",
-            coverage: "ON"
-          }
-        - {
-            name: "windows_latest_gcc_boost_off",
+            name: "windows-latest-gcc-boost-off",
             os: windows-latest,
             build_type: "Release",
             cc: "gcc",
@@ -76,7 +67,7 @@ jobs:
             coverage: "OFF"
           }
 #        - {
-#            name: "windows_latest_clang",
+#            name: "windows-latest-clang",
 #            os: windows-latest,
 #            build_type: "Release",
 #            cc: "clang",
@@ -141,11 +132,3 @@ jobs:
         if: startsWith(matrix.config.coverage, 'OFF')
         shell: bash
         run: ./build/bin/improc_infrastructure_test
-
-      - name: Code Coverage
-        if: startsWith(matrix.config.coverage, 'ON')
-        shell: bash
-        run: |
-          ./build/bin/improc_infrastructure_testd
-          ./build/make coverage
-

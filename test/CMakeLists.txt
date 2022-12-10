@@ -4,7 +4,7 @@ include(FetchContent)
 include(GoogleTest)
 
 # Add external dependencies
-#GOOGLETEST
+# GOOGLETEST
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY  https://github.com/google/googletest.git
