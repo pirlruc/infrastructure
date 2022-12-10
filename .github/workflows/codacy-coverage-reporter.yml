@@ -70,8 +70,9 @@ jobs:
       - name: Code Coverage Report
         shell: bash
         run: |
-          ./build/bin/improc_infrastructure_testd
-          cd build
+          cd build/bin
+          ./improc_infrastructure_testd
+          cd ..
           make coverage
 
       - name: Run codacy-coverage-reporter
