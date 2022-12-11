@@ -59,7 +59,7 @@ if(IMPROC_WITH_COVERAGE AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   add_custom_target(
     coverage
 
-    COMMAND ${LCOV}    --directory ${CMAKE_BINARY_DIR}/improc_infrastructure_test/CMakeFiles/${PROJECT_NAME}_test.dir
+    COMMAND ${LCOV}    --directory ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_test/CMakeFiles/${PROJECT_NAME}_test.dir
                        --capture --output-file ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.info
                        --gcov-tool ${GCOV}
     COMMAND ${GENHTML} --demangle-cpp -o ${PROJECT_NAME}_coverage ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.info
