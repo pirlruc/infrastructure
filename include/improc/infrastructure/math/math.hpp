@@ -3,8 +3,7 @@
 
 #include <improc/infrastructure/logging/logger_infrastructure.hpp>
 #include <improc/improc_defs.hpp>
-
-#include <type_traits>
+#include <improc/improc_type_traits.hpp>
 
 namespace improc 
 {

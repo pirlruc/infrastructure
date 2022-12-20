@@ -2,10 +2,10 @@
 #define IMPROC_INFRASTRUCTURE_LOGGER_SINGLETON_HPP
 
 #include <improc/improc_defs.hpp>
+#include <improc/improc_type_traits.hpp>
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_sinks.h>
-#include <type_traits>
 
 namespace improc 
 {

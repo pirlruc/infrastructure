@@ -4,9 +4,9 @@
 #include <improc/infrastructure/logging/logger_infrastructure.hpp>
 #include <improc/improc_defs.hpp>
 #include <improc/exception.hpp>
+#include <improc/improc_type_traits.hpp>
 
 #include <json/json.h>
-#include <type_traits>
 
 namespace improc 
 {

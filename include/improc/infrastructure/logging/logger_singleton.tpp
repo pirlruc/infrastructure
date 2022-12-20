@@ -5,7 +5,10 @@
  * @param logger
  */
 template<typename LoggerType>
-improc::LoggerSingleton<LoggerType>::LoggerSingleton(std::shared_ptr<spdlog::logger>&&        logger) : data_(std::move(logger)) {}
+improc::LoggerSingleton<LoggerType>::LoggerSingleton(std::shared_ptr<spdlog::logger>&& logger) : data_(std::move(logger)) 
+{
+    static_assert(std::is_base_of_v<improc::LoggerSingleton<LoggerType>,LoggerType>, "improc::LoggerSingleton must be base of LoggerType");
+}
 
 /**
  * @brief Obtain spdlog::logger object associated with improc::LoggerSingleton<LoggerType> object

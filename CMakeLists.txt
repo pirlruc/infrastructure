@@ -84,6 +84,7 @@ set(
   ${PROJECT_SOURCE_DIR}/include/improc/exception.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/improc_compilation_variables.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/improc_defs.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/improc_type_traits.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/string.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark/benchmark_singleton.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/benchmark/benchmark_singleton.tpp

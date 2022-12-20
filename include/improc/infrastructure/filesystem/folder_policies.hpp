@@ -2,8 +2,7 @@
 #define IMPROC_INFRASTRUCTURE_FOLDER_POLICIES_HPP
 
 #include <improc/improc_defs.hpp>
-
-#include <type_traits>
+#include <improc/improc_type_traits.hpp>
 
 namespace improc 
 {

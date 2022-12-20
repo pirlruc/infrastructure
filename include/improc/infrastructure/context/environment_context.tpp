@@ -4,7 +4,10 @@
  * @tparam ContextType - Data type of the application context being created
  */
 template <typename ContextType>
-improc::EnvironmentContext<ContextType>::EnvironmentContext() {}
+improc::EnvironmentContext<ContextType>::EnvironmentContext() 
+{
+    static_assert(std::is_base_of_v<improc::EnvironmentContext<ContextType>,ContextType>, "improc::EnvironmentContext must be base of ContextType");
+}
 
 /**
  * @brief Create or get the improc::EnvironmentContext<ContextType> object
