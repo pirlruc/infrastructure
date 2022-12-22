@@ -78,6 +78,16 @@ namespace improc {
 
     template<class T>
     inline constexpr bool is_variant_arg_function_type_v = is_variant_arg_function_type<T>::value;
+
+    template<class,class>
+    struct is_variant_arg_function_return_type : std::false_type {};
+
+    template<class ReturnType, class ... VariantArgs>
+    struct is_variant_arg_function_return_type<ReturnType, std::variant<VariantArgs ...>> 
+    : std::conjunction< std::is_same<ReturnType, typename improc::function_traits<VariantArgs>::return_type> ...> {};
+
+    template<class ReturnType, class T>
+    inline constexpr bool is_variant_arg_function_return_type_v = is_variant_arg_function_return_type<ReturnType,T>::value;
 }
 
 #endif
