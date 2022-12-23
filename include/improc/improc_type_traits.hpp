@@ -3,6 +3,7 @@
 
 #include <type_traits>
 #include <filesystem>
+#include <variant>
 
 namespace improc {
     template<class>
@@ -20,6 +21,15 @@ namespace improc {
 
     template<class T>
     inline constexpr bool is_hashable_v = is_hashable<T>::value;
+
+    template<class>
+    struct is_variant : std::false_type {};
+
+    template<class ... VariantArgs>
+    struct is_variant<std::variant<VariantArgs ...>> : std::true_type {};
+
+    template<class T>
+    inline constexpr bool is_variant_v = improc::is_variant<T>::value;
 }
 
 #endif
