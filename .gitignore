@@ -4,3 +4,4 @@
 **/*_config.hpp
 **/*_compilation_variables.hpp
 **/install
+**/*.profraw
