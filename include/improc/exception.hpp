@@ -110,6 +110,20 @@ namespace improc {
             return "Printing resolution should be bigger than zero";
         }
     };
+
+    class not_supported_color_conversion: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Not supported color conversion";
+        }
+    };
+
+    class invalid_color_space: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Invalid color space";
+        }
+    };
 }
  
 #endif
