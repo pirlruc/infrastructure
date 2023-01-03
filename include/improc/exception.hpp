@@ -124,6 +124,27 @@ namespace improc {
             return "Invalid color space";
         }
     };
+
+    class inconsistent_size_detected_reference_pixels: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Detected pixels and reference pixels with different sizes";
+        }
+    };
+
+    class invalid_svd_decomposition: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Invalid SVD decomposition";
+        }
+    };
+
+    class invalid_homography_estimation: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Homography cannot be estimated";
+        }
+    };
 }
  
 #endif
