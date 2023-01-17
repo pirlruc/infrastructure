@@ -111,35 +111,35 @@ namespace improc {
         }
     };
 
-    class not_supported_color_conversion: public std::exception {
+    class not_supported_color_conversion final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Not supported color conversion";
         }
     };
 
-    class invalid_color_space: public std::exception {
+    class invalid_color_space final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Invalid color space";
         }
     };
 
-    class inconsistent_size_detected_reference_pixels: public std::exception {
+    class inconsistent_size_detected_reference_pixels final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Detected pixels and reference pixels with different sizes";
         }
     };
 
-    class invalid_svd_decomposition: public std::exception {
+    class invalid_svd_decomposition final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Invalid SVD decomposition";
         }
     };
 
-    class invalid_homography_estimation: public std::exception {
+    class invalid_homography_estimation final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Homography cannot be estimated";
