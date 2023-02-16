@@ -75,21 +75,14 @@ jobs:
           cd ..
           make improc_infrastructure_coverage
 
-      - name: Unit Tests Report Enrico 
+      - name: Unit Tests Report 
         uses: EnricoMi/publish-unit-test-result-action@v2.4.1
         if: always()
         with:
+          check_name: "Unit Tests Report"
+          time_unit: milliseconds
           files: |
             build/**/improc_infrastructure_tests.xml
-
-      - name: Unit Tests Report Dorny
-        uses: dorny/test-reporter@v1.6.0
-        if: always()
-        with:
-          artifact: unit-test-results
-          name: Unit Tests Report
-          path: '**/improc_infrastructure_tests.xml'
-          reporter: java-junit
 
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
