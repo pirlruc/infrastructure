@@ -78,8 +78,9 @@ jobs:
       - name: Unit Tests Report Enrico 
         uses: EnricoMi/publish-unit-test-result-action@v2.4.1
         if: always()
-        files: |
-          build/**/improc_infrastructure_tests.xml
+        with:
+          files: |
+            build/**/improc_infrastructure_tests.xml
 
       - name: Unit Tests Report Dorny
         uses: dorny/test-reporter@v1.6.0
