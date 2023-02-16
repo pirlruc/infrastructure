@@ -132,6 +132,13 @@ namespace improc {
         }
     };
 
+    class inconsistent_size_pixels_lines final: public std::exception {
+    public:
+        virtual const char* what() const throw() {
+            return "Pixels and lines for homography estimation with different sizes";
+        }
+    };
+
     class invalid_svd_decomposition final: public std::exception {
     public:
         virtual const char* what() const throw() {

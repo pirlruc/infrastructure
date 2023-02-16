@@ -71,9 +71,17 @@ jobs:
         shell: bash
         run: |
           cd build/bin
-          ./improc_infrastructure_testd
+          ./improc_infrastructure_testd --gtest_output="xml:improc_infrastructure_tests.xml"
           cd ..
           make improc_infrastructure_coverage
+
+      - name: Run test-reporter
+        uses: dorny/test-reporter@v1
+        with:
+          artifact: unit-test-results
+          name: Unit Tests Report
+          path: './improc_infrastructure_tests.xml'
+          reporter: java-junit
 
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1

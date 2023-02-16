@@ -71,6 +71,7 @@ add_executable(
   ${PROJECT_NAME}_test
     
   ${PROJECT_SOURCE_DIR}/test/test_logger_singleton.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_exception.cpp
   ${PROJECT_SOURCE_DIR}/test/test_env_context.cpp
   ${PROJECT_SOURCE_DIR}/test/test_app_context.cpp
   ${PROJECT_SOURCE_DIR}/test/test_math.cpp
