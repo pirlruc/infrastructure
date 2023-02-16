@@ -80,7 +80,7 @@ jobs:
         with:
           artifact: unit-test-results
           name: Unit Tests Report
-          path: './build/bin/improc_infrastructure_tests.xml'
+          path: build/bin/improc_infrastructure_tests.xml
           reporter: java-junit
 
       - name: Run codacy-coverage-reporter
