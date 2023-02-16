@@ -75,8 +75,15 @@ jobs:
           cd ..
           make improc_infrastructure_coverage
 
-      - name: Run test-reporter
-        uses: dorny/test-reporter@v1
+      - name: Unit Tests Report Enrico 
+        uses: EnricoMi/publish-unit-test-result-action@v2.4.1
+        if: always()
+        files: |
+          build/**/improc_infrastructure_tests.xml
+
+      - name: Unit Tests Report Dorny
+        uses: dorny/test-reporter@v1.6.0
+        if: always()
         with:
           artifact: unit-test-results
           name: Unit Tests Report
