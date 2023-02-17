@@ -133,9 +133,9 @@ Json::Value improc::JsonString::Parse(const std::string& json_string) const
                                                            , &json_parsed, &parse_errors );
     if (is_parse_successful == false)
     {
-        IMPROC_INFRASTRUCTURE_LOGGER_ERROR  ( "ERROR_01: Error parsing json string {}: {}."
-                                            , std::move(json_string), std::move(parse_errors) );
-        throw improc::json_parsing_error();
+        std::string error_message = fmt::format("Error parsing json string: {}",std::move(parse_errors));
+        IMPROC_INFRASTRUCTURE_LOGGER_ERROR  ( "ERROR_01: " + error_message);
+        throw improc::json_error(std::move(error_message));
     }
     return json_parsed;
 }

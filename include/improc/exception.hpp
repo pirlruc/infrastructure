@@ -1,9 +1,34 @@
 #ifndef IMPROC_INFRASTRUCTURE_EXCEPTIONS_HPP
 #define IMPROC_INFRASTRUCTURE_EXCEPTIONS_HPP
  
-#include <exception>
+#include <stdexcept>
  
-namespace improc {
+namespace improc 
+{
+    class key_error final: public std::runtime_error
+    {
+        public:
+            explicit key_error(const std::string& message): std::runtime_error(std::move(message)) {}
+    };
+
+    class value_error final: public std::logic_error
+    {
+        public:
+            explicit value_error(const std::string& message): std::logic_error(std::move(message)) {}
+    };
+
+    class operating_system_error final: public std::runtime_error
+    {
+        public:
+            explicit operating_system_error(const std::string& message): std::runtime_error(std::move(message)) {}
+    };
+
+    class json_error final: public std::runtime_error
+    {
+        public:
+            explicit json_error(const std::string& message): std::runtime_error(std::move(message)) {}
+    };
+
     class duplicated_key final: public std::exception {
     public:
         virtual const char* what() const throw() {
@@ -27,20 +52,6 @@ namespace improc {
             }
     };
 
-    class invalid_filepath final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Invalid filepath";
-        }
-    };
-
-    class invalid_folder_path final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Invalid folder path";
-        }
-    };
-
     class file_processing_error final: public std::exception {
     public:
         virtual const char* what() const throw() {
@@ -48,24 +59,10 @@ namespace improc {
         }
     };
 
-    class json_parsing_error final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Error parsing json structure";
-        }
-    };
-
     class not_supported_data_type final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Not supported data type";
-        }
-    };
-
-    class benchmark_keys_cannot_change final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Cannot change benchmark keys after creation";
         }
     };
 

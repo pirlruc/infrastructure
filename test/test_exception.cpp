@@ -3,15 +3,16 @@
 #include <improc/exception.hpp>
 
 TEST(Exception,TestExceptions) {
+    EXPECT_THROW(throw improc::value_error("test"),improc::value_error);
+    EXPECT_THROW(throw improc::key_error("test"),improc::key_error);
+    EXPECT_THROW(throw improc::operating_system_error("test"),improc::operating_system_error);
+    EXPECT_THROW(throw improc::json_error("test"),improc::json_error);
+
     EXPECT_THROW(throw improc::duplicated_key(),improc::duplicated_key);
     EXPECT_THROW(throw improc::not_found_key(),improc::not_found_key);
     EXPECT_THROW(throw improc::not_found_in_factory(),improc::not_found_in_factory);
-    EXPECT_THROW(throw improc::invalid_filepath(),improc::invalid_filepath);
-    EXPECT_THROW(throw improc::invalid_folder_path(),improc::invalid_folder_path);
     EXPECT_THROW(throw improc::file_processing_error(),improc::file_processing_error);
-    EXPECT_THROW(throw improc::json_parsing_error(),improc::json_parsing_error);
     EXPECT_THROW(throw improc::not_supported_data_type(),improc::not_supported_data_type);
-    EXPECT_THROW(throw improc::benchmark_keys_cannot_change(),improc::benchmark_keys_cannot_change);
     EXPECT_THROW(throw improc::drawer_not_defined(),improc::drawer_not_defined);
     EXPECT_THROW(throw improc::page_drawer_not_allocated(),improc::page_drawer_not_allocated);
     EXPECT_THROW(throw improc::invalid_page_image(),improc::invalid_page_image);

@@ -28,8 +28,9 @@ improc::BenchmarkSingleton<BenchmarkType>& improc::BenchmarkSingleton<BenchmarkT
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Adding keys to benchmark...");
     if (this->is_created_ == true)
     {
-        IMPROC_INFRASTRUCTURE_LOGGER_ERROR ("ERROR_01: Cannot change keys after benchmark has been created.");
-        throw improc::benchmark_keys_cannot_change();
+        std::string error_message = "Cannot change keys after benchmark has been created";
+        IMPROC_INFRASTRUCTURE_LOGGER_ERROR ("ERROR_01: " + error_message);
+        throw improc::key_error(std::move(error_message));
     }
     this->keys_.insert(keys.begin(),keys.end());
     this->InitializeLineContent(std::move(keys));

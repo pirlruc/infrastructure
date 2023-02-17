@@ -42,8 +42,9 @@ improc::BaseFile& improc::BaseFile::set_filepath(const std::string& filepath)
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Setting filepath {}...",filepath);
     if (improc::BaseFile::IsFile(filepath) == false)
     {
-        IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_01: Invalid filepath {}.",filepath);
-        throw improc::invalid_filepath();
+        std::string error_message = "Invalid path for file: " + filepath;
+        IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_01: " + error_message);
+        throw improc::value_error(std::move(error_message));
     }
     this->filepath_ = std::filesystem::path(std::move(filepath));
     return (*this);
@@ -123,15 +124,19 @@ bool improc::BaseFile::Exists() const
 std::string improc::BaseFile::Read(const std::string& filepath)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Reading content from filepath {}...",filepath);
-    if (improc::BaseFile::IsFile(filepath) == false) {
-        IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_02: Filepath {} does not exist.",filepath);
-        throw improc::invalid_filepath();
+    if (improc::BaseFile::IsFile(filepath) == false) 
+    {
+        std::string error_message = fmt::format("Filepath {} does not exist", filepath);
+        IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_02: " + error_message);
+        throw improc::value_error(std::move(error_message));
     }
  
     std::ifstream file_stream(filepath,std::ifstream::binary);
-    if (file_stream.is_open() == false) {
-        IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_03: Error opening filepath {}.",filepath);
-        throw improc::invalid_filepath();
+    if (file_stream.is_open() == false) 
+    {
+        std::string error_message = "Error opening filepath " + filepath;
+        IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_03: " + error_message);
+        throw improc::operating_system_error(std::move(error_message));
     }
 
     std::string file_content ( (std::istreambuf_iterator<char>(file_stream))
@@ -250,8 +255,9 @@ improc::JsonFile& improc::JsonFile::set_filepath(const std::string& filepath)
     improc::BaseFile json_file {std::move(filepath)};
     if (improc::JsonFile::IsExtensionValid(json_file) == false)
     {
-        IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_01: Invalid json extension {}.",json_file.get_extension());
-        throw improc::invalid_filepath();
+        std::string error_message = "Invalid json extension " + json_file.get_extension();
+        IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_01: " + error_message);
+        throw improc::value_error(std::move(error_message));
     }
     this->BaseFile::operator=(std::move(json_file));
     return (*this);

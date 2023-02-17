@@ -40,7 +40,7 @@ TEST(String,TestStringStaticToUpper) {
 
 TEST(JsonString,TestEmptyJsonStringConstructor) {
     improc::JsonString str_empty {};
-    EXPECT_THROW(str_empty.Parse(""),improc::json_parsing_error);
+    EXPECT_THROW(str_empty.Parse(""),improc::json_error);
 }
 
 TEST(JsonString,TestJsonStringConstructor) {

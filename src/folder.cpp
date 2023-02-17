@@ -27,8 +27,9 @@ improc::Folder& improc::Folder::set_folder_path(const std::string& folder_path)
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Setting folder path {}...",folder_path);
     if (improc::Folder::IsFolder(folder_path) == false)
     {
-        IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_01: Invalid folder path {}.",folder_path);
-        throw improc::invalid_folder_path();
+        std::string error_message = "Invalid path for folder: " + folder_path;
+        IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_01: " + error_message);
+        throw improc::value_error(std::move(error_message));
     }
     this->folder_path_ = std::filesystem::path(std::move(folder_path));
     return (*this);

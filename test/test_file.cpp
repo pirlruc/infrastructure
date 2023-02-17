@@ -36,7 +36,7 @@ TEST(File,TestFileConstructorFromJson) {
 }
 
 TEST(File,TestFileConstructorNonExistingFile) {
-    EXPECT_THROW(improc::File file_not_exists {std::string("test.txt")},improc::invalid_filepath);
+    EXPECT_THROW(improc::File file_not_exists {std::string("test.txt")},improc::value_error);
 }
 
 TEST(File,TestSetFilepath) {
@@ -50,7 +50,7 @@ TEST(File,TestSetFilepath) {
 
 TEST(File,TestSetFilepathNonExistingFile) {
     improc::File file_empty {};
-    EXPECT_THROW(file_empty.set_filepath("test.txt"),improc::invalid_filepath);
+    EXPECT_THROW(file_empty.set_filepath("test.txt"),improc::value_error);
 }
 
 TEST(File,TestNonExistingFile) {
@@ -82,7 +82,7 @@ TEST(File,TestReadingNonExistingFile) {
     std::ofstream("file_tst.txt");
     improc::File file_not_exists {std::string("file_tst.txt")};
     file_not_exists.Remove();
-    EXPECT_THROW(file_not_exists.Read(),improc::invalid_filepath);
+    EXPECT_THROW(file_not_exists.Read(),improc::value_error);
 }
 
 TEST(File,TestReadingExistingFile) {
@@ -139,11 +139,11 @@ TEST(JsonFile,TestFileConstructorFromJson) {
 }
 
 TEST(JsonFile,TestFileConstructorNonExistingFile) {
-    EXPECT_THROW(improc::JsonFile file_not_exists {std::string("test.json")},improc::invalid_filepath);
+    EXPECT_THROW(improc::JsonFile file_not_exists {std::string("test.json")},improc::value_error);
 }
 
 TEST(JsonFile,TestNonJsonFileConstructor) {
-    EXPECT_THROW(improc::JsonFile file_str {std::string("test.txt")},improc::invalid_filepath);
+    EXPECT_THROW(improc::JsonFile file_str {std::string("test.txt")},improc::value_error);
 }
 
 TEST(JsonFile,TestSetFilepath) {
@@ -157,13 +157,13 @@ TEST(JsonFile,TestSetFilepath) {
 
 TEST(JsonFile,TestSetFilepathNonExistingFile) {
     improc::JsonFile file_empty {};
-    EXPECT_THROW(file_empty.set_filepath("test.json"),improc::invalid_filepath);
+    EXPECT_THROW(file_empty.set_filepath("test.json"),improc::value_error);
 }
 
 TEST(JsonFile,TestNonJsonSetFilepath) {
     std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.txt";
     improc::JsonFile not_json_file {};
-    EXPECT_THROW(not_json_file.set_filepath(filepath),improc::invalid_filepath);
+    EXPECT_THROW(not_json_file.set_filepath(filepath),improc::value_error);
 }
 
 TEST(JsonFile,TestNonExistingFile) {
@@ -186,7 +186,7 @@ TEST(JsonFile,TestReadingNonExistingFile) {
     std::ofstream("file_tst.json");
     improc::JsonFile file_not_exists {std::string("file_tst.json")};
     file_not_exists.Remove();
-    EXPECT_THROW(file_not_exists.Read(),improc::invalid_filepath);
+    EXPECT_THROW(file_not_exists.Read(),improc::value_error);
 }
 
 TEST(JsonFile,TestReadingExistingFile) {
@@ -197,5 +197,5 @@ TEST(JsonFile,TestReadingExistingFile) {
 
 TEST(JsonFile,TestReadingNonJsonFile) {
     std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.txt";
-    EXPECT_THROW(improc::JsonFile::Read(filepath),improc::invalid_filepath);
+    EXPECT_THROW(improc::JsonFile::Read(filepath),improc::value_error);
 }

@@ -61,7 +61,7 @@ if(IMPROC_WITH_BOOST)
   FetchContent_Declare(
     boost
     GIT_REPOSITORY https://github.com/boostorg/boost
-    GIT_TAG        boost-1.80.0
+    GIT_TAG        boost-1.81.0
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/boost
   )
   FetchContent_MakeAvailable(boost)

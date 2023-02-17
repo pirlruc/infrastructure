@@ -9,7 +9,7 @@ TEST(Folder,TestEmptyFolderConstructor) {
 }
 
 TEST(Folder,TestFolderConstructorNonExisting) {
-    EXPECT_THROW(improc::Folder folder_not_exists {std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "test"},improc::invalid_folder_path);
+    EXPECT_THROW(improc::Folder folder_not_exists {std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "test"},improc::value_error);
 }
 
 TEST(Folder,TestSetFolderPath) {
@@ -20,7 +20,7 @@ TEST(Folder,TestSetFolderPath) {
 
 TEST(Folder,TestSetFolderPathNonExisting) {
     improc::Folder folder_not_exists {};
-    EXPECT_THROW(folder_not_exists.set_folder_path(std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "test"),improc::invalid_folder_path);
+    EXPECT_THROW(folder_not_exists.set_folder_path(std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "test"),improc::value_error);
 }
 
 TEST(Folder,TestIsFolder) {
