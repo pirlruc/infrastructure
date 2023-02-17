@@ -29,36 +29,6 @@ namespace improc
             explicit json_error(const std::string& message): std::runtime_error(std::move(message)) {}
     };
 
-    class duplicated_key final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Key already exists";
-        }
-    };
-
-    class not_found_key final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Key does not exist";
-        }
-    };
-
-    class not_found_in_factory final: public std::exception
-    {
-        public:
-            const char* what() const throw()
-            {
-                return "Unknown object type passed to factory.";
-            }
-    };
-
-    class file_processing_error final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Error processing file";
-        }
-    };
-
     class not_supported_data_type final: public std::exception {
     public:
         virtual const char* what() const throw() {

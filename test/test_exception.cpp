@@ -8,10 +8,6 @@ TEST(Exception,TestExceptions) {
     EXPECT_THROW(throw improc::operating_system_error("test"),improc::operating_system_error);
     EXPECT_THROW(throw improc::json_error("test"),improc::json_error);
 
-    EXPECT_THROW(throw improc::duplicated_key(),improc::duplicated_key);
-    EXPECT_THROW(throw improc::not_found_key(),improc::not_found_key);
-    EXPECT_THROW(throw improc::not_found_in_factory(),improc::not_found_in_factory);
-    EXPECT_THROW(throw improc::file_processing_error(),improc::file_processing_error);
     EXPECT_THROW(throw improc::not_supported_data_type(),improc::not_supported_data_type);
     EXPECT_THROW(throw improc::drawer_not_defined(),improc::drawer_not_defined);
     EXPECT_THROW(throw improc::page_drawer_not_allocated(),improc::page_drawer_not_allocated);
