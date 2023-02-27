@@ -13,10 +13,10 @@ namespace improc
     namespace json
     {
         template<typename KeyType>
-        IMPROC_API KeyType inline               ReadElement (const Json::Value& json_elem);
+        IMPROC_API inline KeyType               ReadElement (const Json::Value& json_elem);
 
         template<typename KeyType>
-        IMPROC_API std::vector<KeyType> inline  ReadVector  (const Json::Value& json_vector);
+        IMPROC_API inline std::vector<KeyType>  ReadVector  (const Json::Value& json_vector);
     }
 }
 
