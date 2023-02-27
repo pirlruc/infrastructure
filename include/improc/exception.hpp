@@ -17,6 +17,12 @@ namespace improc
             explicit value_error(const std::string& message): std::logic_error(std::move(message)) {}
     };
 
+    class processing_flow_error final: public std::logic_error
+    {
+        public:
+            explicit processing_flow_error(const std::string& message): std::logic_error(std::move(message)) {}
+    };
+
     class operating_system_error final: public std::runtime_error
     {
         public:
@@ -29,52 +35,16 @@ namespace improc
             explicit json_error(const std::string& message): std::runtime_error(std::move(message)) {}
     };
 
+    class freetype_error final: public std::runtime_error
+    {
+        public:
+            explicit freetype_error(const std::string& message): std::runtime_error(std::move(message)) {}
+    };
+
     class not_supported_data_type final: public std::exception {
     public:
         virtual const char* what() const throw() {
             return "Not supported data type";
-        }
-    };
-
-    class drawer_not_defined final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Drawer not defined";
-        }
-    };
-
-    class page_drawer_not_allocated final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Page drawer not allocated";
-        }
-    };
-
-    class invalid_page_image final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Invalid page image";
-        }
-    };
-
-    class context_elem_diff_page_elem final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Number of context elements different than the number of page elements";
-        }
-    };
-
-    class freetype_lib_error final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Error executing freetype library method";
-        }
-    };
-
-    class printing_resolution_not_positive final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Printing resolution should be bigger than zero";
         }
     };
 
