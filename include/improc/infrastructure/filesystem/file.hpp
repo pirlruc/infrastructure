@@ -53,9 +53,6 @@ namespace improc
      */
     class IMPROC_API File final: public BaseFile
     {
-        protected:
-            std::filesystem::path   filepath_;
-
         public:
             File();
             explicit File(const std::string& filepath);
