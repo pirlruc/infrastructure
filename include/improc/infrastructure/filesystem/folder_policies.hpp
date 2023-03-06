@@ -16,6 +16,9 @@ namespace improc
         template <class ListFileType = std::filesystem::recursive_directory_iterator>
         struct ListFiles final
         {
+            static_assert( improc::is_folder_iterator_v<ListFileType> 
+                        , "ListFileType should be a std::filesystem::directory_iterator or std::filesystem::recursive_directory_iterator."); 
+
             static std::vector<std::filesystem::path> GetFiles(const std::filesystem::path& folder_path);
         };
 

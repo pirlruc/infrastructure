@@ -41,6 +41,7 @@ namespace improc
             explicit freetype_error(const std::string& message): std::runtime_error(std::move(message)) {}
     };
 
+
     class not_supported_data_type final: public std::exception {
     public:
         virtual const char* what() const throw() {

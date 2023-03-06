@@ -10,8 +10,6 @@
 template <class ListFileType>
 std::vector<std::filesystem::path> improc::folder::ListFiles<ListFileType>::GetFiles(const std::filesystem::path& folder_path)
 {
-    static_assert( improc::is_folder_iterator_v<ListFileType> 
-                 , "ListFileType should be a std::filesystem::directory_iterator or std::filesystem::recursive_directory_iterator."); 
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE  ("Obtain files in folder {}...",folder_path.string());
     ListFileType directory_iterator = ListFileType(std::move(folder_path));
 
