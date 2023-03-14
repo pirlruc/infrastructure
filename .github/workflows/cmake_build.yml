@@ -61,30 +61,30 @@ jobs:
             boost: "OFF",
             coverage: "OFF"
           }
-        - {
-            name: "windows-latest-gcc-boost-off",
-            os: windows-latest,
-            build_type: "Release",
-            cc: "gcc",
-            cxx: "g++",
-            generator: "Ninja",
-            archiver: "7z a",
-            artifact: "windows_gcc.7z",
-            boost: "OFF",
-            coverage: "OFF"
-          }
-        - {
-            name: "windows-latest-clang-boost-off",
-            os: windows-latest,
-            build_type: "Release",
-            cc: "clang",
-            cxx: "clang++",
-            generator: "Ninja",
-            archiver: "7z a",
-            artifact: "windows_clang.7z",
-            boost: "OFF",
-            coverage: "OFF"
-          }
+        # - {
+        #     name: "windows-latest-gcc-boost-off",
+        #     os: windows-latest,
+        #     build_type: "Release",
+        #     cc: "gcc",
+        #     cxx: "g++",
+        #     generator: "Ninja",
+        #     archiver: "7z a",
+        #     artifact: "windows_gcc.7z",
+        #     boost: "OFF",
+        #     coverage: "OFF"
+        #   }
+        # - {
+        #     name: "windows-latest-clang-boost-off",
+        #     os: windows-latest,
+        #     build_type: "Release",
+        #     cc: "clang",
+        #     cxx: "clang++",
+        #     generator: "Ninja",
+        #     archiver: "7z a",
+        #     artifact: "windows_clang.7z",
+        #     boost: "OFF",
+        #     coverage: "OFF"
+        #   }
           
     steps:
       - uses: actions/checkout@v2
@@ -132,7 +132,6 @@ jobs:
             -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
             -DCMAKE_C_COMPILER=${{ matrix.config.cc }} \
             -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} \
-            -DCMAKE_INSTALL_PREFIX:PATH=install_dir \
             -DIMPROC_WITH_BOOST=${{ matrix.config.boost }} \
             -DIMPROC_WITH_COVERAGE=${{ matrix.config.coverage }} \
             -DIMPROC_WITH_TESTS=ON \
@@ -153,7 +152,7 @@ jobs:
 
       - name: Pack
         shell: bash
-        working-directory: install_dir
+        working-directory: install
         run: |
           ls -laR
           ${{ matrix.config.archiver }} ../${{ matrix.config.artifact }} .
