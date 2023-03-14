@@ -61,30 +61,30 @@ jobs:
             boost: "OFF",
             coverage: "OFF"
           }
-        # - {
-        #     name: "windows-latest-gcc-boost-off",
-        #     os: windows-latest,
-        #     build_type: "Release",
-        #     cc: "gcc",
-        #     cxx: "g++",
-        #     generator: "Ninja",
-        #     archiver: "7z a",
-        #     artifact: "windows_gcc.7z",
-        #     boost: "OFF",
-        #     coverage: "OFF"
-        #   }
-        # - {
-        #     name: "windows-latest-clang-boost-off",
-        #     os: windows-latest,
-        #     build_type: "Release",
-        #     cc: "clang",
-        #     cxx: "clang++",
-        #     generator: "Ninja",
-        #     archiver: "7z a",
-        #     artifact: "windows_clang.7z",
-        #     boost: "OFF",
-        #     coverage: "OFF"
-        #   }
+        - {
+            name: "windows-latest-gcc-boost-off",
+            os: windows-latest,
+            build_type: "Release",
+            cc: "gcc",
+            cxx: "g++",
+            generator: "Ninja",
+            archiver: "7z a",
+            artifact: "windows_gcc.7z",
+            boost: "OFF",
+            coverage: "OFF"
+          }
+        - {
+            name: "windows-latest-clang-boost-off",
+            os: windows-latest,
+            build_type: "Release",
+            cc: "clang",
+            cxx: "clang++",
+            generator: "Ninja",
+            archiver: "7z a",
+            artifact: "windows_clang.7z",
+            boost: "OFF",
+            coverage: "OFF"
+          }
           
     steps:
       - uses: actions/checkout@v2

@@ -17,6 +17,13 @@ namespace improc {
     inline constexpr bool is_folder_iterator_v = is_folder_iterator<T>::value;
 
     template <class T>
+    struct is_path : std::bool_constant<    std::is_same<T, std::filesystem::path>::value
+                                         || std::is_same<T, std::string>::value > {};
+
+    template<class T>
+    inline constexpr bool is_path_v = is_path<T>::value;
+
+    template <class T>
     struct is_hashable : std::bool_constant<std::is_integral<T>::value || std::is_same<T, std::string>::value> {};
 
     template<class T>
