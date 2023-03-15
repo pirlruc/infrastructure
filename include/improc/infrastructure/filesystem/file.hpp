@@ -93,7 +93,18 @@ namespace improc
             static Json::Value      Read(const FilepathType& filepath);
 
         private:
-            static inline bool      IsExtensionValid(const improc::BaseFile& json_file);
+            /**
+             * @brief Check if file extension is a valid json extension
+             * 
+             * @param json_file - file object
+             * @return true if file extension is a valid json extension (i.e. .json)
+             * @return false 
+             */
+            static inline bool      IsExtensionValid(const improc::BaseFile& json_file)
+            {
+                static const std::string kJsonExtension = ".json";
+                return json_file.get_extension() == kJsonExtension;
+            }
     };
 }
 

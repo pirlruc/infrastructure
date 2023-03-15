@@ -186,18 +186,3 @@ Json::Value improc::JsonFile::Read() const
 {
     return improc::JsonFile::Read(this->filepath_);
 }
-
-/**
- * @brief Check if file extension is a valid json extension
- * 
- * @param json_file - file object
- * @return true if file extension is a valid json extension (i.e. .json)
- * @return false 
- */
-inline bool improc::JsonFile::IsExtensionValid(const improc::BaseFile& json_file)
-{
-    IMPROC_INFRASTRUCTURE_LOGGER_TRACE  ( "Checking if json file {} has valid extension..."
-                                        , json_file.get_filepath() );
-    static const std::string kJsonExtension = ".json";
-    return json_file.get_extension() == kJsonExtension;
-}
