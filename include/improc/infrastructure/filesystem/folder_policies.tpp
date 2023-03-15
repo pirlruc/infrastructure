@@ -16,7 +16,7 @@ std::vector<std::filesystem::path> improc::folder::ListFiles<ListFileType>::GetF
     std::vector<std::filesystem::path> filepaths {};
     std::transform  ( std::filesystem::begin(directory_iterator),std::filesystem::end(directory_iterator)
                     , std::back_inserter(filepaths)
-                    , [] (const std::filesystem::directory_entry& directory_entry) -> std::string {return directory_entry.path();} );
+                    , [] (const std::filesystem::directory_entry& directory_entry) {return directory_entry.path();} );
 
     std::vector<std::filesystem::path> filtered_files {};
     std::copy_if( filepaths.begin(), filepaths.end()

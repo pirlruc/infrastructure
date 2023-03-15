@@ -21,7 +21,7 @@ namespace improc
      * @brief Base file object and utilities
      * 
      */
-    class BaseFile
+    class IMPROC_API BaseFile
     {
         protected:
             std::filesystem::path   filepath_;
@@ -29,9 +29,11 @@ namespace improc
         public:
             BaseFile();
             explicit BaseFile(const std::string& filepath);
+            explicit BaseFile(const std::filesystem::path& filepath);
             explicit BaseFile(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
 
-            BaseFile&               set_filepath(const std::string& filepath);
+            template<typename FilepathType>
+            BaseFile&               set_filepath(const FilepathType& filepath);
             
             std::string             get_filepath () const;
             std::string             get_filename () const;
@@ -41,10 +43,17 @@ namespace improc
             bool                    Remove() const;
             bool                    Exists() const;
 
-            static std::string      Read    (const std::string& filepath);
-            static bool             Remove  (const std::string& filepath);
-            static bool             Exists  (const std::string& filepath);
-            static bool             IsFile  (const std::string& filepath);
+            template<typename FilepathType>
+            static std::string      Read    (const FilepathType& filepath);
+            
+            template<typename FilepathType>
+            static bool             Remove  (const FilepathType& filepath);
+            
+            template<typename FilepathType>
+            static bool             Exists  (const FilepathType& filepath);
+            
+            template<typename FilepathType>
+            static bool             IsFile  (const FilepathType& filepath);
     };
 
     /**
@@ -56,9 +65,11 @@ namespace improc
         public:
             File();
             explicit File(const std::string& filepath);
+            explicit File(const std::filesystem::path& filepath);
             explicit File(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
 
-            File&               set_filepath(const std::string& filepath);
+            template<typename FilepathType>
+            File&               set_filepath(const FilepathType& filepath);
     };
 
     /**
@@ -70,16 +81,33 @@ namespace improc
         public:
             JsonFile();
             explicit JsonFile(const std::string& filepath);
+            explicit JsonFile(const std::filesystem::path& filepath);
             explicit JsonFile(const Json::Value& filepath_json, const std::optional<std::string>& application_folder = std::optional<std::string>());
 
-            JsonFile&               set_filepath(const std::string& filepath);
+            template<typename FilepathType>
+            JsonFile&               set_filepath(const FilepathType& filepath);
 
             Json::Value             Read() const;
-            static Json::Value      Read(const std::string& filepath);
+
+            template<typename FilepathType>
+            static Json::Value      Read(const FilepathType& filepath);
 
         private:
-            static inline bool      IsExtensionValid(const improc::BaseFile& json_file);
+            /**
+             * @brief Check if file extension is a valid json extension
+             * 
+             * @param json_file - file object
+             * @return true if file extension is a valid json extension (i.e. .json)
+             * @return false 
+             */
+            static inline bool      IsExtensionValid(const improc::BaseFile& json_file)
+            {
+                static const std::string kJsonExtension = ".json";
+                return json_file.get_extension() == kJsonExtension;
+            }
     };
 }
+
+#include <improc/infrastructure/filesystem/file.tpp>
 
 #endif

@@ -34,6 +34,11 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Print Event
+        run: |
+          echo github.event.action: ${{ github.event.action }}
+          echo github.event_name: ${{ github.event_name }}
+          
       - name: Install Dependencies Linux
         run: |
           sudo apt-get update
