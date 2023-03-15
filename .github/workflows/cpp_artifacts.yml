@@ -1,11 +1,10 @@
-name: CMake Build
+name: CPP Create Artifacts
 
 on:
   # Triggers the workflow on push or pull request events
   push:
     branches: 
     - main
-    - feature-windows
   pull_request:
     branches: 
     - main
@@ -22,33 +21,42 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        # - {
-        #     name: "ubuntu-latest-gcc-boost-on",
-        #     os: ubuntu-latest,
-        #     build_type: "Release",
-        #     cc: "gcc-11",
-        #     cxx: "g++-11",
-        #     boost: "ON",
-        #     coverage: "OFF"
-        #   }
-        # - {
-        #     name: "ubuntu-latest-gcc-boost-off",
-        #     os: ubuntu-latest,
-        #     build_type: "Release",
-        #     cc: "gcc-11",
-        #     cxx: "g++-11",
-        #     boost: "OFF",
-        #     coverage: "OFF"
-        #   }
-        # - {
-        #     name: "ubuntu-latest-clang-boost-on",
-        #     os: ubuntu-latest,
-        #     build_type: "Release",
-        #     cc: "clang-14",
-        #     cxx: "clang++-14",
-        #     boost: "ON",
-        #     coverage: "OFF"
-        #   }
+        - {
+            name: "ubuntu-latest-gcc-boost-on",
+            os: ubuntu-latest,
+            build_type: "Release",
+            cc: "gcc-11",
+            cxx: "g++-11",
+            generator: "Unix Makefiles",
+            archiver: "7z a",
+            artifact: "ubuntu_clang.7z",
+            boost: "ON",
+            coverage: "OFF"
+          }
+        - {
+            name: "ubuntu-latest-gcc-boost-off",
+            os: ubuntu-latest,
+            build_type: "Release",
+            cc: "gcc-11",
+            cxx: "g++-11",
+            generator: "Unix Makefiles",
+            archiver: "7z a",
+            artifact: "ubuntu_clang.7z",
+            boost: "OFF",
+            coverage: "OFF"
+          }
+        - {
+            name: "ubuntu-latest-clang-boost-on",
+            os: ubuntu-latest,
+            build_type: "Release",
+            cc: "clang-14",
+            cxx: "clang++-14",
+            generator: "Unix Makefiles",
+            archiver: "7z a",
+            artifact: "ubuntu_clang.7z",
+            boost: "ON",
+            coverage: "OFF"
+          }
         - {
             name: "ubuntu-latest-clang-boost-off",
             os: ubuntu-latest,
@@ -135,17 +143,12 @@ jobs:
             -DCMAKE_INSTALL_PREFIX:PATH=install \
             -DIMPROC_WITH_BOOST=${{ matrix.config.boost }} \
             -DIMPROC_WITH_COVERAGE=${{ matrix.config.coverage }} \
-            -DIMPROC_WITH_TESTS=ON \
+            -DIMPROC_WITH_TESTS=OFF \
             -G "${{ matrix.config.generator }}"
       
       - name: Build
         shell: bash
         run: cmake --build build --config ${{ matrix.config.build_type }} --target all
-
-      - name: Test
-        if: startsWith(matrix.config.coverage, 'OFF')
-        shell: bash
-        run: ./build/bin/improc_infrastructure_test
 
       - name: Install Strip
         shell: bash
