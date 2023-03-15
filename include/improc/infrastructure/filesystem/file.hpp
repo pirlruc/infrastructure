@@ -21,7 +21,7 @@ namespace improc
      * @brief Base file object and utilities
      * 
      */
-    class BaseFile
+    class IMPROC_API BaseFile
     {
         protected:
             std::filesystem::path   filepath_;

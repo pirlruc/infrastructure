@@ -12,25 +12,25 @@ improc::BaseFile& improc::BaseFile::set_filepath(const FilepathType& filepath)
     if (improc::BaseFile::IsFile(filepath) == false)
     {
         std::string error_message = "Invalid path for file: ";
-        if constexpr (std::is_same_v<FilepathType,std::string>)
+        if constexpr (std::is_same_v<FilepathType,std::filesystem::path>)
         {
-            error_message += filepath;
+            error_message += filepath.string();
         }
         else
         {
-            error_message += filepath.string();
+            error_message += filepath;
         }
         IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_01: " + error_message);
         throw improc::value_error(std::move(error_message));
     }
 
-    if constexpr (std::is_same_v<FilepathType,std::string>)
+    if constexpr (std::is_same_v<FilepathType,std::filesystem::path>)
     {
-        this->filepath_ = std::filesystem::path(std::move(filepath));
+        this->filepath_ = std::move(filepath);
     }
     else
     {
-        this->filepath_ = std::move(filepath);
+        this->filepath_ = std::filesystem::path(std::move(filepath));
     }
     return (*this);
 }
@@ -50,13 +50,13 @@ std::string improc::BaseFile::Read(const FilepathType& filepath)
     if (improc::BaseFile::IsFile(filepath) == false) 
     {
         std::string error_message {};
-        if constexpr (std::is_same_v<FilepathType,std::string>)
+        if constexpr (std::is_same_v<FilepathType,std::filesystem::path>)
         {
-            error_message = fmt::format("Filepath {} does not exist", filepath);
+            error_message = fmt::format("Filepath {} does not exist", filepath.string());
         }
         else
         {
-            error_message = fmt::format("Filepath {} does not exist", filepath.string());
+            error_message = fmt::format("Filepath {} does not exist", filepath);
         }
         IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_02: " + error_message);
         throw improc::value_error(std::move(error_message));
@@ -66,13 +66,13 @@ std::string improc::BaseFile::Read(const FilepathType& filepath)
     if (file_stream.is_open() == false) 
     {
         std::string error_message = "Error opening filepath ";
-        if constexpr (std::is_same_v<FilepathType,std::string>)
+        if constexpr (std::is_same_v<FilepathType,std::filesystem::path>)
         {
-            error_message += filepath;
+            error_message += filepath.string();
         }
         else
         {
-            error_message += filepath.string();
+            error_message += filepath;
         }
         IMPROC_INFRASTRUCTURE_LOGGER_ERROR("ERROR_03: " + error_message);
         throw improc::operating_system_error(std::move(error_message));
@@ -155,7 +155,8 @@ improc::JsonFile& improc::JsonFile::set_filepath(const FilepathType& filepath)
 {
     static_assert(improc::is_path_v<FilepathType>,"Filepath data type not valid for path");
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Setting json filepath {}...",filepath);
-    improc::BaseFile json_file {std::move(filepath)};
+    improc::BaseFile json_file {};
+    json_file.set_filepath(std::move(filepath));
     if (improc::JsonFile::IsExtensionValid(json_file) == false)
     {
         std::string error_message = "Invalid json extension " + json_file.get_extension();
