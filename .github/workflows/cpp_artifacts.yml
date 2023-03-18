@@ -119,7 +119,6 @@ jobs:
           gcc-11   --version
           clang-14 --version
           lcov     --version
-
       - name: Install Dependencies Windows
         if: startsWith(matrix.config.name, 'windows-latest')
         run: |
@@ -160,10 +159,8 @@ jobs:
         run: |
           ls -laR
           ${{ matrix.config.archiver }} ../${{ matrix.config.artifact }} .
-
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
         with: 
           name: ${{ matrix.config.name }}
           path: ./${{ matrix.config.artifact }}
-          
