@@ -144,7 +144,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX:PATH=install \
             -DIMPROC_WITH_BOOST=${{ matrix.config.boost }} \
             -DIMPROC_WITH_COVERAGE=${{ matrix.config.coverage }} \
-            -DIMPROC_WITH_TESTS=ON \
+            -DIMPROC_INFRASTRUCTURE_WITH_TESTS=ON \
             -G "${{ matrix.config.generator }}"
       
       - name: Build

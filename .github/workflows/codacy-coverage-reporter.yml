@@ -65,7 +65,7 @@ jobs:
             -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} \
             -DIMPROC_WITH_BOOST=${{ matrix.config.boost }} \
             -DIMPROC_WITH_COVERAGE=${{ matrix.config.coverage }} \
-            -DIMPROC_WITH_TESTS=ON \
+            -DIMPROC_INFRASTRUCTURE_WITH_TESTS=ON \
             -G "Unix Makefiles"
 
       - name: Build

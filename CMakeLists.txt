@@ -12,6 +12,10 @@ if(NOT DEFINED IMPROC_WITH_BOOST)
   set(IMPROC_WITH_BOOST OFF)
 endif()
 
+if(NOT DEFINED IMPROC_INFRASTRUCTURE_WITH_TESTS)
+  set(IMPROC_INFRASTRUCTURE_WITH_TESTS OFF)
+endif()
+
 project(
   improc_infrastructure
   VERSION     ${IMPROC_SUPERPROJECT_VERSION}
@@ -133,7 +137,7 @@ target_link_libraries       (${PROJECT_NAME}   INTERFACE jsoncpp_lib)
 target_link_libraries       (${PROJECT_NAME}   INTERFACE ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
 
 # Tests configuration
-if(IMPROC_WITH_TESTS)
+if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
   add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/improc_infrastructure_test)
 endif()
 
