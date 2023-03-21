@@ -49,8 +49,10 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: |
-            external
-          key: ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON
+            external/*
+          restore-keys: |
+            ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-${{ hashFiles('**/CMakeLists.txt') }}
+            ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-
 
       - name: Install Dependencies Linux
         run: |
@@ -68,6 +70,7 @@ jobs:
       - name: Configure
         shell: bash
         run: |
+          ls
           rm -rf build
           mkdir build
           cmake \
@@ -83,15 +86,17 @@ jobs:
 
       - name: Build
         shell: bash
-        run: cmake --build build --config ${{ matrix.config.build_type }} --target all
+        run: | 
+          ls external
+          cmake --build build --config ${{ matrix.config.build_type }} --target all
 
       - name: Save Build Cache
         id: save-build-cache
         uses: actions/cache/save@v3
         with:
           path: |
-            external
-          key: ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON
+            external/*
+          key: ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-${{ hashFiles('**/CMakeLists.txt') }}
 
       - name: Code Coverage Report
         shell: bash
