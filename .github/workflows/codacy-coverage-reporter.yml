@@ -6,6 +6,7 @@ on:
     branches: 
     - main
     - developer
+    - feature-cache
   pull_request:
     branches: 
     - main
@@ -30,6 +31,10 @@ jobs:
           }
 
     steps:
+      - name: Get Branch Name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
+
       - uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -39,6 +44,15 @@ jobs:
           echo github.event.action: ${{ github.event.action }}
           echo github.event_name: ${{ github.event_name }}
           
+      - name: Restore Build Cache
+        id: restore-build-cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            build
+            external
+          key: ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON
+
       - name: Install Dependencies Linux
         run: |
           sudo apt-get update
@@ -52,11 +66,16 @@ jobs:
           clang-14 --version
           lcov     --version
 
-      - name: Configure
+      - name: Clean build directory
+        if: steps.restore-build-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
           rm -rf build
           mkdir build
+
+      - name: Configure
+        shell: bash
+        run: |
           cmake \
             -S . \
             -B build \
@@ -71,6 +90,15 @@ jobs:
       - name: Build
         shell: bash
         run: cmake --build build --config ${{ matrix.config.build_type }} --target all
+
+      - name: Save Build Cache
+        id: save-build-cache
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            build
+            external
+          key: ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON
 
       - name: Code Coverage Report
         shell: bash
