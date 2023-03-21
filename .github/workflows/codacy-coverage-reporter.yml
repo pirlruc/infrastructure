@@ -50,8 +50,9 @@ jobs:
         with:
           path: |
             external/*
-          restore-keys: |
+          key: |
             ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-${{ hashFiles('**/CMakeLists.txt') }}
+          restore-keys: |
             ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-
 
       - name: Install Dependencies Linux
