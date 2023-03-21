@@ -31,10 +31,6 @@ jobs:
           }
 
     steps:
-      - name: Get Branch Name
-        id: branch-name
-        uses: tj-actions/branch-names@v6
-
       - uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -49,11 +45,12 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: |
+            build/*
             external/*
-          key: |
-            ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-${{ hashFiles('**/CMakeLists.txt') }}
+            test/external/*
+          key: ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-${{ hashFiles('**/CMakeLists.txt') }}
           restore-keys: |
-            ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-
+            ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-
 
       - name: Install Dependencies Linux
         run: |
@@ -96,8 +93,10 @@ jobs:
         uses: actions/cache/save@v3
         with:
           path: |
+            build/*
             external/*
-          key: ${{ steps.branch-name.outputs.current_branch }}-${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-${{ hashFiles('**/CMakeLists.txt') }}
+            test/external/*
+          key: ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-${{ hashFiles('**/CMakeLists.txt') }}
 
       - name: Code Coverage Report
         shell: bash
