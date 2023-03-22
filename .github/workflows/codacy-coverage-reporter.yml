@@ -1,11 +1,6 @@
 name: Codacy Coverage Reporter
 
 on:
-  workflow_run:
-    workflows: [CPP Build and Test]
-    types: [completed]
-    branches: [main,developer,feature-cache]
-
   # Triggers the workflow on push or pull request events
   push:
     branches: 

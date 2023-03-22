@@ -1,11 +1,6 @@
 name: CPP Create Artifacts
 
 on:
-  workflow_run:
-    workflows: [CPP Build and Test]
-    types: [completed]
-    branches: [main,developer,feature-cache]
-
   # Triggers the workflow on push or pull request events
   push:
     branches: 
@@ -189,17 +184,9 @@ jobs:
         shell: bash
         run: |
           cmake --install build --strip
-          ls install
 
-      - name: Pack
-        shell: bash
-        working-directory: install
-        run: |
-          ls -laR
-          ${{ matrix.config.archiver }} ../${{ matrix.config.artifact }} .
-          
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3.1.2
         with: 
           name: ${{ matrix.config.name }}
-          path: ./${{ matrix.config.artifact }}
+          path: install/*
