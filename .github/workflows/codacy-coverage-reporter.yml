@@ -65,12 +65,16 @@ jobs:
           clang-14 --version
           lcov     --version
 
+      - name: Clean Build Folder
+        if: steps.restore-build-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          rm -rf build
+          mkdir build
+
       - name: Configure
         shell: bash
         run: |
-          ls
-          rm -rf build
-          mkdir build
           cmake \
             -S . \
             -B build \
@@ -85,7 +89,7 @@ jobs:
       - name: Build
         shell: bash
         run: | 
-          ls external
+          ls build
           cmake --build build --config ${{ matrix.config.build_type }} --target all
 
       - name: Save Build Cache
