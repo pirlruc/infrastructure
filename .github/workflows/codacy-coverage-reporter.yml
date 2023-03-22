@@ -26,6 +26,9 @@ jobs:
             build_type: "Debug",
             cc: "clang-14",
             cxx: "clang++-14",
+            generator: "Unix Makefiles",
+            archiver: "7z a",
+            artifact: "ubuntu_clang.7z",
             boost: "OFF",
             coverage: "ON"
           }
@@ -40,18 +43,6 @@ jobs:
           echo github.event.action: ${{ github.event.action }}
           echo github.event_name: ${{ github.event_name }}
           
-      - name: Restore Build Cache
-        id: restore-build-cache
-        uses: actions/cache/restore@v3
-        with:
-          path: |
-            build/*
-            external/*
-            test/external/*
-          key: ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-${{ hashFiles('CMakeLists.txt','test/CMakeLists.txt') }}
-          restore-keys: |
-            ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-
-
       - name: Install Dependencies Linux
         run: |
           sudo apt-get update
@@ -64,7 +55,18 @@ jobs:
           gcc-11   --version
           clang-14 --version
           lcov     --version
-          ls /usr/bin
+
+      - name: Restore Build Cache
+        id: restore-build-cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            build/*
+            external/*
+            test/external/*
+          key: ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-${{ hashFiles('CMakeLists.txt','test/CMakeLists.txt') }}
+          restore-keys: |
+            ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_ON-
 
       - name: Clean Build Folder
         if: steps.restore-build-cache.outputs.cache-hit != 'true'
@@ -76,7 +78,6 @@ jobs:
       - name: Configure
         shell: bash
         run: |
-          ls build
           cmake \
             -S . \
             -B build \
@@ -86,12 +87,11 @@ jobs:
             -DIMPROC_WITH_BOOST=${{ matrix.config.boost }} \
             -DIMPROC_WITH_COVERAGE=${{ matrix.config.coverage }} \
             -DIMPROC_INFRASTRUCTURE_WITH_TESTS=ON \
-            -G "Unix Makefiles"
+            -G "${{ matrix.config.generator }}"
 
       - name: Build
         shell: bash
-        run: | 
-          cmake --build build --config ${{ matrix.config.build_type }} --target all
+        run: cmake --build build --config ${{ matrix.config.build_type }} --target all
 
       - name: Save Build Cache
         id: save-build-cache
