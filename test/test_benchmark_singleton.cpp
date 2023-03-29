@@ -68,7 +68,7 @@ TEST(Benchmark,TestBenchmarkKeys) {
     #else
         EXPECT_STREQ(improc::File::Read("./benchmark_keys.csv").c_str(),"benchmark2;test1;test2\nbenchmark2;true;\n");
     #endif
-    EXPECT_THROW(TestBenchmarkReferenceKeys::get()->AddKeys(keys),improc::benchmark_keys_cannot_change);
+    EXPECT_THROW(TestBenchmarkReferenceKeys::get()->AddKeys(keys),improc::key_error);
     spdlog::drop("benchmark2");
 }
 

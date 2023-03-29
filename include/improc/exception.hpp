@@ -1,59 +1,46 @@
 #ifndef IMPROC_INFRASTRUCTURE_EXCEPTIONS_HPP
 #define IMPROC_INFRASTRUCTURE_EXCEPTIONS_HPP
  
-#include <exception>
+#include <stdexcept>
  
-namespace improc {
-    class duplicated_key final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Key already exists";
-        }
-    };
-
-    class not_found_key final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Key does not exist";
-        }
-    };
-
-    class not_found_in_factory final: public std::exception
+namespace improc 
+{
+    class key_error final: public std::runtime_error
     {
         public:
-            const char* what() const throw()
-            {
-                return "Unknown object type passed to factory.";
-            }
+            explicit key_error(const std::string& message): std::runtime_error(std::move(message)) {}
     };
 
-    class invalid_filepath final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Invalid filepath";
-        }
+    class value_error final: public std::logic_error
+    {
+        public:
+            explicit value_error(const std::string& message): std::logic_error(std::move(message)) {}
     };
 
-    class invalid_folder_path final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Invalid folder path";
-        }
+    class processing_flow_error final: public std::logic_error
+    {
+        public:
+            explicit processing_flow_error(const std::string& message): std::logic_error(std::move(message)) {}
     };
 
-    class file_processing_error final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Error processing file";
-        }
+    class operating_system_error final: public std::runtime_error
+    {
+        public:
+            explicit operating_system_error(const std::string& message): std::runtime_error(std::move(message)) {}
     };
 
-    class json_parsing_error final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Error parsing json structure";
-        }
+    class json_error final: public std::runtime_error
+    {
+        public:
+            explicit json_error(const std::string& message): std::runtime_error(std::move(message)) {}
     };
+
+    class freetype_error final: public std::runtime_error
+    {
+        public:
+            explicit freetype_error(const std::string& message): std::runtime_error(std::move(message)) {}
+    };
+
 
     class not_supported_data_type final: public std::exception {
     public:
@@ -62,52 +49,45 @@ namespace improc {
         }
     };
 
-    class benchmark_keys_cannot_change final: public std::exception {
+    class not_supported_color_conversion final: public std::exception {
     public:
         virtual const char* what() const throw() {
-            return "Cannot change benchmark keys after creation";
+            return "Not supported color conversion";
         }
     };
 
-    class drawer_not_defined final: public std::exception {
+    class invalid_color_space final: public std::exception {
     public:
         virtual const char* what() const throw() {
-            return "Drawer not defined";
+            return "Invalid color space";
         }
     };
 
-    class page_drawer_not_allocated final: public std::exception {
+    class inconsistent_size_detected_reference_pixels final: public std::exception {
     public:
         virtual const char* what() const throw() {
-            return "Page drawer not allocated";
+            return "Detected pixels and reference pixels with different sizes";
         }
     };
 
-    class invalid_page_image final: public std::exception {
+    class inconsistent_size_pixels_lines final: public std::exception {
     public:
         virtual const char* what() const throw() {
-            return "Invalid page image";
+            return "Pixels and lines for homography estimation with different sizes";
         }
     };
 
-    class context_elem_diff_page_elem final: public std::exception {
+    class invalid_svd_decomposition final: public std::exception {
     public:
         virtual const char* what() const throw() {
-            return "Number of context elements different than the number of page elements";
+            return "Invalid SVD decomposition";
         }
     };
 
-    class freetype_lib_error final: public std::exception {
+    class invalid_homography_estimation final: public std::exception {
     public:
         virtual const char* what() const throw() {
-            return "Error executing freetype library method";
-        }
-    };
-
-    class printing_resolution_not_positive final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Printing resolution should be bigger than zero";
+            return "Homography cannot be estimated";
         }
     };
 }
