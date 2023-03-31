@@ -5,11 +5,6 @@ on:
   push:
     branches: 
     - main
-    - developer
-  pull_request:
-    branches: 
-    - main
-    - developer
 
   # Runs this workflow manually from the Actions tab
   workflow_dispatch:
@@ -85,6 +80,10 @@ jobs:
           }
           
     steps:
+      - name: Get Branch Name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
+
       - uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -158,6 +157,7 @@ jobs:
         run: cmake --build build --config ${{ matrix.config.build_type }} --target all
 
       - name: Save Build Cache
+        if: ${{ steps.branch-name.outputs.current_branch }} == 'developer'
         id: save-build-cache
         uses: actions/cache/save@v3
         with:
