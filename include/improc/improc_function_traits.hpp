@@ -1,6 +1,8 @@
 #ifndef IMPROC_INFRASTRUCTURE_FUNCTION_TRAITS_HPP
 #define IMPROC_INFRASTRUCTURE_FUNCTION_TRAITS_HPP
 
+#include <variant>
+
 namespace improc {
     template<class Function>
     struct function_traits;
