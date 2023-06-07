@@ -34,31 +34,40 @@ endif()
 
 # Add external dependencies
 # SPDLOG
-FetchContent_Declare(
-  spdlog
-  GIT_REPOSITORY  https://github.com/gabime/spdlog
-  GIT_TAG         v1.11.0
-  SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/spdlog
-)
-FetchContent_MakeAvailable(spdlog)
-target_include_directories(spdlog INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/spdlog/include>
-                                            $<INSTALL_INTERFACE:include> )
+if(DEFINED CMAKE_TOOLCHAIN_FILE)
+  find_package(spdlog CONFIG REQUIRED)
+else()
+  FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY  https://github.com/gabime/spdlog
+    GIT_TAG         v1.11.0
+    SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/spdlog
+  )
+  FetchContent_MakeAvailable(spdlog)
+  target_include_directories(spdlog INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/spdlog/include>
+                                              $<INSTALL_INTERFACE:include> )
+  add_library(spdlog::spdlog ALIAS spdlog)
+endif()
 
 # JSONCPP
-FetchContent_Declare(
-  jsoncpp
-  GIT_REPOSITORY https://github.com/open-source-parsers/jsoncpp
-  GIT_TAG        1.9.5
-  SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/jsoncpp
-)
-set(JSONCPP_WITH_TESTS    OFF)
-set(JSONCPP_WITH_EXAMPLE  OFF)
-set(BUILD_STATIC_LIBS     OFF)
-FetchContent_MakeAvailable(jsoncpp)
+if(DEFINED CMAKE_TOOLCHAIN_FILE)
+  find_package(jsoncpp CONFIG REQUIRED)
+else()
+  FetchContent_Declare(
+    jsoncpp
+    GIT_REPOSITORY https://github.com/open-source-parsers/jsoncpp
+    GIT_TAG        1.9.5
+    SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/jsoncpp
+  )
+  set(JSONCPP_WITH_TESTS    OFF)
+  set(JSONCPP_WITH_EXAMPLE  OFF)
+  set(BUILD_STATIC_LIBS     OFF)
+  FetchContent_MakeAvailable(jsoncpp)
   add_library(JsonCpp::JsonCpp ALIAS jsoncpp_lib)
 endif()
 
 message(STATUS "Build ${PROJECT_NAME} Version: ${PROJECT_VERSION}")
+message(STATUS "CMake Toolchain File: ${CMAKE_TOOLCHAIN_FILE}")
 message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install Dir: ${CMAKE_INSTALL_PREFIX}")
 
@@ -95,7 +104,7 @@ set(
 
 add_library(${PROJECT_NAME} SHARED ${IMPROC_INFRASTRUCTURE_LIB_FILES})
 add_library(improc::infrastructure ALIAS ${PROJECT_NAME})
-add_dependencies(${PROJECT_NAME} spdlog jsoncpp_lib ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
+add_dependencies(${PROJECT_NAME} spdlog::spdlog JsonCpp::JsonCpp)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD           17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED  TRUE)
@@ -108,12 +117,10 @@ target_include_directories  (${PROJECT_NAME}   INTERFACE $<BUILD_INTERFACE:${PRO
                                                $<INSTALL_INTERFACE:include> )
 
 # Link dependencies
-target_link_libraries       (${PROJECT_NAME}   PRIVATE   spdlog)
-target_link_libraries       (${PROJECT_NAME}   PRIVATE   jsoncpp_lib)
-target_link_libraries       (${PROJECT_NAME}   PRIVATE   ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
-target_link_libraries       (${PROJECT_NAME}   INTERFACE spdlog)
-target_link_libraries       (${PROJECT_NAME}   INTERFACE jsoncpp_lib)
-target_link_libraries       (${PROJECT_NAME}   INTERFACE ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
+target_link_libraries       (${PROJECT_NAME}   PRIVATE   spdlog::spdlog)
+target_link_libraries       (${PROJECT_NAME}   PRIVATE   JsonCpp::JsonCpp)
+target_link_libraries       (${PROJECT_NAME}   INTERFACE spdlog::spdlog)
+target_link_libraries       (${PROJECT_NAME}   INTERFACE JsonCpp::JsonCpp)
 
 # Tests configuration
 if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
@@ -121,17 +128,22 @@ if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
 endif()
 
 # Install configuration
-set(${PROJECT_NAME}_libs ${PROJECT_NAME} spdlog jsoncpp_lib ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
-install(
-  TARGETS     ${${PROJECT_NAME}_libs}
-  DESTINATION lib
-  EXPORT      ${PROJECT_NAME}_target 
-)
-install(FILES   ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE          DESTINATION share/licenses/improc/jsoncpp)
-install(FILES   ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE           DESTINATION share/licenses/improc/spdlog)
+if (NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  set(${PROJECT_NAME}_libs ${PROJECT_NAME} spdlog jsoncpp_lib)
+  install(
+    TARGETS     ${${PROJECT_NAME}_libs}
+    DESTINATION lib
+    EXPORT      ${PROJECT_NAME}_target 
+  )
+  install(FILES   ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE          DESTINATION share/licenses/improc/jsoncpp)
+  install(FILES   ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE           DESTINATION share/licenses/improc/spdlog)
 
-if(IMPROC_WITH_BOOST)
-  install(FILES   ${PROJECT_SOURCE_DIR}/external/boost/LICENSE_1_0.txt  DESTINATION share/licenses/improc/boost)
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/improc                  DESTINATION include)
+else()
+  install(
+    TARGETS     ${${PROJECT_NAME}}
+    DESTINATION lib
+    EXPORT      ${PROJECT_NAME}_target 
+  )
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/improc                  DESTINATION include)
 endif()
-
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/improc                  DESTINATION include)
