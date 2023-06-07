@@ -19,63 +19,39 @@ jobs:
       matrix:
         config:
         - {
-            name: "ubuntu-latest-gcc-boost-on",
+            name: "ubuntu-latest-gcc",
             os: ubuntu-latest,
             build_type: "Release",
             cc: "gcc-11",
             cxx: "g++-11",
             generator: "Unix Makefiles",
-            boost: "ON",
             coverage: "OFF"
           }
         - {
-            name: "ubuntu-latest-gcc-boost-off",
-            os: ubuntu-latest,
-            build_type: "Release",
-            cc: "gcc-11",
-            cxx: "g++-11",
-            generator: "Unix Makefiles",
-            boost: "OFF",
-            coverage: "OFF"
-          }
-        - {
-            name: "ubuntu-latest-clang-boost-on",
+            name: "ubuntu-latest-clang",
             os: ubuntu-latest,
             build_type: "Release",
             cc: "clang-14",
             cxx: "clang++-14",
             generator: "Unix Makefiles",
-            boost: "ON",
             coverage: "OFF"
           }
         - {
-            name: "ubuntu-latest-clang-boost-off",
-            os: ubuntu-latest,
-            build_type: "Release",
-            cc: "clang-14",
-            cxx: "clang++-14",
-            generator: "Unix Makefiles",
-            boost: "OFF",
-            coverage: "OFF"
-          }
-        - {
-            name: "windows-latest-gcc-boost-off",
+            name: "windows-latest-gcc",
             os: windows-latest,
             build_type: "Release",
             cc: "gcc",
             cxx: "g++",
             generator: "Ninja",
-            boost: "OFF",
             coverage: "OFF"
           }
         - {
-            name: "windows-latest-clang-boost-off",
+            name: "windows-latest-clang",
             os: windows-latest,
             build_type: "Release",
             cc: "clang",
             cxx: "clang++",
             generator: "Ninja",
-            boost: "OFF",
             coverage: "OFF"
           }
           
@@ -126,9 +102,9 @@ jobs:
             build/*
             external/*
             test/external/*
-          key: ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_OFF-${{ hashFiles('CMakeLists.txt','test/CMakeLists.txt') }}
+          key: ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-coverage_${{ matrix.config.coverage }}-tests_OFF-${{ hashFiles('CMakeLists.txt','test/CMakeLists.txt') }}
           restore-keys: |
-            ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_OFF-
+            ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-coverage_${{ matrix.config.coverage }}-tests_OFF-
 
       - name: Clean Build Folder
         if: steps.restore-build-cache.outputs.cache-hit != 'true'
@@ -147,7 +123,6 @@ jobs:
             -DCMAKE_C_COMPILER=${{ matrix.config.cc }} \
             -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} \
             -DCMAKE_INSTALL_PREFIX:PATH=install \
-            -DIMPROC_WITH_BOOST=${{ matrix.config.boost }} \
             -DIMPROC_WITH_COVERAGE=${{ matrix.config.coverage }} \
             -DIMPROC_INFRASTRUCTURE_WITH_TESTS=OFF \
             -G "${{ matrix.config.generator }}"
@@ -165,7 +140,7 @@ jobs:
             build/*
             external/*
             test/external/*
-          key: ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-boost_${{ matrix.config.boost }}-coverage_${{ matrix.config.coverage }}-tests_OFF-${{ hashFiles('CMakeLists.txt','test/CMakeLists.txt') }}
+          key: ${{ matrix.config.os }}-build-${{ matrix.config.cxx }}-${{ matrix.config.build_type }}-coverage_${{ matrix.config.coverage }}-tests_OFF-${{ hashFiles('CMakeLists.txt','test/CMakeLists.txt') }}
 
       - name: Install Strip
         shell: bash

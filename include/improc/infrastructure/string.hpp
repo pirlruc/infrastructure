@@ -9,11 +9,6 @@
 #include <algorithm>
 #include <json/json.h>
 
-#include <improc/improc_compilation_variables.hpp>
-#ifdef IMPROC_WITH_BOOST
-    #include <boost/algorithm/string.hpp>
-#endif
-
 namespace improc 
 {
     /**

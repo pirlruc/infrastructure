@@ -8,10 +8,6 @@ if(NOT DEFINED IMPROC_SUPERPROJECT_VERSION)
   set(IMPROC_SUPERPROJECT_VERSION 1.0.0)
 endif()
 
-if(NOT DEFINED IMPROC_WITH_BOOST)
-  set(IMPROC_WITH_BOOST OFF)
-endif()
-
 if(NOT DEFINED IMPROC_INFRASTRUCTURE_WITH_TESTS)
   set(IMPROC_INFRASTRUCTURE_WITH_TESTS OFF)
 endif()
@@ -59,24 +55,8 @@ set(JSONCPP_WITH_TESTS    OFF)
 set(JSONCPP_WITH_EXAMPLE  OFF)
 set(BUILD_STATIC_LIBS     OFF)
 FetchContent_MakeAvailable(jsoncpp)
-
-# BOOST
-if(IMPROC_WITH_BOOST)
-  FetchContent_Declare(
-    boost
-    GIT_REPOSITORY https://github.com/boostorg/boost
-    GIT_TAG        boost-1.81.0
-    SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/boost
-  )
-  FetchContent_MakeAvailable(boost)
-  
-  list(APPEND IMPROC_INFRASTRUCTURE_EXTRA_LIBS boost_algorithm)
+  add_library(JsonCpp::JsonCpp ALIAS jsoncpp_lib)
 endif()
-
-configure_file(
-  ${PROJECT_SOURCE_DIR}/improc_compilation_variables.hpp.in 
-  ${PROJECT_SOURCE_DIR}/include/improc/improc_compilation_variables.hpp
-)
 
 message(STATUS "Build ${PROJECT_NAME} Version: ${PROJECT_VERSION}")
 message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
@@ -86,7 +66,6 @@ set(
   IMPROC_INFRASTRUCTURE_LIB_FILES
 
   ${PROJECT_SOURCE_DIR}/include/improc/exception.hpp
-  ${PROJECT_SOURCE_DIR}/include/improc/improc_compilation_variables.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/improc_defs.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/improc_type_traits.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/improc_function_traits.hpp
