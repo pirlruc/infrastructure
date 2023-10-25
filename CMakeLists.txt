@@ -40,7 +40,7 @@ else()
   FetchContent_Declare(
     spdlog
     GIT_REPOSITORY  https://github.com/gabime/spdlog
-    GIT_TAG         v1.11.0
+    GIT_TAG         v1.12.0
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/spdlog
   )
   FetchContent_MakeAvailable(spdlog)

@@ -11,21 +11,19 @@ else()
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY  https://github.com/google/googletest.git
-    GIT_TAG         v1.13.0
+    GIT_TAG         v1.14.0
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/test/external/googletest
   )
   set(BUILD_GMOCK OFF)
   FetchContent_MakeAvailable(googletest)
-  add_library(GTest::gtest      ALIAS gtest)
-  add_library(GTest::gtest_main ALIAS gtest)
 endif()
 
 mark_as_advanced(
   gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
 )
 
-set_target_properties(GTest::gtest      PROPERTIES FOLDER extern)
-set_target_properties(GTest::gtest_main PROPERTIES FOLDER extern)
+set_target_properties(gtest      PROPERTIES FOLDER extern)
+set_target_properties(gtest_main PROPERTIES FOLDER extern)
 
 # Create file to get folder with tests
 configure_file(
