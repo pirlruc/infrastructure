@@ -7,6 +7,8 @@ include(GoogleTest)
 # GOOGLETEST
 if(DEFINED CMAKE_TOOLCHAIN_FILE)
   find_package(GTest CONFIG REQUIRED)
+  set_target_properties(GTest::gtest      PROPERTIES FOLDER extern)
+  set_target_properties(GTest::gtest_main PROPERTIES FOLDER extern)
 else()
   FetchContent_Declare(
     googletest
@@ -16,14 +18,15 @@ else()
   )
   set(BUILD_GMOCK OFF)
   FetchContent_MakeAvailable(googletest)
+  add_library(GTest::gtest         ALIAS gtest)
+  add_library(GTest::gtest_main    ALIAS gtest_main)
+  set_target_properties(gtest      PROPERTIES FOLDER extern)
+  set_target_properties(gtest_main PROPERTIES FOLDER extern)
 endif()
 
 mark_as_advanced(
   gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
 )
-
-set_target_properties(gtest      PROPERTIES FOLDER extern)
-set_target_properties(gtest_main PROPERTIES FOLDER extern)
 
 # Create file to get folder with tests
 configure_file(
