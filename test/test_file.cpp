@@ -5,6 +5,11 @@
 
 #include <improc_infrastructure_test_config.hpp>
 
+TEST(BaseFile,TestReadingNonExistingFile) {
+    EXPECT_THROW(improc::BaseFile::Read(std::string("base_file_tst.txt")),improc::value_error);
+    EXPECT_THROW(improc::BaseFile::Read(std::filesystem::path("base_file_tst.txt")),improc::value_error);
+}
+
 TEST(File,TestEmptyFileConstructor) {
     improc::File file_empty {};
     EXPECT_TRUE(file_empty.get_filepath().empty());

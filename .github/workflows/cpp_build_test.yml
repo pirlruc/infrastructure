@@ -13,6 +13,7 @@ on:
 jobs:
   build:
     # The type of runner that the job will run on
+    # GCC on windows was removed since there is an issue with gtest_discover_tests
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
     strategy:
@@ -32,10 +33,16 @@ jobs:
             binary_dir: "out/build/clang-debug"
           }
         - {
-            name: windows-latest-gcc,
-            os: windows-latest,
+            name: ubuntu-latest-gcc-no-toolchain,
+            os: ubuntu-latest,
             preset_name: "gcc-debug-no-toolchain",
             binary_dir: "out/build/gcc-debug-no-toolchain"
+          }
+        - {
+            name: ubuntu-latest-clang-no-toolchain,
+            os: ubuntu-latest,
+            preset_name: "clang-debug-no-toolchain",
+            binary_dir: "out/build/clang-debug-no-toolchain"
           }
         - {
             name: windows-latest-clang,
@@ -43,7 +50,13 @@ jobs:
             preset_name: "clang-debug",
             binary_dir: "out/build/clang-debug"
           }
-          
+        - {
+            name: windows-latest-clang-no-toolchain,
+            os: windows-latest,
+            preset_name: "clang-debug-no-toolchain",
+            binary_dir: "out/build/clang-debug-no-toolchain"
+          }
+
     steps:
       - name: Get Branch Name
         id: branch-name
@@ -132,6 +145,5 @@ jobs:
           key: ${{ matrix.config.os }}-build-${{ matrix.config.preset_name }}-${{ hashFiles('CMakeLists.txt','test/CMakeLists.txt') }}
 
       - name: Test
-        if: startsWith(matrix.config.coverage, 'OFF')
         shell: bash
         run: ./${{ matrix.config.binary_dir }}/bin/improc_infrastructure_testd

@@ -31,10 +31,16 @@ jobs:
             install_dir: "/home/runner/work/infrastructure/infrastructure/install"
           }
         - {
-            name: windows-latest-gcc,
-            os: windows-latest,
+            name: ubuntu-latest-gcc-no-toolchain,
+            os: ubuntu-latest,
             preset_name: "gcc-release-no-toolchain",
-            install_dir: "D:/a/infrastructure/infrastructure/install"
+            install_dir: "/home/runner/work/infrastructure/infrastructure/install"
+          }
+        - {
+            name: ubuntu-latest-clang-no-toolchain,
+            os: ubuntu-latest,
+            preset_name: "clang-release-no-toolchain",
+            install_dir: "/home/runner/work/infrastructure/infrastructure/install"
           }
         - {
             name: windows-latest-clang,
@@ -42,7 +48,19 @@ jobs:
             preset_name: "clang-release",
             install_dir: "D:/a/infrastructure/infrastructure/install"
           }
-          
+        - {
+            name: windows-latest-gcc-no-toolchain,
+            os: windows-latest,
+            preset_name: "gcc-release-no-toolchain",
+            install_dir: "D:/a/infrastructure/infrastructure/install"
+          }
+        - {
+            name: windows-latest-clang-no-toolchain,
+            os: windows-latest,
+            preset_name: "clang-release-no-toolchain",
+            install_dir: "D:/a/infrastructure/infrastructure/install"
+          }
+
     steps:
       - name: Get Branch Name
         id: branch-name
@@ -129,11 +147,6 @@ jobs:
             external/*
             test/external/*
           key: ${{ matrix.config.os }}-build-${{ matrix.config.preset_name }}-${{ hashFiles('CMakeLists.txt','test/CMakeLists.txt') }}
-
-      - name: Install Strip
-        shell: bash
-        run: |
-          cmake --install build --strip
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3.1.3
