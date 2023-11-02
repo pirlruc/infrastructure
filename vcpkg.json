@@ -1,5 +1,5 @@
 {
-  "name": "infrastructure-vcpkg-dependencies",
+  "name": "improc_infrastructure",
   "version": "1.0",
   "dependencies": [
     {
