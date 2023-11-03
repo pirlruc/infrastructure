@@ -2,7 +2,7 @@
 
 #include <improc/infrastructure/filesystem/folder.hpp>
 
-#include <improc_infrastructure_test_config.hpp>
+#include <improc-infrastructure_test_config.hpp>
 
 TEST(Folder,TestEmptyFolderConstructor) {
     improc::Folder folder_empty {};

@@ -3,7 +3,7 @@
 #include <improc/infrastructure/filesystem/file.hpp>
 #include <improc/infrastructure/parsers/json_parser.hpp>
 
-#include <improc_infrastructure_test_config.hpp>
+#include <improc-infrastructure_test_config.hpp>
 
 TEST(JsonParser,TestReadingStringContent) {
     Json::Value json_content {"test"};
