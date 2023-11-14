@@ -102,9 +102,9 @@ jobs:
         run: |
           HOME_DIRECTORY=$(pwd)
           cd ${{ matrix.config.binary_dir }}/bin
-          ./improc-infrastructure_testd --gtest_output="xml:improc-infrastructure_tests.xml"
+          ./improc_infrastructure_testd --gtest_output="xml:improc_infrastructure_tests.xml"
           cd "$HOME_DIRECTORY"
-          cmake --build --preset ${{ matrix.config.preset_name }} --target improc-infrastructure_coverage
+          cmake --build --preset ${{ matrix.config.preset_name }} --target improc_infrastructure_coverage
 
       - name: Unit Tests Report 
         uses: EnricoMi/publish-unit-test-result-action@v2.11.0
@@ -113,10 +113,10 @@ jobs:
           check_name: "unit-tests-report"
           time_unit: milliseconds
           files: |
-            **/improc-infrastructure_tests.xml
+            **/improc_infrastructure_tests.xml
 
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1.3.0
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: ./${{ matrix.config.binary_dir }}/improc-infrastructure_coverage.lcov
+          coverage-reports: ./${{ matrix.config.binary_dir }}/improc_infrastructure_coverage.lcov
