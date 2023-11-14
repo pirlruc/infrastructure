@@ -17,7 +17,7 @@ if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
 endif()
 
 project(
-  improc-infrastructure
+  improc_infrastructure
   VERSION     ${IMPROC_SUPERPROJECT_VERSION}
   LANGUAGES   CXX
 )
@@ -128,7 +128,7 @@ target_link_libraries       (${PROJECT_NAME}   INTERFACE JsonCpp::JsonCpp)
 
 # Tests configuration
 if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
-  add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/improc-infrastructure_test)
+  add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/improc_infrastructure_test)
 endif()
 
 # Install configuration
