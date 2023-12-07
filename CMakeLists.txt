@@ -47,6 +47,7 @@ else()
     GIT_TAG         v1.12.0
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/spdlog
   )
+  set(SPDLOG_MASTER_PROJECT ON)
   FetchContent_MakeAvailable(spdlog)
   target_include_directories(spdlog INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/spdlog/include>
                                               $<INSTALL_INTERFACE:include> )
@@ -132,22 +133,51 @@ if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
 endif()
 
 # Install configuration
-if (NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  set(${PROJECT_NAME}_libs ${PROJECT_NAME} spdlog jsoncpp_lib)
-  install(
-    TARGETS     ${${PROJECT_NAME}_libs}
-    DESTINATION lib
-    EXPORT      ${PROJECT_NAME}_target 
-  )
-  install(FILES   ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE          DESTINATION share/licenses/improc/jsoncpp)
-  install(FILES   ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE           DESTINATION share/licenses/improc/spdlog)
+# Include files
+install(
+  TARGETS     ${PROJECT_NAME} 
+  EXPORT      ${PROJECT_NAME}_targets
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/improc                  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES   ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE          DESTINATION share/licenses/improc/jsoncpp)
+install(FILES   ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE           DESTINATION share/licenses/improc/spdlog)
+install(FILES   ${PROJECT_SOURCE_DIR}/LICENSE                           DESTINATION share/licenses/improc/infrastructure)
 
-  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/improc                  DESTINATION include)
+# pkg-config files
+if(IS_ABSOLUTE ${CMAKE_INSTALL_INCLUDEDIR})
+  set(PKG_CONFIG_INCLUDEDIR ${CMAKE_INSTALL_INCLUDEDIR})
 else()
-  install(
-    TARGETS     ${${PROJECT_NAME}}
-    DESTINATION lib
-    EXPORT      ${PROJECT_NAME}_target 
-  )
-  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/improc                  DESTINATION include)
+  set(PKG_CONFIG_INCLUDEDIR "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
 endif()
+if(IS_ABSOLUTE ${CMAKE_INSTALL_LIBDIR})
+  set(PKG_CONFIG_LIBDIR ${CMAKE_INSTALL_LIBDIR})
+else()
+  set(PKG_CONFIG_LIBDIR "\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}")
+endif()
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}.pc.in
+  ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc 
+  @ONLY )
+install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+
+# CMake config files
+set(CONFIG_TARGETS_FILE "improc_infrastructure_config_targets.cmake")
+set(EXPORT_DESTINATION_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+install(EXPORT ${PROJECT_NAME}_targets FILE ${CONFIG_TARGETS_FILE} DESTINATION ${EXPORT_DESTINATION_DIR})
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+  ${PROJECT_SOURCE_DIR}/cmake/improc_infrastructure_config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/improc_infrastructure_config.cmake 
+  INSTALL_DESTINATION ${EXPORT_DESTINATION_DIR} )
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/improc_infrastructure_config_version.cmake
+  VERSION ${IMPROC_SUPERPROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/improc_infrastructure_config.cmake 
+              ${CMAKE_CURRENT_BINARY_DIR}/improc_infrastructure_config_version.cmake
+        DESTINATION ${EXPORT_DESTINATION_DIR})
