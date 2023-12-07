@@ -144,13 +144,8 @@ if (NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)
 endif()
 
 # Include files
-set(IMPROC_INFRASTRUCTURE_TARGETS ${PROJECT_NAME})
-if (NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  list(APPEND IMPROC_INFRASTRUCTURE_TARGETS spdlog)
-endif()
-
 install(
-  TARGETS     ${IMPROC_INFRASTRUCTURE_TARGETS}
+  TARGETS     ${PROJECT_NAME}
   EXPORT      ${PROJECT_NAME}_targets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -158,9 +153,9 @@ install(
   INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/improc                  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-install(FILES   ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE          DESTINATION share/licenses/improc/jsoncpp)
-install(FILES   ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE           DESTINATION share/licenses/improc/spdlog)
-install(FILES   ${PROJECT_SOURCE_DIR}/LICENSE                           DESTINATION share/licenses/improc/infrastructure)
+install(FILES     ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE        DESTINATION share/licenses/improc/jsoncpp)
+install(FILES     ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE         DESTINATION share/licenses/improc/spdlog)
+install(FILES     ${PROJECT_SOURCE_DIR}/LICENSE                         DESTINATION share/licenses/improc/infrastructure)
 
 # pkg-config files
 if(IS_ABSOLUTE ${CMAKE_INSTALL_INCLUDEDIR})
@@ -180,19 +175,19 @@ configure_file(
 install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # CMake config files
-set(CONFIG_TARGETS_FILE "improc_infrastructure_config_targets.cmake")
+set(CONFIG_TARGETS_FILE "${PROJECT_NAME}ConfigTargets.cmake")
 set(EXPORT_DESTINATION_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 install(EXPORT ${PROJECT_NAME}_targets FILE ${CONFIG_TARGETS_FILE} DESTINATION ${EXPORT_DESTINATION_DIR})
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(
-  ${PROJECT_SOURCE_DIR}/cmake/improc_infrastructure_config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/improc_infrastructure_config.cmake 
+  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}_config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake 
   INSTALL_DESTINATION ${EXPORT_DESTINATION_DIR} )
 write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/improc_infrastructure_config_version.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
   VERSION ${IMPROC_SUPERPROJECT_VERSION}
   COMPATIBILITY SameMajorVersion)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/improc_infrastructure_config.cmake 
-              ${CMAKE_CURRENT_BINARY_DIR}/improc_infrastructure_config_version.cmake
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake 
+              ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
         DESTINATION ${EXPORT_DESTINATION_DIR})
