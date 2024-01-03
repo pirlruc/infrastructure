@@ -42,7 +42,7 @@ jobs:
         run: |
           echo github.event.action: ${{ github.event.action }}
           echo github.event_name: ${{ github.event_name }}
-          echo branch: ${{ steps.branch-name.outputs.branch }}
+          echo github.branch: ${{ steps.branch-name.outputs.branch }}
           
       - name: Install Dependencies Linux
         run: |
