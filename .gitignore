@@ -3,3 +3,6 @@
 **/*_config.hpp
 **/install
 **/*.profraw
+**/out
+**/doxygen
+**/.DS_Store
