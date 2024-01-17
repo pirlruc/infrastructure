@@ -153,9 +153,11 @@ install(
   INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/improc                  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-install(FILES     ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE        DESTINATION share/licenses/improc/jsoncpp)
-install(FILES     ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE         DESTINATION share/licenses/improc/spdlog)
 install(FILES     ${PROJECT_SOURCE_DIR}/LICENSE                         DESTINATION share/licenses/improc/infrastructure)
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  install(FILES     ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE        DESTINATION share/licenses/improc/jsoncpp)
+  install(FILES     ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE         DESTINATION share/licenses/improc/spdlog)
+endif()
 
 # pkg-config files
 if(IS_ABSOLUTE ${CMAKE_INSTALL_INCLUDEDIR})
