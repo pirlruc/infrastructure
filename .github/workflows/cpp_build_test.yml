@@ -51,6 +51,12 @@ jobs:
             binary_dir: "out/build/clang-debug"
           }
         - {
+            name: windows-latest-gcc-no-toolchain,
+            os: windows-latest,
+            preset_name: "gcc-debug-no-toolchain",
+            binary_dir: "out/build/gcc-debug-no-toolchain"
+          }
+        - {
             name: windows-latest-clang-no-toolchain,
             os: windows-latest,
             preset_name: "clang-debug-no-toolchain",
