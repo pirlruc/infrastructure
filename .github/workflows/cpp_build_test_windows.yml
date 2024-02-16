@@ -3,10 +3,9 @@ name: Windows Build
 on:
   # Triggers the workflow on push or pull request events
   push:
-    branches: 
+    branches:
     - main
     - developer
-    - feature-os
 
   # Runs this workflow manually from the Actions tab
   workflow_dispatch:
@@ -14,7 +13,6 @@ on:
 jobs:
   build:
     # The type of runner that the job will run on
-    # GCC on windows was removed since there is an issue with gtest_discover_tests
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
     strategy:
@@ -22,22 +20,10 @@ jobs:
       matrix:
         config:
         - {
-            name: windows-latest-gcc,
-            os: windows-latest,
-            preset_name: "gcc-debug",
-            binary_dir: "out/build/gcc-debug"
-          }
-        - {
             name: windows-latest-clang,
             os: windows-latest,
             preset_name: "clang-debug",
             binary_dir: "out/build/clang-debug"
-          }
-        - {
-            name: windows-latest-gcc-no-toolchain,
-            os: windows-latest,
-            preset_name: "gcc-debug-no-toolchain",
-            binary_dir: "out/build/gcc-debug-no-toolchain"
           }
         - {
             name: windows-latest-clang-no-toolchain,
@@ -61,7 +47,7 @@ jobs:
           echo github.event.action: ${{ github.event.action }}
           echo github.event_name: ${{ github.event_name }}
           echo github.branch: ${{ steps.branch-name.outputs.branch }}
-          
+
       - name: Install Dependencies
         run: |
           choco install ninja
@@ -70,7 +56,7 @@ jobs:
           gcc      --version
           clang    --version
           vcpkg    --version
-          
+
       - name: Restore Build Cache
         id: restore-build-cache
         uses: actions/cache/restore@v4
@@ -98,7 +84,7 @@ jobs:
           export VCPKG_ROOT=C:\vcpkg
           cmake --preset ${{ matrix.config.preset_name }}
           cmake --build --preset ${{ matrix.config.preset_name }} --target all
-      
+
       - if: ${{ steps.branch-name.outputs.branch == 'developer' }}
         name: Save Build Cache
         id: save-build-cache
