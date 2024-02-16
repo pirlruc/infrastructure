@@ -6,7 +6,7 @@ on:
     branches: 
     - main
     - feature-os
-
+    
   # Runs this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -19,6 +19,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
+        - {
+            name: windows-latest-gcc,
+            os: windows-latest,
+            preset_name: "gcc-release",
+            binary_dir: "D:/a/infrastructure/infrastructure/install"
+          }
         - {
             name: windows-latest-clang,
             os: windows-latest,
@@ -85,7 +91,6 @@ jobs:
           mkdir build
           
       - name: Configure & Build
-        if: startsWith(matrix.config.name, 'windows-latest')
         shell: bash
         run: |
           export VCPKG_ROOT=C:\vcpkg

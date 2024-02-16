@@ -22,10 +22,22 @@ jobs:
       matrix:
         config:
         - {
+            name: windows-latest-gcc,
+            os: windows-latest,
+            preset_name: "gcc-debug",
+            binary_dir: "out/build/gcc-debug"
+          }
+        - {
             name: windows-latest-clang,
             os: windows-latest,
             preset_name: "clang-debug",
             binary_dir: "out/build/clang-debug"
+          }
+        - {
+            name: windows-latest-gcc-no-toolchain,
+            os: windows-latest,
+            preset_name: "gcc-debug-no-toolchain",
+            binary_dir: "out/build/gcc-debug-no-toolchain"
           }
         - {
             name: windows-latest-clang-no-toolchain,
@@ -87,7 +99,7 @@ jobs:
           cmake --preset ${{ matrix.config.preset_name }}
           cmake --build --preset ${{ matrix.config.preset_name }} --target all
       
-      - if: ${{ steps.branch-name.outputs.branch == 'feature-os' }}
+      - if: ${{ steps.branch-name.outputs.branch == 'developer' }}
         name: Save Build Cache
         id: save-build-cache
         uses: actions/cache/save@v4
