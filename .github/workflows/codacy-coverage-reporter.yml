@@ -1,4 +1,4 @@
-name: Codacy Coverage Reporter
+name: Coverage Reporter
 
 on:
   # Triggers the workflow on push or pull request events
@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
         
-      - uses: actions/checkout@v4.1.1
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -60,7 +60,7 @@ jobs:
 
       - name: Restore Build Cache
         id: restore-build-cache
-        uses: actions/cache/restore@v3.3.2
+        uses: actions/cache/restore@v4
         with:
           path: |
             out/*
@@ -88,10 +88,10 @@ jobs:
         shell: bash
         run: cmake --build --preset ${{ matrix.config.preset_name }} --target all
 
-      - if: ${{ steps.branch-name.outputs.branch == 'developer' }}
+      - if: ${{ steps.branch-name.outputs.branch == 'feature-os' }}
         name: Save Build Cache
         id: save-build-cache
-        uses: actions/cache/save@v3.3.2
+        uses: actions/cache/save@v4
         with:
           path: |
             out/*
@@ -110,7 +110,7 @@ jobs:
           cmake --build --preset ${{ matrix.config.preset_name }} --target improc_infrastructure_coverage
 
       - name: Unit Tests Report 
-        uses: EnricoMi/publish-unit-test-result-action@v2.11.0
+        uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           check_name: "unit-tests-report"
@@ -119,7 +119,7 @@ jobs:
             **/improc_infrastructure_tests.xml
 
       - name: Run codacy-coverage-reporter
-        uses: codacy/codacy-coverage-reporter-action@v1.3.0
+        uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: ./${{ matrix.config.binary_dir }}/improc_infrastructure_coverage.lcov
