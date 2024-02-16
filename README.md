@@ -7,7 +7,6 @@
 [![Ubuntu Build](https://github.com/pirlruc/infrastructure/actions/workflows/cpp_build_test_ubuntu.yml/badge.svg?branch=main)](https://github.com/pirlruc/infrastructure/actions/workflows/cpp_build_test_ubuntu.yml)
 [![Windows Build](https://github.com/pirlruc/infrastructure/actions/workflows/cpp_build_test_windows.yml/badge.svg?branch=main)](https://github.com/pirlruc/infrastructure/actions/workflows/cpp_build_test_windows.yml)
 
-
 ## developer
 
 [![Ubuntu Build](https://github.com/pirlruc/infrastructure/actions/workflows/cpp_build_test_ubuntu.yml/badge.svg?branch=developer)](https://github.com/pirlruc/infrastructure/actions/workflows/cpp_build_test_ubuntu.yml)
