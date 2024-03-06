@@ -7,7 +7,7 @@ TEST(Exception,TestExceptions) {
     EXPECT_THROW(throw improc::processing_flow_error("test"),improc::processing_flow_error);
     EXPECT_THROW(throw improc::key_error("test"),improc::key_error);
     EXPECT_THROW(throw improc::operating_system_error("test"),improc::operating_system_error);
-    EXPECT_THROW(throw improc::json_error("test"),improc::json_error);
+    EXPECT_THROW(throw improc::syntax_error("test"),improc::syntax_error);
     EXPECT_THROW(throw improc::freetype_error("test"),improc::freetype_error);
 
     EXPECT_THROW(throw improc::inconsistent_size_detected_reference_pixels(),improc::inconsistent_size_detected_reference_pixels);

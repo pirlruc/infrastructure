@@ -3,10 +3,18 @@
  
 #include <stdexcept>
  
+/**
+ * @brief Image processing library namespace.
+ */
 namespace improc 
 {
+    /** @defgroup exceptions Exceptions
+     *  Exceptions defined in the image processing library
+     *  @{
+     */
+
     /**
-     * @brief Raised when a mapping key is not found in the set of existing keys.
+     * @brief Raised when a mapping key is not found in the set of existing keys or an invalid operation in the keys is performed.
      */
     class key_error final: public std::logic_error
     {
@@ -23,22 +31,28 @@ namespace improc
             explicit value_error(const std::string& message): std::logic_error(std::move(message)) {}
     };
 
-    class processing_flow_error final: public std::logic_error
+    /**
+     * @brief Raised when a parser encounters a syntax error.
+     */
+    class syntax_error final: public std::runtime_error
     {
         public:
-            explicit processing_flow_error(const std::string& message): std::logic_error(std::move(message)) {}
+            explicit syntax_error(const std::string& message): std::runtime_error(std::move(message)) {}
     };
 
+    /**
+     * @brief Raised when a system function returns a system-related error, including I/O failures.
+     */
     class operating_system_error final: public std::runtime_error
     {
         public:
             explicit operating_system_error(const std::string& message): std::runtime_error(std::move(message)) {}
     };
 
-    class json_error final: public std::runtime_error
+    class processing_flow_error final: public std::logic_error
     {
         public:
-            explicit json_error(const std::string& message): std::runtime_error(std::move(message)) {}
+            explicit processing_flow_error(const std::string& message): std::logic_error(std::move(message)) {}
     };
 
     class freetype_error final: public std::runtime_error
@@ -75,6 +89,8 @@ namespace improc
             return "Homography cannot be estimated";
         }
     };
+
+    /** @} */ // end of exceptions
 }
  
 #endif

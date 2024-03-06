@@ -3,7 +3,13 @@
 
 #include <variant>
 
-namespace improc {
+namespace improc 
+{
+    /** @defgroup function_traits Function Traits
+     *  Function traits defined in the image processing library
+     *  @{
+     */
+
     template<class Function>
     struct function_traits;
     
@@ -90,6 +96,8 @@ namespace improc {
 
     template<class ReturnType, class T>
     inline constexpr bool is_variant_arg_function_return_type_v = is_variant_arg_function_return_type<ReturnType,T>::value;
+
+    /** @} */ // end of function_traits
 }
 
 #endif

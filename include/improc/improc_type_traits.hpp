@@ -5,7 +5,13 @@
 #include <filesystem>
 #include <variant>
 
-namespace improc {
+namespace improc 
+{
+    /** @defgroup type_traits Type Traits
+     *  Type traits defined in the image processing library
+     *  @{
+     */
+    
     template<class>
     inline constexpr bool dependent_false_v = false;
 
@@ -48,6 +54,8 @@ namespace improc {
     struct is_variant<std::variant<VariantArgs ...>> : std::true_type {};
     template<class T>
     inline constexpr bool is_variant_v = improc::is_variant<T>::value;
+
+    /** @} */ // end of type_traits
 }
 
 #endif

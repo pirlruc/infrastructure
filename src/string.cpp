@@ -119,7 +119,7 @@ Json::Value improc::JsonString::Parse(const std::string& json_string) const
     {
         std::string error_message = fmt::format("Error parsing json string: {}",std::move(parse_errors));
         IMPROC_INFRASTRUCTURE_LOGGER_ERROR  ( "ERROR_01: " + error_message);
-        throw improc::json_error(std::move(error_message));
+        throw improc::syntax_error(std::move(error_message));
     }
     return json_parsed;
 }
