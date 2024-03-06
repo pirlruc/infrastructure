@@ -48,27 +48,6 @@ namespace improc
     };
 
 
-    class not_supported_data_type final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Not supported data type";
-        }
-    };
-
-    class not_supported_color_conversion final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Not supported color conversion";
-        }
-    };
-
-    class invalid_color_space final: public std::exception {
-    public:
-        virtual const char* what() const throw() {
-            return "Invalid color space";
-        }
-    };
-
     class inconsistent_size_detected_reference_pixels final: public std::exception {
     public:
         virtual const char* what() const throw() {

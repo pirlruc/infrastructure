@@ -10,9 +10,6 @@ TEST(Exception,TestExceptions) {
     EXPECT_THROW(throw improc::json_error("test"),improc::json_error);
     EXPECT_THROW(throw improc::freetype_error("test"),improc::freetype_error);
 
-    EXPECT_THROW(throw improc::not_supported_data_type(),improc::not_supported_data_type);
-    EXPECT_THROW(throw improc::not_supported_color_conversion(),improc::not_supported_color_conversion);
-    EXPECT_THROW(throw improc::invalid_color_space(),improc::invalid_color_space);
     EXPECT_THROW(throw improc::inconsistent_size_detected_reference_pixels(),improc::inconsistent_size_detected_reference_pixels);
     EXPECT_THROW(throw improc::inconsistent_size_pixels_lines(),improc::inconsistent_size_pixels_lines);
     EXPECT_THROW(throw improc::invalid_svd_decomposition(),improc::invalid_svd_decomposition);
