@@ -5,12 +5,18 @@
  
 namespace improc 
 {
-    class key_error final: public std::runtime_error
+    /**
+     * @brief Raised when a mapping key is not found in the set of existing keys.
+     */
+    class key_error final: public std::logic_error
     {
         public:
-            explicit key_error(const std::string& message): std::runtime_error(std::move(message)) {}
+            explicit key_error(const std::string& message): std::logic_error(std::move(message)) {}
     };
 
+    /**
+     * @brief Raised when an operation or function receives an argument that has the right type but an inappropriate value.
+     */
     class value_error final: public std::logic_error
     {
         public:

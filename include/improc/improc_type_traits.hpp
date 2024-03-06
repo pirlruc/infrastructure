@@ -9,12 +9,22 @@ namespace improc {
     template<class>
     inline constexpr bool dependent_false_v = false;
 
+    /**
+     * @brief If T is a directory iterator, provides the member constant value equal to true. Otherwise value is false.
+     * 
+     * @tparam T 
+     */
     template <class T>
     struct is_folder_iterator : std::bool_constant<    std::is_same<T, std::filesystem::recursive_directory_iterator>::value
                                                     || std::is_same<T, std::filesystem::directory_iterator>::value > {};
     template<class T>
     inline constexpr bool is_folder_iterator_v = is_folder_iterator<T>::value;
 
+    /**
+     * @brief If T is a standard C character array string, provides the member constant value equal to true. Otherwise value is false.
+     * 
+     * @tparam T 
+     */
     template <class T>
     struct is_c_str : std::bool_constant<   std::is_same<typename std::decay<T>::type, char *>::value > {};
     template<class T>
