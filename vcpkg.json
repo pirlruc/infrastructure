@@ -1,7 +1,4 @@
 {
-  "name": "improc-infrastructure",
-  "version": "1.0.0",
-  "port-version": 0,
   "dependencies": [
     {
       "name": "spdlog",
@@ -22,6 +19,5 @@
         }
       ]
     }
-  },
-  "builtin-baseline": "53bef8994c541b6561884a8395ea35715ece75db"
+  }
 }
