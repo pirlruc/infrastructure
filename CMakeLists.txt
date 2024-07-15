@@ -117,9 +117,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE        CXX)
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION                ${PROJECT_VERSION})
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX          ${CMAKE_DEBUG_POSTFIX})
 
-target_include_directories  (${PROJECT_NAME}   PRIVATE   ${PROJECT_SOURCE_DIR}/include)
-target_include_directories  (${PROJECT_NAME}   INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                                               $<INSTALL_INTERFACE:include> )
+target_include_directories  (${PROJECT_NAME}   PRIVATE    ${PROJECT_SOURCE_DIR}/include)
+target_include_directories  (${PROJECT_NAME}   INTERFACE  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+                                                          $<INSTALL_INTERFACE:include> )
 
 # Link dependencies
 target_link_libraries       (${PROJECT_NAME}   PRIVATE   spdlog::spdlog)
@@ -177,19 +177,37 @@ configure_file(
 install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # CMake config files
-set(CONFIG_TARGETS_FILE "${PROJECT_NAME}ConfigTargets.cmake")
-set(EXPORT_DESTINATION_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-install(EXPORT ${PROJECT_NAME}_targets FILE ${CONFIG_TARGETS_FILE} DESTINATION ${EXPORT_DESTINATION_DIR})
+# Generate and install *-targets.cmake 
+install(EXPORT ${PROJECT_NAME}_targets
+        FILE ${PROJECT_NAME}-targets.cmake
+        NAMESPACE ${PROJECT_NAME}::
+        DESTINATION share/${PROJECT_NAME})
 
-include(CMakePackageConfigHelpers)
-configure_package_config_file(
-  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}_config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake 
-  INSTALL_DESTINATION ${EXPORT_DESTINATION_DIR} )
-write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-  VERSION ${IMPROC_SUPERPROJECT_VERSION}
-  COMPATIBILITY SameMajorVersion)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake 
-              ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-        DESTINATION ${EXPORT_DESTINATION_DIR})
+# Generate the config file in the current binary dir (this ensures it's not placed directly in source)
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+"include(CMakeFindDependencyMacro)\n"
+"find_dependency(spdlog CONFIG REQUIRED)\n"
+"find_dependency(jsoncpp CONFIG REQUIRED)\n"
+"include(\"\${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}-targets.cmake\")\n"
+)
+
+# Install the generated config file
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+        DESTINATION share/${PROJECT_NAME})
+        
+# set(CONFIG_TARGETS_FILE "${PROJECT_NAME}ConfigTargets.cmake")
+# set(EXPORT_DESTINATION_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+# install(EXPORT ${PROJECT_NAME}_targets FILE ${CONFIG_TARGETS_FILE} DESTINATION ${EXPORT_DESTINATION_DIR})
+
+# include(CMakePackageConfigHelpers)
+# configure_package_config_file(
+#   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}_config.cmake.in
+#   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake 
+#   INSTALL_DESTINATION ${EXPORT_DESTINATION_DIR} )
+# write_basic_package_version_file(
+#   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+#   VERSION ${IMPROC_SUPERPROJECT_VERSION}
+#   COMPATIBILITY SameMajorVersion)
+# install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake 
+#               ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+#         DESTINATION ${EXPORT_DESTINATION_DIR})
