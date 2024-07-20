@@ -71,6 +71,7 @@ else()
   add_library(JsonCpp::JsonCpp ALIAS jsoncpp_lib)
 endif()
 
+set(PKG_CONFIG_REQUIRES spdlog jsoncpp)
 message(STATUS "Build ${PROJECT_NAME} Version: ${PROJECT_VERSION}")
 message(STATUS "CMake Toolchain File: ${CMAKE_TOOLCHAIN_FILE}")
 message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
@@ -168,8 +169,11 @@ endif()
 if(IS_ABSOLUTE ${CMAKE_INSTALL_LIBDIR})
   set(PKG_CONFIG_LIBDIR ${CMAKE_INSTALL_LIBDIR})
 else()
-  set(PKG_CONFIG_LIBDIR "\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}")
+  set(PKG_CONFIG_LIBDIR "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
 endif()
+get_target_property(PKG_CONFIG_DEFINES ${PROJECT_NAME} INTERFACE_COMPILE_DEFINITIONS)
+string(REPLACE ";" " -D" PKG_CONFIG_DEFINES "${PKG_CONFIG_DEFINES}")
+string(CONCAT PKG_CONFIG_DEFINES "-D" "${PKG_CONFIG_DEFINES}")
 configure_file(
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}.pc.in
   ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc 
@@ -177,37 +181,15 @@ configure_file(
 install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # CMake config files
-# Generate and install *-targets.cmake 
+set(TARGETS_FILE "${PROJECT_NAME}-targets.cmake")
+set(CONFIG_TARGETS_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake")
+set(EXPORT_DESTINATION_DIR share/${PROJECT_NAME})
 install(EXPORT ${PROJECT_NAME}_targets
-        FILE ${PROJECT_NAME}-targets.cmake
-        NAMESPACE ${PROJECT_NAME}::
-        DESTINATION share/${PROJECT_NAME})
-
-# Generate the config file in the current binary dir (this ensures it's not placed directly in source)
-file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
-"include(CMakeFindDependencyMacro)\n"
-"find_dependency(spdlog CONFIG REQUIRED)\n"
-"find_dependency(jsoncpp CONFIG REQUIRED)\n"
-"include(\"\${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}-targets.cmake\")\n"
-)
-
-# Install the generated config file
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
-        DESTINATION share/${PROJECT_NAME})
-        
-# set(CONFIG_TARGETS_FILE "${PROJECT_NAME}ConfigTargets.cmake")
-# set(EXPORT_DESTINATION_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-# install(EXPORT ${PROJECT_NAME}_targets FILE ${CONFIG_TARGETS_FILE} DESTINATION ${EXPORT_DESTINATION_DIR})
-
-# include(CMakePackageConfigHelpers)
-# configure_package_config_file(
-#   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}_config.cmake.in
-#   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake 
-#   INSTALL_DESTINATION ${EXPORT_DESTINATION_DIR} )
-# write_basic_package_version_file(
-#   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-#   VERSION ${IMPROC_SUPERPROJECT_VERSION}
-#   COMPATIBILITY SameMajorVersion)
-# install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake 
-#               ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-#         DESTINATION ${EXPORT_DESTINATION_DIR})
+        FILE ${TARGETS_FILE}
+        NAMESPACE improc::
+        DESTINATION ${EXPORT_DESTINATION_DIR})
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}_config.cmake.in
+  ${CONFIG_TARGETS_FILE}
+  @ONLY )
+install(FILES ${CONFIG_TARGETS_FILE} DESTINATION ${EXPORT_DESTINATION_DIR})
