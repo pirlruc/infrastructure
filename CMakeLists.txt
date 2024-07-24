@@ -17,10 +17,11 @@ if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
 endif()
 
 project(
-  improc_infrastructure
+  improc-infrastructure
   VERSION     ${IMPROC_SUPERPROJECT_VERSION}
   LANGUAGES   CXX
 )
+string(REPLACE "-" "_" PROJECT_NAME_FILE ${PROJECT_NAME})
 
 include(FetchContent)
 
@@ -108,7 +109,11 @@ set(
   ${PROJECT_SOURCE_DIR}/src/string.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED ${IMPROC_INFRASTRUCTURE_LIB_FILES})
+if (BUILD_SHARED_LIBS)
+  add_library(${PROJECT_NAME} SHARED ${IMPROC_INFRASTRUCTURE_LIB_FILES})
+else()
+  add_library(${PROJECT_NAME} STATIC ${IMPROC_INFRASTRUCTURE_LIB_FILES})
+endif()
 add_library(improc::infrastructure ALIAS ${PROJECT_NAME})
 add_dependencies(${PROJECT_NAME} spdlog::spdlog JsonCpp::JsonCpp)
 
@@ -175,10 +180,10 @@ get_target_property(PKG_CONFIG_DEFINES ${PROJECT_NAME} INTERFACE_COMPILE_DEFINIT
 string(REPLACE ";" " -D" PKG_CONFIG_DEFINES "${PKG_CONFIG_DEFINES}")
 string(CONCAT PKG_CONFIG_DEFINES "-D" "${PKG_CONFIG_DEFINES}")
 configure_file(
-  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}.pc.in
-  ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc 
+  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME_FILE}.pc.in
+  ${CMAKE_BINARY_DIR}/${PROJECT_NAME_FILE}.pc 
   @ONLY )
-install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME_FILE}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # CMake config files
 set(TARGETS_FILE "${PROJECT_NAME}-targets.cmake")
@@ -189,7 +194,7 @@ install(EXPORT ${PROJECT_NAME}_targets
         NAMESPACE improc::
         DESTINATION ${EXPORT_DESTINATION_DIR})
 configure_file(
-  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}_config.cmake.in
+  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME_FILE}_config.cmake.in
   ${CONFIG_TARGETS_FILE}
   @ONLY )
 install(FILES ${CONFIG_TARGETS_FILE} DESTINATION ${EXPORT_DESTINATION_DIR})
