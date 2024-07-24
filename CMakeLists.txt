@@ -45,7 +45,7 @@ else()
   FetchContent_Declare(
     spdlog
     GIT_REPOSITORY  https://github.com/gabime/spdlog
-    GIT_TAG         v1.13.0
+    GIT_TAG         v1.14.1
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/spdlog
   )
   set(SPDLOG_MASTER_PROJECT ON)
@@ -72,7 +72,7 @@ else()
   add_library(JsonCpp::JsonCpp ALIAS jsoncpp_lib)
 endif()
 
-set(PKG_CONFIG_REQUIRES spdlog jsoncpp)
+set(PKG_CONFIG_REQUIRES "spdlog jsoncpp")
 message(STATUS "Build ${PROJECT_NAME} Version: ${PROJECT_VERSION}")
 message(STATUS "CMake Toolchain File: ${CMAKE_TOOLCHAIN_FILE}")
 message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
@@ -174,11 +174,8 @@ endif()
 if(IS_ABSOLUTE ${CMAKE_INSTALL_LIBDIR})
   set(PKG_CONFIG_LIBDIR ${CMAKE_INSTALL_LIBDIR})
 else()
-  set(PKG_CONFIG_LIBDIR "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
+  set(PKG_CONFIG_LIBDIR "\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}")
 endif()
-get_target_property(PKG_CONFIG_DEFINES ${PROJECT_NAME} INTERFACE_COMPILE_DEFINITIONS)
-string(REPLACE ";" " -D" PKG_CONFIG_DEFINES "${PKG_CONFIG_DEFINES}")
-string(CONCAT PKG_CONFIG_DEFINES "-D" "${PKG_CONFIG_DEFINES}")
 configure_file(
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME_FILE}.pc.in
   ${CMAKE_BINARY_DIR}/${PROJECT_NAME_FILE}.pc 

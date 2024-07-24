@@ -1,4 +1,5 @@
 prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
 libdir=@PKG_CONFIG_LIBDIR@
 includedir=@PKG_CONFIG_INCLUDEDIR@
 
@@ -7,5 +8,5 @@ Description: Infrastructure module of image-proc library
 URL: https://github.com/pirlruc/infrastructure
 Version: @IMPROC_SUPERPROJECT_VERSION@
 Libs: -L${libdir} -l@PROJECT_NAME@ -lspdlog -ljsoncpp
-CFlags: -I${includedir} @PKG_CONFIG_DEFINES@
+CFlags: -I${includedir}
 Requires: @PKG_CONFIG_REQUIRES@
