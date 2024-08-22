@@ -13,7 +13,7 @@ else()
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY  https://github.com/google/googletest.git
-    GIT_TAG         v1.15.0
+    GIT_TAG         v1.15.2
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/test/external/googletest
   )
   set(BUILD_GMOCK OFF)
@@ -38,9 +38,9 @@ if(IMPROC_WITH_COVERAGE AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
   set(ENV{LLVM_PROFILE_FILE} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-  find_program(LLVM_PROFDATA llvm-profdata-14 REQUIRED)
-  find_program(LLVM_COV      llvm-cov-14      REQUIRED)
-  find_program(GENHTML       genhtml          REQUIRED)
+  find_program(LLVM_PROFDATA llvm-profdata-${IMPROC_COVERAGE_VERSION} REQUIRED)
+  find_program(LLVM_COV      llvm-cov-${IMPROC_COVERAGE_VERSION}      REQUIRED)
+  find_program(GENHTML       genhtml                                  REQUIRED)
   
   add_custom_target(
     ${PROJECT_NAME}_coverage
@@ -60,9 +60,9 @@ if(IMPROC_WITH_COVERAGE AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Og --coverage")
   set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 
-  find_program(GCOV    gcov-11 REQUIRED)
-  find_program(LCOV    lcov    REQUIRED)
-  find_program(GENHTML genhtml REQUIRED)
+  find_program(GCOV    gcov-${IMPROC_COVERAGE_VERSION}  REQUIRED)
+  find_program(LCOV    lcov                             REQUIRED)
+  find_program(GENHTML genhtml                          REQUIRED)
   
   add_custom_target(
     ${PROJECT_NAME}_coverage
@@ -75,9 +75,9 @@ if(IMPROC_WITH_COVERAGE AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   )
 endif()
 
-add_executable(
-  ${PROJECT_NAME}_test
-    
+set(
+  IMPROC_INFRASTRUCTURE_TEST_FILES
+
   ${PROJECT_SOURCE_DIR}/test/test_logger_singleton.cpp
   ${PROJECT_SOURCE_DIR}/test/test_exception.cpp
   ${PROJECT_SOURCE_DIR}/test/test_env_context.cpp
@@ -90,6 +90,8 @@ add_executable(
   ${PROJECT_SOURCE_DIR}/test/test_folder.cpp
   ${PROJECT_SOURCE_DIR}/test/test_logger_infrastructure.cpp
 )
+
+add_executable(${PROJECT_NAME}_test ${IMPROC_INFRASTRUCTURE_TEST_FILES})
 set_target_properties(${PROJECT_NAME}_test PROPERTIES CXX_STANDARD           17)
 set_target_properties(${PROJECT_NAME}_test PROPERTIES CXX_STANDARD_REQUIRED  TRUE)
 set_target_properties(${PROJECT_NAME}_test PROPERTIES LINKER_LANGUAGE        CXX)

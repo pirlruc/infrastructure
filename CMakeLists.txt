@@ -8,11 +8,21 @@ if(NOT DEFINED IMPROC_SUPERPROJECT_VERSION)
   set(IMPROC_SUPERPROJECT_VERSION 1.0.0)
 endif()
 
+if(NOT DEFINED IMPROC_COVERAGE_VERSION)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(IMPROC_COVERAGE_VERSION "14")
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(IMPROC_COVERAGE_VERSION "11")
+  else()
+    set(IMPROC_COVERAGE_VERSION "14")
+  endif()
+endif()
+
 if(NOT DEFINED IMPROC_INFRASTRUCTURE_WITH_TESTS)
   set(IMPROC_INFRASTRUCTURE_WITH_TESTS OFF)
 endif()
 
-if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
+if(IMPROC_WITH_TESTS OR IMPROC_WITH_COVERAGE OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
   list(APPEND VCPKG_MANIFEST_FEATURES "tests")
 endif()
 
@@ -26,15 +36,16 @@ string(REPLACE "-" "_" PROJECT_NAME_FILE ${PROJECT_NAME})
 include(FetchContent)
 
 # Project configuration
+option(IMPROC_WITH_TESTS 			     "Building library with tests"          OFF)
+option(IMPROC_WITH_COVERAGE  	     "Building library with code coverage"  OFF)
+option(BUILD_SHARED_LIBS           "Building shared libraries"            ON)
+
 if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"      CACHE PATH "Archive output dir.")
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"      CACHE PATH "Library output dir.")
   set(CMAKE_PDB_OUTPUT_DIRECTORY     "${CMAKE_BINARY_DIR}/bin"      CACHE PATH "PDB (MSVC debug symbol)output dir.")
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"      CACHE PATH "Executable/dll output dir.")
   set(CMAKE_DEBUG_POSTFIX d)
-  option(IMPROC_WITH_TESTS 			     "Building library with tests"          OFF)
-  option(IMPROC_WITH_COVERAGE  	     "Building library with code coverage"  OFF)
-  option(BUILD_SHARED_LIBS           "Building shared libraries"            ON)
 endif()
 
 # Add external dependencies
@@ -74,6 +85,10 @@ endif()
 
 set(PKG_CONFIG_REQUIRES "spdlog jsoncpp")
 message(STATUS "Build ${PROJECT_NAME} Version: ${PROJECT_VERSION}")
+message(STATUS "IMPROC_WITH_TESTS               : ${IMPROC_WITH_TESTS}")
+message(STATUS "IMPROC_INFRASTRUCTURE_WITH_TESTS: ${IMPROC_INFRASTRUCTURE_WITH_TESTS}")
+message(STATUS "IMPROC_WITH_COVERAGE            : ${IMPROC_WITH_COVERAGE}")
+message(STATUS "IMPROC_COVERAGE_VERSION         : ${IMPROC_COVERAGE_VERSION}")
 message(STATUS "CMake Toolchain File: ${CMAKE_TOOLCHAIN_FILE}")
 message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install Dir: ${CMAKE_INSTALL_PREFIX}")
@@ -134,7 +149,7 @@ target_link_libraries       (${PROJECT_NAME}   INTERFACE spdlog::spdlog)
 target_link_libraries       (${PROJECT_NAME}   INTERFACE JsonCpp::JsonCpp)
 
 # Tests configuration
-if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
+if(IMPROC_WITH_TESTS OR IMPROC_WITH_COVERAGE OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
   add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/improc_infrastructure_test)
 endif()
 
