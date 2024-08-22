@@ -34,6 +34,11 @@ configure_file(
   ${PROJECT_SOURCE_DIR}/test/${PROJECT_NAME_FILE}_test_config.hpp
 )
 
+set(IMPROC_INFRASTRUCTURE_TEST_EXE ${PROJECT_NAME}_test)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  set(IMPROC_INFRASTRUCTURE_TEST_EXE ${PROJECT_NAME}_test${CMAKE_DEBUG_POSTFIX})
+endif()
+
 if(IMPROC_WITH_COVERAGE AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
   set(ENV{LLVM_PROFILE_FILE} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -49,7 +54,7 @@ if(IMPROC_WITH_COVERAGE AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
                                    -o ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.profdata
     COMMAND ${LLVM_COV} export  --ignore-filename-regex="external/*" 
                                 --format=lcov --instr-profile ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.profdata 
-                                                             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}_testd 
+                                                             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${IMPROC_INFRASTRUCTURE_TEST_EXE}
                                                            > ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.lcov
     COMMAND ${GENHTML} --demangle-cpp -o ${PROJECT_NAME}_coverage ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.lcov
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
