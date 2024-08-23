@@ -46,6 +46,12 @@ if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
   set(CMAKE_PDB_OUTPUT_DIRECTORY     "${CMAKE_BINARY_DIR}/bin"      CACHE PATH "PDB (MSVC debug symbol)output dir.")
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"      CACHE PATH "Executable/dll output dir.")
   set(CMAKE_DEBUG_POSTFIX d)
+
+  if(IMPROC_WITH_COVERAGE AND NOT IMPROC_WITH_TESTS AND NOT IMPROC_INFRASTRUCTURE_WITH_TESTS)
+    message(STATUS "Warning: IMPROC_COVERAGE ON but tests of image processing library is not ON")
+    message(STATUS "---------> Setting IMPROC_INFRASTRUCTURE_WITH_TESTS = ON")
+    set(IMPROC_INFRASTRUCTURE_WITH_TESTS ON)
+  endif()
 endif()
 
 # Add external dependencies
@@ -149,7 +155,7 @@ target_link_libraries       (${PROJECT_NAME}   INTERFACE spdlog::spdlog)
 target_link_libraries       (${PROJECT_NAME}   INTERFACE JsonCpp::JsonCpp)
 
 # Tests configuration
-if(IMPROC_WITH_TESTS OR IMPROC_WITH_COVERAGE OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
+if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
   add_subdirectory(${PROJECT_SOURCE_DIR}/test     ${CMAKE_BINARY_DIR}/improc_infrastructure_test)
 endif()
 
