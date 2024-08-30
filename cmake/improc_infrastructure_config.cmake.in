@@ -1,10 +1,8 @@
-@PACKAGE_INIT@
+include(CMakeFindDependencyMacro)
 
-find_package(spdlog REQUIRED)
-find_package(jsoncpp REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+find_package(jsoncpp CONFIG REQUIRED)
 
-set(config_targets_file @CONFIG_TARGETS_FILE@)
+include("${CMAKE_CURRENT_LIST_DIR}/@TARGETS_FILE@")
 
-include("${CMAKE_CURRENT_LIST_DIR}/${config_targets_file}")
-
-check_required_components(improc_infrastructure)
+check_required_components(@PROJECT_NAME@)

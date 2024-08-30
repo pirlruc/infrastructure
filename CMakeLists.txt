@@ -2,38 +2,58 @@ cmake_minimum_required(VERSION 3.14-3.18)
 
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
-set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install")
+if (NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install")
+endif()
 
 if(NOT DEFINED IMPROC_SUPERPROJECT_VERSION)
   set(IMPROC_SUPERPROJECT_VERSION 1.0.0)
+endif()
+
+if(NOT DEFINED IMPROC_COVERAGE_VERSION)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(IMPROC_COVERAGE_VERSION "14")
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(IMPROC_COVERAGE_VERSION "11")
+  else()
+    set(IMPROC_COVERAGE_VERSION "14")
+  endif()
 endif()
 
 if(NOT DEFINED IMPROC_INFRASTRUCTURE_WITH_TESTS)
   set(IMPROC_INFRASTRUCTURE_WITH_TESTS OFF)
 endif()
 
-if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
+if(IMPROC_WITH_TESTS OR IMPROC_WITH_COVERAGE OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
   list(APPEND VCPKG_MANIFEST_FEATURES "tests")
 endif()
 
 project(
-  improc_infrastructure
+  improc-infrastructure
   VERSION     ${IMPROC_SUPERPROJECT_VERSION}
   LANGUAGES   CXX
 )
+string(REPLACE "-" "_" PROJECT_NAME_FILE ${PROJECT_NAME})
 
 include(FetchContent)
 
 # Project configuration
+option(IMPROC_WITH_TESTS 			     "Building library with tests"          OFF)
+option(IMPROC_WITH_COVERAGE  	     "Building library with code coverage"  OFF)
+option(BUILD_SHARED_LIBS           "Building shared libraries"            ON)
+
 if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"      CACHE PATH "Archive output dir.")
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"      CACHE PATH "Library output dir.")
   set(CMAKE_PDB_OUTPUT_DIRECTORY     "${CMAKE_BINARY_DIR}/bin"      CACHE PATH "PDB (MSVC debug symbol)output dir.")
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"      CACHE PATH "Executable/dll output dir.")
   set(CMAKE_DEBUG_POSTFIX d)
-  option(IMPROC_WITH_TESTS 			     "Building library with tests"          OFF)
-  option(IMPROC_WITH_COVERAGE  	     "Building library with code coverage"  OFF)
-  option(BUILD_SHARED_LIBS           "Building shared libraries"            ON)
+
+  if(IMPROC_WITH_COVERAGE AND NOT IMPROC_WITH_TESTS AND NOT IMPROC_INFRASTRUCTURE_WITH_TESTS)
+    message(STATUS "Warning: IMPROC_COVERAGE ON but tests of image processing library is not ON")
+    message(STATUS "---------> Setting IMPROC_INFRASTRUCTURE_WITH_TESTS = ON")
+    set(IMPROC_INFRASTRUCTURE_WITH_TESTS ON)
+  endif()
 endif()
 
 # Add external dependencies
@@ -44,7 +64,7 @@ else()
   FetchContent_Declare(
     spdlog
     GIT_REPOSITORY  https://github.com/gabime/spdlog
-    GIT_TAG         v1.13.0
+    GIT_TAG         v1.14.1
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/spdlog
   )
   set(SPDLOG_MASTER_PROJECT ON)
@@ -71,7 +91,12 @@ else()
   add_library(JsonCpp::JsonCpp ALIAS jsoncpp_lib)
 endif()
 
-message(STATUS "Build ${PROJECT_NAME} Version: ${PROJECT_VERSION}")
+set(PKG_CONFIG_REQUIRES "spdlog jsoncpp")
+message(STATUS "Build ${PROJECT_NAME} Version   : ${PROJECT_VERSION}")
+message(STATUS "IMPROC_WITH_TESTS               : ${IMPROC_WITH_TESTS}")
+message(STATUS "IMPROC_INFRASTRUCTURE_WITH_TESTS: ${IMPROC_INFRASTRUCTURE_WITH_TESTS}")
+message(STATUS "IMPROC_WITH_COVERAGE            : ${IMPROC_WITH_COVERAGE}")
+message(STATUS "IMPROC_COVERAGE_VERSION         : ${IMPROC_COVERAGE_VERSION}")
 message(STATUS "CMake Toolchain File: ${CMAKE_TOOLCHAIN_FILE}")
 message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install Dir: ${CMAKE_INSTALL_PREFIX}")
@@ -107,7 +132,11 @@ set(
   ${PROJECT_SOURCE_DIR}/src/string.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED ${IMPROC_INFRASTRUCTURE_LIB_FILES})
+if (BUILD_SHARED_LIBS)
+  add_library(${PROJECT_NAME} SHARED ${IMPROC_INFRASTRUCTURE_LIB_FILES})
+else()
+  add_library(${PROJECT_NAME} STATIC ${IMPROC_INFRASTRUCTURE_LIB_FILES})
+endif()
 add_library(improc::infrastructure ALIAS ${PROJECT_NAME})
 add_dependencies(${PROJECT_NAME} spdlog::spdlog JsonCpp::JsonCpp)
 
@@ -117,9 +146,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE        CXX)
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION                ${PROJECT_VERSION})
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX          ${CMAKE_DEBUG_POSTFIX})
 
-target_include_directories  (${PROJECT_NAME}   PRIVATE   ${PROJECT_SOURCE_DIR}/include)
-target_include_directories  (${PROJECT_NAME}   INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                                               $<INSTALL_INTERFACE:include> )
+target_include_directories  (${PROJECT_NAME}   PRIVATE    ${PROJECT_SOURCE_DIR}/include)
+target_include_directories  (${PROJECT_NAME}   INTERFACE  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+                                                          $<INSTALL_INTERFACE:include> )
 
 # Link dependencies
 target_link_libraries       (${PROJECT_NAME}   PRIVATE   spdlog::spdlog)
@@ -171,25 +200,20 @@ else()
   set(PKG_CONFIG_LIBDIR "\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}")
 endif()
 configure_file(
-  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}.pc.in
+  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME_FILE}.pc.in
   ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc 
   @ONLY )
 install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # CMake config files
-set(CONFIG_TARGETS_FILE "${PROJECT_NAME}ConfigTargets.cmake")
-set(EXPORT_DESTINATION_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-install(EXPORT ${PROJECT_NAME}_targets FILE ${CONFIG_TARGETS_FILE} DESTINATION ${EXPORT_DESTINATION_DIR})
-
-include(CMakePackageConfigHelpers)
-configure_package_config_file(
-  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}_config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake 
-  INSTALL_DESTINATION ${EXPORT_DESTINATION_DIR} )
-write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-  VERSION ${IMPROC_SUPERPROJECT_VERSION}
-  COMPATIBILITY SameMajorVersion)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake 
-              ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+set(TARGETS_FILE "${PROJECT_NAME}-targets.cmake")
+set(EXPORT_DESTINATION_DIR share/${PROJECT_NAME})
+install(EXPORT ${PROJECT_NAME}_targets
+        FILE ${TARGETS_FILE}
+        NAMESPACE improc::
         DESTINATION ${EXPORT_DESTINATION_DIR})
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME_FILE}_config.cmake.in
+  ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-config.cmake
+  @ONLY )
+install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-config.cmake DESTINATION ${EXPORT_DESTINATION_DIR})
