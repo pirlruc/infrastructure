@@ -33,7 +33,7 @@ jobs:
     - name: Semgrep Security Analysis
       run: |
         pip install semgrep
-        semgrep scan --config auto . --json-output=semgrep_output.json
+        semgrep scan --config auto . --json-output=semgrep_output.json --error
 
     - name: Flawfinder Security Analysis
       run: |
@@ -43,7 +43,7 @@ jobs:
     - name: Cppcheck Security Analysis
       run: |
         sudo apt-get install cppcheck
-        cppcheck --enable=warning --enable=style --enable=performance --enable=portability -I include include src --xml 2> cppcheck_output.xml
+        cppcheck --error-exitcode=1 --enable=warning --enable=style --enable=performance --enable=portability -I include include src --xml 2> cppcheck_output.xml
 
     - name: Upload Security Analysis Artifacts
       uses: actions/upload-artifact@v4
