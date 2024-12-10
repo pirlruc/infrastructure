@@ -36,6 +36,20 @@ project(
 string(REPLACE "-" "_" PROJECT_NAME_FILE ${PROJECT_NAME})
 
 include(FetchContent)
+include(GNUInstallDirs)
+
+if(APPLE)
+  set(R_BASE "@loader_path")
+else ()
+  set(R_BASE "$ORIGIN")
+endif ()
+
+file(RELATIVE_PATH LIBDIR
+     "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
+     "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+
+set(CMAKE_INSTALL_RPATH "${R_BASE};${R_BASE}/${LIBDIR}")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Project configuration
 option(IMPROC_WITH_TESTS 			     "Building library with tests"          OFF)
@@ -92,11 +106,13 @@ else()
 endif()
 
 set(PKG_CONFIG_REQUIRES "spdlog jsoncpp")
-message(STATUS "Build ${PROJECT_NAME} Version   : ${PROJECT_VERSION}")
-message(STATUS "IMPROC_WITH_TESTS               : ${IMPROC_WITH_TESTS}")
-message(STATUS "IMPROC_INFRASTRUCTURE_WITH_TESTS: ${IMPROC_INFRASTRUCTURE_WITH_TESTS}")
-message(STATUS "IMPROC_WITH_COVERAGE            : ${IMPROC_WITH_COVERAGE}")
-message(STATUS "IMPROC_COVERAGE_VERSION         : ${IMPROC_COVERAGE_VERSION}")
+message(STATUS "Build ${PROJECT_NAME} Version    : ${PROJECT_VERSION}")
+message(STATUS "IMPROC_WITH_TESTS                : ${IMPROC_WITH_TESTS}")
+message(STATUS "IMPROC_INFRASTRUCTURE_WITH_TESTS : ${IMPROC_INFRASTRUCTURE_WITH_TESTS}")
+message(STATUS "IMPROC_WITH_COVERAGE             : ${IMPROC_WITH_COVERAGE}")
+message(STATUS "IMPROC_COVERAGE_VERSION          : ${IMPROC_COVERAGE_VERSION}")
+message(STATUS "CMAKE_INSTALL_RPATH              : ${CMAKE_INSTALL_RPATH}")
+message(STATUS "CMAKE_INSTALL_RPATH_USE_LINK_PATH: ${CMAKE_INSTALL_RPATH_USE_LINK_PATH}")
 message(STATUS "CMake Toolchain File: ${CMAKE_TOOLCHAIN_FILE}")
 message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install Dir: ${CMAKE_INSTALL_PREFIX}")

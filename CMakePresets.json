@@ -73,6 +73,17 @@
             }
         },
         {
+            "name": "clang-coverage-no-toolchain",
+            "inherits": "base-clang",
+            "displayName": "Clang Coverage w/o vcpkg",
+            "description": "Coverage report using Clang without vcpkg",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "IMPROC_WITH_COVERAGE": "ON",
+                "IMPROC_INFRASTRUCTURE_WITH_TESTS": "ON"
+            }
+        },
+        {
             "name": "clang-debug-no-toolchain",
             "inherits": "base-clang",
             "displayName": "Clang Debug w/o vcpkg",
@@ -152,6 +163,10 @@
         {
             "name": "clang-release",
             "configurePreset": "clang-release"
+        },
+        {
+            "name": "clang-coverage-no-toolchain",
+            "configurePreset": "clang-coverage-no-toolchain"
         },
         {
             "name": "clang-debug-no-toolchain",
