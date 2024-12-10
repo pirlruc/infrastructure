@@ -62,5 +62,5 @@ inline std::vector<KeyType> improc::json::ReadVector(const Json::Value& json_vec
     {
         list_elems.push_back(improc::json::ReadElement<KeyType>(std::move(json_vector)));
     }
-    return std::move(list_elems);
+    return list_elems;
 }
