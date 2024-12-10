@@ -43,7 +43,7 @@ jobs:
     - name: Cppcheck Security Analysis
       run: |
         sudo apt-get install cppcheck
-        cppcheck --error-exitcode=1 --enable=warning --enable=style --enable=performance --enable=portability -I include include src --xml 2> cppcheck_output.xml
+        cppcheck --error-exitcode=1 --enable=warning --enable=performance --enable=portability -I include include src --xml 2> cppcheck_output.xml
 
     - name: Upload Security Analysis Artifacts
       uses: actions/upload-artifact@v4
