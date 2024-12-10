@@ -45,14 +45,14 @@ jobs:
         sudo apt-get install cppcheck
         cppcheck --enable=warning --enable=style --enable=performance --enable=portability -I include include src --xml 2> cppcheck_output.xml
 
-      - name: Upload Security Analysis Artifacts
-        uses: actions/upload-artifact@v4
-        with: 
-          name: Security Analysis
-          path: |
-            semgrep_output.json
-            flawfinder_output.html
-            cppcheck_output.xml
+    - name: Upload Security Analysis Artifacts
+      uses: actions/upload-artifact@v4
+      with: 
+        name: Security Analysis
+        path: |
+          semgrep_output.json
+          flawfinder_output.html
+          cppcheck_output.xml
 
   codacy-coverage-reporter:
     env:
