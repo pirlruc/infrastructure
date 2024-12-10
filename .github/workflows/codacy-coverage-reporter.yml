@@ -35,6 +35,16 @@ jobs:
         pip install semgrep
         semgrep scan --config auto .
 
+    - name: Flawfinder security analysis
+      run: |
+        pip install flawfinder
+        flawfinder .
+
+    - name: Cppcheck security analysis
+      run: |
+        sudo apt-get install cppcheck
+        cppcheck include src
+
   codacy-coverage-reporter:
     env:
       VCPKG_ROOT: /usr/local/share/vcpkg
