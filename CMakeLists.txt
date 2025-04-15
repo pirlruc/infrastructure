@@ -64,7 +64,7 @@ else()
   FetchContent_Declare(
     spdlog
     GIT_REPOSITORY  https://github.com/gabime/spdlog
-    GIT_TAG         v1.14.1
+    GIT_TAG         v1.15.2
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/spdlog
   )
   set(SPDLOG_MASTER_PROJECT ON)
@@ -81,7 +81,7 @@ else()
   FetchContent_Declare(
     jsoncpp
     GIT_REPOSITORY https://github.com/open-source-parsers/jsoncpp
-    GIT_TAG        1.9.5
+    GIT_TAG        1.9.6
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/jsoncpp
   )
   set(JSONCPP_WITH_TESTS    OFF)
