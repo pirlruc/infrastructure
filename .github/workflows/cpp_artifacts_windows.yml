@@ -58,7 +58,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          choco install ninja
+          choco install llvm --version=17.0.2
           ninja    --version
           cmake    --version
           gcc      --version
