@@ -71,7 +71,7 @@ jobs:
         gcc      --version
         gcc-13   --version
         clang    --version
-        clang-14 --version
+        clang-18 --version
         lcov     --version
         vcpkg    --version
 
