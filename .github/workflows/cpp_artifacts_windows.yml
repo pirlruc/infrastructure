@@ -22,6 +22,12 @@ jobs:
       matrix:
         config:
         - {
+            name: windows-latest-gcc,
+            os: windows-latest,
+            preset_name: "gcc-debug",
+            install_dir: "D:/a/infrastructure/infrastructure/install"
+          }
+        - {
             name: windows-latest-clang,
             os: windows-latest,
             preset_name: "clang-release",
@@ -58,7 +64,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          choco install llvm --version=17.0.2 --allow-downgrade
           ninja    --version
           cmake    --version
           gcc      --version

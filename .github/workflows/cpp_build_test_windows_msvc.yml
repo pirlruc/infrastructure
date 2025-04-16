@@ -24,10 +24,22 @@ jobs:
       matrix:
         config:
         - {
+            name: windows-latest-gcc,
+            os: windows-latest,
+            preset_name: "gcc-debug",
+            binary_dir: "out/build/gcc-debug"
+          }
+        - {
             name: windows-latest-clang,
             os: windows-latest,
             preset_name: "clang-debug",
             binary_dir: "out/build/clang-debug"
+          }
+        - {
+            name: windows-latest-gcc-no-toolchain,
+            os: windows-latest,
+            preset_name: "gcc-debug-no-toolchain",
+            binary_dir: "out/build/gcc-debug-no-toolchain"
           }
         - {
             name: windows-latest-clang-no-toolchain,
@@ -54,7 +66,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          choco install llvm --version=17.0.2 --allow-downgrade
           ninja    --version
           cmake    --version
           gcc      --version
