@@ -69,7 +69,7 @@ jobs:
         ninja    --version
         cmake    --version
         gcc      --version
-        gcc-11   --version
+        gcc-13   --version
         clang    --version
         clang-14 --version
         lcov     --version
