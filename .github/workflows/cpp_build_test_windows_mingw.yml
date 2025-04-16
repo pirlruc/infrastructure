@@ -1,4 +1,4 @@
-name: Windows Build
+name: Windows MinGW Build
 
 on:
   # Triggers the workflow on push or pull request events
@@ -54,7 +54,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          choco install llvm --version=17.0.2 --allow-downgrade
+          ./setup-llvm-mingw.sh
           ninja    --version
           cmake    --version
           gcc      --version

@@ -70,6 +70,10 @@ jobs:
           sudo apt-get install ninja-build
           sudo apt-get install lcov
           sudo apt-get install clang-17
+          sudo update-alternatives --install /usr/bin/clang   clang   /usr/bin/clang-17   100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-17 100
+          sudo update-alternatives --set clang   /usr/bin/clang-17
+          sudo update-alternatives --set clang++ /usr/bin/clang++-17
           ninja    --version
           cmake    --version
           gcc      --version
