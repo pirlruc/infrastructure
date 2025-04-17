@@ -24,24 +24,11 @@ jobs:
       matrix:
         config:
         - {
-            name: windows-latest-gcc,
-            os: windows-latest,
-            preset_name: "gcc-debug",
-            triplet: "x64-mingw-dynamic",
-            binary_dir: "out/build/gcc-debug"
-          }
-        - {
             name: windows-latest-clang,
             os: windows-latest,
             preset_name: "clang-debug",
             triplet: "x64-windows",
             binary_dir: "out/build/clang-debug"
-          }
-        - {
-            name: windows-latest-gcc-no-toolchain,
-            os: windows-latest,
-            preset_name: "gcc-debug-no-toolchain",
-            binary_dir: "out/build/gcc-debug-no-toolchain"
           }
         - {
             name: windows-latest-clang-no-toolchain,
@@ -90,6 +77,7 @@ jobs:
           cmake    --version
           gcc      --version
           clang    --version
+          clang++  --version
           vcpkg    --version
 
       - name: Restore Build Cache
@@ -117,6 +105,7 @@ jobs:
         shell: bash
         run: |
           export VCPKG_ROOT=C:\vcpkg
+          clang++ --version
           if [ -n "${{ matrix.config.triplet }}" ]; then
             cmake --preset ${{ matrix.config.preset_name }} -DVCPKG_TARGET_TRIPLET=${{ matrix.config.triplet }}
           else
