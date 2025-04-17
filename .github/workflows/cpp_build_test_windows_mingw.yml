@@ -71,7 +71,7 @@ jobs:
           unzip -q "$ARCHIVE_NAME" -d "$INSTALL_DIR"
 
           $env:PATH="$INSTALL_DIR/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-x86_64/bin;$env:PATH"
-          Add-Content -Path $env:GITHUB_PATH -Value "$INSTALL_DIR/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-x86_64/bin
+          Add-Content -Path $env:GITHUB_PATH -Value "$INSTALL_DIR/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-x86_64/bin"
           echo "LLVM-MinGW setup complete."
           
           ninja    --version
