@@ -71,13 +71,13 @@ jobs:
           unzip -q "$ARCHIVE_NAME" -d "$INSTALL_DIR"
 
           $env:PATH="$INSTALL_DIR/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-x86_64/bin;$env:PATH"
+          Add-Content -Path $env:GITHUB_PATH -Value "$INSTALL_DIR/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-x86_64/bin
           echo "LLVM-MinGW setup complete."
-
+          
           ninja    --version
           cmake    --version
           gcc      --version
           clang    --version
-          clang++  --version
           vcpkg    --version
 
       - name: Restore Build Cache
@@ -105,7 +105,6 @@ jobs:
         shell: bash
         run: |
           export VCPKG_ROOT=C:\vcpkg
-          clang++ --version
           if [ -n "${{ matrix.config.triplet }}" ]; then
             cmake --preset ${{ matrix.config.preset_name }} -DVCPKG_TARGET_TRIPLET=${{ matrix.config.triplet }}
           else
