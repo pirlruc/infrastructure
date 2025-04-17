@@ -70,6 +70,7 @@ jobs:
         run: |
           choco uninstall llvm
           bash .github/workflows/setup_llvm_mingw.sh
+          echo $PATH
           ninja    --version
           cmake    --version
           gcc      --version

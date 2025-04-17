@@ -22,4 +22,9 @@ dir "$INSTALL_DIR"
 echo "Directory bin structure:"
 dir "$INSTALL_DIR/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-x86_64/bin/"
 
+echo "Version:"
+clang --version
+clang++ --version
+echo $PATH
+
 echo "LLVM-MinGW setup complete."
