@@ -1,7 +1,7 @@
 {
   "default-registry": {
     "kind": "git",
-    "baseline": "1de2026f28ead93ff1773e6e680387643e914ea1", 
+    "baseline": "ce613c41372b23b1f51333815feb3edd87ef8a8b",     
     "repository": "https://github.com/microsoft/vcpkg"
   },
   "registries": [
@@ -14,7 +14,7 @@
       "kind": "git",
       "repository": "https://github.com/pirlruc/cpp-registry",
       "reference": "feature-vcpkg",
-      "baseline": "7a76a24a3fe2660b09482694d195231bf51ed361",
+      "baseline": "c7171c15ab6c4eceb2b9d3d1eae4e46b2016f87e",
       "packages": [ "jsoncpp", "pipes", "improc-infrastructure", "improc-services", "improc-corecv", "improc-drawer" ]
     }
   ]
