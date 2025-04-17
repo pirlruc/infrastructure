@@ -120,4 +120,6 @@ jobs:
 
       - name: Test
         shell: bash
-        run: ./${{ matrix.config.binary_dir }}/bin/improc-infrastructure_testd
+        run: |
+          dir ${{ matrix.config.binary_dir }}/bin/
+          ./${{ matrix.config.binary_dir }}/bin/improc-infrastructure_testd

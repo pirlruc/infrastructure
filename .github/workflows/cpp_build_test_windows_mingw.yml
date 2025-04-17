@@ -68,7 +68,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          bash .github/workflows/setup-llvm-mingw.sh
+          bash .github/workflows/setup_llvm_mingw.sh
           ninja    --version
           cmake    --version
           gcc      --version

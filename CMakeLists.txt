@@ -88,6 +88,11 @@ else()
   set(JSONCPP_WITH_EXAMPLE  OFF)
   set(BUILD_STATIC_LIBS     OFF)
   FetchContent_MakeAvailable(jsoncpp)
+  
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(jsoncpp_lib PRIVATE -Wno-unknown-pragmas)
+  endif()
+
   add_library(JsonCpp::JsonCpp ALIAS jsoncpp_lib)
 endif()
 
@@ -145,10 +150,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED  TRUE)
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE        CXX)
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION                ${PROJECT_VERSION})
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX          ${CMAKE_DEBUG_POSTFIX})
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unknown-pragmas)
-endif()
 
 target_include_directories  (${PROJECT_NAME}   PRIVATE    ${PROJECT_SOURCE_DIR}/include)
 target_include_directories  (${PROJECT_NAME}   INTERFACE  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
