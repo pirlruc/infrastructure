@@ -2,6 +2,7 @@
 #define IMPROC_INFRASTRUCTURE_EXCEPTIONS_HPP
  
 #include <stdexcept>
+#include <utility>
  
 namespace improc 
 {
