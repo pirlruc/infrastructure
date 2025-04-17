@@ -119,6 +119,6 @@ jobs:
           key: ${{ matrix.config.os }}-build-${{ matrix.config.preset_name }}-${{ hashFiles('CMakeLists.txt','test/CMakeLists.txt') }}
 
       - name: Test
-        shell: bash
+        shell: pwsh
         run: |
           ./${{ matrix.config.binary_dir }}/bin/improc-infrastructure_testd.exe

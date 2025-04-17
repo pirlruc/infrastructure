@@ -15,4 +15,11 @@ echo "Extracting LLVM-MinGW..."
 unzip -q "$ARCHIVE_NAME" -d "$INSTALL_DIR"
 
 export PATH="$INSTALL_DIR/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-x86_64/bin:$PATH"
+
+echo "Directory structure:"
+dir "$INSTALL_DIR"
+
+echo "Directory bin structure:"
+dir "$INSTALL_DIR/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-x86_64/bin/"
+
 echo "LLVM-MinGW setup complete."
