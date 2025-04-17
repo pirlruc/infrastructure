@@ -1,0 +1,126 @@
+name: Windows Artifacts
+
+on:
+  # Triggers the workflow on push or pull request events
+  push:
+    branches:
+    - main
+
+  # Runs this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    # The type of runner that the job will run on
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {
+            name: windows-latest-clang,
+            os: windows-latest,
+            preset_name: "clang-release",
+            triplet: "x64-mingw-dynamic",
+            install_dir: "D:/a/infrastructure/infrastructure/install"
+          }
+        - {
+            name: windows-latest-clang-no-toolchain,
+            os: windows-latest,
+            preset_name: "clang-release-no-toolchain",
+            install_dir: "D:/a/infrastructure/infrastructure/install"
+          }
+
+    steps:
+      - name: Get Branch Name
+        id: branch-name
+        shell: bash
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Print Event
+        run: |
+          echo github.event.action: ${{ github.event.action }}
+          echo github.event_name: ${{ github.event_name }}
+          echo github.branch: ${{ steps.branch-name.outputs.branch }}
+
+      - name: Install Dependencies
+        run: |
+          choco uninstall llvm
+
+          echo "Starting LLVM-MinGW setup..."
+          $LLVM_MINGW_VERSION="20231128"
+          $ARCHIVE_NAME="llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-x86_64.zip"
+          $DOWNLOAD_URL="https://github.com/mstorsjo/llvm-mingw/releases/download/${LLVM_MINGW_VERSION}/${ARCHIVE_NAME}"
+          $INSTALL_DIR="$HOME/llvm-mingw"
+
+          echo "Downloading LLVM-MinGW..."
+          curl -L -o "$ARCHIVE_NAME" "$DOWNLOAD_URL"
+
+          echo "Extracting LLVM-MinGW..."
+          mkdir -p "$INSTALL_DIR"
+          unzip -q "$ARCHIVE_NAME" -d "$INSTALL_DIR"
+
+          $env:PATH="$INSTALL_DIR/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-x86_64/bin;$env:PATH"
+          Add-Content -Path $env:GITHUB_PATH -Value "$INSTALL_DIR/llvm-mingw-${LLVM_MINGW_VERSION}-ucrt-x86_64/bin"
+          echo "LLVM-MinGW setup complete."
+
+          ninja    --version
+          cmake    --version
+          gcc      --version
+          clang    --version
+          vcpkg    --version
+
+      - name: Restore Build Cache
+        id: restore-build-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            out/*
+            build/*
+            external/*
+            test/external/*
+          key: ${{ matrix.config.os }}-build-${{ matrix.config.preset_name }}-${{ hashFiles('CMakeLists.txt','test/CMakeLists.txt') }}
+          restore-keys: |
+            ${{ matrix.config.os }}-build-${{ matrix.config.preset_name }}
+
+      - name: Clean Build Folder
+        if: steps.restore-build-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          rm -rf out
+          rm -rf build
+          mkdir build
+
+      - name: Configure & Build
+        shell: bash
+        run: |
+          export VCPKG_ROOT=C:\vcpkg
+          if [ -n "${{ matrix.config.triplet }}" ]; then
+            cmake --preset ${{ matrix.config.preset_name }} -DVCPKG_TARGET_TRIPLET=${{ matrix.config.triplet }}
+          else
+            cmake --preset ${{ matrix.config.preset_name }}
+          fi
+          cmake --build --preset ${{ matrix.config.preset_name }} --target install
+
+      - if: ${{ steps.branch-name.outputs.branch == 'developer' }}
+        name: Save Build Cache
+        id: save-build-cache
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            out/*
+            build/*
+            external/*
+            test/external/*
+          key: ${{ matrix.config.os }}-build-${{ matrix.config.preset_name }}-${{ hashFiles('CMakeLists.txt','test/CMakeLists.txt') }}
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.config.name }}
+          path: ${{ matrix.config.install_dir }}/*
