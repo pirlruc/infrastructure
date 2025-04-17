@@ -68,6 +68,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          choco uninstall llvm
           bash .github/workflows/setup_llvm_mingw.sh
           ninja    --version
           cmake    --version
@@ -121,4 +122,5 @@ jobs:
 
       - name: Test
         shell: bash
-        run: ./${{ matrix.config.binary_dir }}/bin/improc-infrastructure_testd
+        run: |
+          ./${{ matrix.config.binary_dir }}/bin/improc-infrastructure_testd.exe
