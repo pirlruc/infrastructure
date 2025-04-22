@@ -89,10 +89,6 @@ else()
   set(BUILD_STATIC_LIBS     OFF)
   FetchContent_MakeAvailable(jsoncpp)
 
-  if (WIN32 OR WINCE)
-    target_compile_options(jsoncpp_lib PRIVATE -Wno-unknown-pragmas)
-  endif()
-
   add_library(JsonCpp::JsonCpp ALIAS jsoncpp_lib)
 endif()
 
