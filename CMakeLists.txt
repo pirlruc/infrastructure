@@ -88,8 +88,8 @@ else()
   set(JSONCPP_WITH_EXAMPLE  OFF)
   set(BUILD_STATIC_LIBS     OFF)
   FetchContent_MakeAvailable(jsoncpp)
-  
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+
+  if (WIN32 OR WINCE)
     target_compile_options(jsoncpp_lib PRIVATE -Wno-unknown-pragmas)
   endif()
 
