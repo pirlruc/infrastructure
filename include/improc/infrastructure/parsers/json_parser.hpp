@@ -7,6 +7,7 @@
 #include <improc/improc_type_traits.hpp>
 
 #include <json/json.h>
+#include <algorithm>
 
 namespace improc 
 {
