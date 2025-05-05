@@ -92,10 +92,6 @@ else()
     set(BUILD_STATIC_LIBS    ON)
   endif()
   FetchContent_MakeAvailable(jsoncpp)
-  
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(jsoncpp_lib PRIVATE -Wno-unknown-pragmas)
-  endif()
 
   if (BUILD_SHARED_LIBS)
     add_library(JsonCpp::JsonCpp ALIAS jsoncpp_lib)
