@@ -10,10 +10,10 @@ namespace improc
     namespace math
     {
         template <typename NumericType>
-        IMPROC_API bool inline IsEven(const NumericType& number);
+        bool inline IsEven(const NumericType& number);
 
         template <typename NumericType>
-        IMPROC_API bool inline IsOdd(const NumericType& number);
+        bool inline IsOdd(const NumericType& number);
     }
 }
 
