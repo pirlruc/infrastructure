@@ -107,13 +107,15 @@ endif()
 
 set(PKG_CONFIG_REQUIRES "spdlog jsoncpp")
 message(STATUS "Build ${PROJECT_NAME} Version   : ${PROJECT_VERSION}")
+message(STATUS "CMake Toolchain File: ${CMAKE_TOOLCHAIN_FILE}")
+message(STATUS "Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "Simulate ID: ${CMAKE_CXX_SIMULATE_ID}")
+message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
+message(STATUS "Install Dir: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "IMPROC_WITH_TESTS               : ${IMPROC_WITH_TESTS}")
 message(STATUS "IMPROC_INFRASTRUCTURE_WITH_TESTS: ${IMPROC_INFRASTRUCTURE_WITH_TESTS}")
 message(STATUS "IMPROC_WITH_COVERAGE            : ${IMPROC_WITH_COVERAGE}")
 message(STATUS "IMPROC_COVERAGE_VERSION         : ${IMPROC_COVERAGE_VERSION}")
-message(STATUS "CMake Toolchain File: ${CMAKE_TOOLCHAIN_FILE}")
-message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
-message(STATUS "Install Dir: ${CMAKE_INSTALL_PREFIX}")
 
 set(
   IMPROC_INFRASTRUCTURE_LIB_FILES
