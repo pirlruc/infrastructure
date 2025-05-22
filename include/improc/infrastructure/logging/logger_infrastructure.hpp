@@ -12,7 +12,7 @@ namespace improc
      */
     class IMPROC_API InfrastructureLogger final : public LoggerSingleton<InfrastructureLogger>
     {
-        friend std::shared_ptr<InfrastructureLogger> LoggerSingleton::get(const std::string& logger_name);
+        friend class LoggerSingleton<InfrastructureLogger>;
         private:
             explicit InfrastructureLogger(std::shared_ptr<spdlog::logger>&&      logger) : LoggerSingleton(std::move(logger)) {}
 
