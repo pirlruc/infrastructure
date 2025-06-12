@@ -74,6 +74,7 @@ if(IMPROC_WITH_COVERAGE AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
     # TODO: Add mcdc-coverage when gcc version > 14.2. To do this we need to add -fcondition-coverage to the flags
     COMMAND ${LCOV}    --directory ${CMAKE_BINARY_DIR}
+                       --object ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/$<TARGET_FILE_NAME:${PROJECT_NAME}>
                        --capture --output-file ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_coverage.info
                        --branch-coverage
                        --gcov-tool ${GCOV}
@@ -99,6 +100,7 @@ set(
   ${PROJECT_SOURCE_DIR}/test/test_file.cpp
   ${PROJECT_SOURCE_DIR}/test/test_folder.cpp
   ${PROJECT_SOURCE_DIR}/test/test_logger_infrastructure.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_file_content_type.cpp
 )
 
 add_executable(${PROJECT_NAME}_test ${IMPROC_INFRASTRUCTURE_TEST_FILES})

@@ -105,7 +105,25 @@ else()
   endif()
 endif()
 
-set(PKG_CONFIG_REQUIRES "spdlog jsoncpp")
+# CPPCODEC
+if(DEFINED CMAKE_TOOLCHAIN_FILE)
+    find_path(CPPCODEC_INCLUDE_DIRS "cppcodec/base32_crockford.hpp")
+else()
+    set(CMAKE_POLICY_DEFAULT_CMP0048 NEW)
+    FetchContent_Declare(
+      cppcodec
+      GIT_REPOSITORY https://github.com/tplgy/cppcodec
+      GIT_TAG        v0.2
+      SOURCE_DIR     ${PROJECT_SOURCE_DIR}/external/cppcodec
+    )
+    set(BUILD_TESTING OFF)
+    FetchContent_MakeAvailable(cppcodec)    
+    target_include_directories(cppcodec INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/cppcodec>
+                                                  $<INSTALL_INTERFACE:include>)
+    list(APPEND IMPROC_INFRASTRUCTURE_EXTRA_LIBS cppcodec)
+endif()
+
+set(PKG_CONFIG_REQUIRES "spdlog jsoncpp cppcodec")
 message(STATUS "Build ${PROJECT_NAME} Version   : ${PROJECT_VERSION}")
 message(STATUS "CMake Toolchain File: ${CMAKE_TOOLCHAIN_FILE}")
 message(STATUS "Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
@@ -141,16 +159,18 @@ set(
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/math/math.tpp
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.tpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/structures/file_content_type.hpp
   
   ${PROJECT_SOURCE_DIR}/src/application_context.cpp
   ${PROJECT_SOURCE_DIR}/src/file.cpp
+  ${PROJECT_SOURCE_DIR}/src/file_content_type.cpp
   ${PROJECT_SOURCE_DIR}/src/folder.cpp
   ${PROJECT_SOURCE_DIR}/src/string.cpp
 )
 
 add_library(${PROJECT_NAME} ${IMPROC_INFRASTRUCTURE_LIB_FILES})
 add_library(improc::infrastructure ALIAS ${PROJECT_NAME})
-add_dependencies(${PROJECT_NAME} spdlog::spdlog JsonCpp::JsonCpp)
+add_dependencies(${PROJECT_NAME} spdlog::spdlog JsonCpp::JsonCpp ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD              17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED     TRUE)
@@ -185,14 +205,17 @@ target_compile_options(${PROJECT_NAME} PRIVATE ${TARGET_CXX_FLAGS})
 target_link_options(${PROJECT_NAME} PRIVATE ${TARGET_CXX_FLAGS})
 
 target_include_directories  (${PROJECT_NAME}   PRIVATE    ${PROJECT_SOURCE_DIR}/include)
+target_include_directories  (${PROJECT_NAME}   PRIVATE    ${CPPCODEC_INCLUDE_DIRS})
 target_include_directories  (${PROJECT_NAME}   INTERFACE  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
                                                           $<INSTALL_INTERFACE:include> )
 
 # Link dependencies
 target_link_libraries       (${PROJECT_NAME}   PRIVATE   spdlog::spdlog)
 target_link_libraries       (${PROJECT_NAME}   PRIVATE   JsonCpp::JsonCpp)
+target_link_libraries       (${PROJECT_NAME}   PRIVATE   ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
 target_link_libraries       (${PROJECT_NAME}   INTERFACE spdlog::spdlog)
 target_link_libraries       (${PROJECT_NAME}   INTERFACE JsonCpp::JsonCpp)
+target_link_libraries       (${PROJECT_NAME}   INTERFACE ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
 
 # Tests configuration
 if(IMPROC_WITH_TESTS OR IMPROC_INFRASTRUCTURE_WITH_TESTS)
@@ -211,8 +234,9 @@ if (NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)
 endif()
 
 # Include files
+list(APPEND IMPROC_INFRASTRUCTURE_TARGETS ${PROJECT_NAME} ${IMPROC_INFRASTRUCTURE_EXTRA_LIBS})
 install(
-  TARGETS     ${PROJECT_NAME}
+  TARGETS     ${IMPROC_INFRASTRUCTURE_TARGETS}
   EXPORT      ${PROJECT_NAME}_targets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -224,6 +248,7 @@ install(FILES     ${PROJECT_SOURCE_DIR}/LICENSE                         DESTINAT
 if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
   install(FILES     ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE        DESTINATION share/licenses/improc/jsoncpp)
   install(FILES     ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE         DESTINATION share/licenses/improc/spdlog)
+  install(FILES     ${PROJECT_SOURCE_DIR}/external/cppcodec/LICENSE       DESTINATION share/licenses/improc/cppcodec)
 endif()
 
 # pkg-config files
