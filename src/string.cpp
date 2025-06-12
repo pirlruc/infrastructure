@@ -69,7 +69,7 @@ improc::String& improc::String::ToUpper()
 std::string improc::String::ToLower(const std::string& str_data)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Transforming string to lower case...");
-    std::string lower {std::move(str_data)};
+    std::string lower {str_data};
     std::transform  ( lower.begin(),lower.end(),lower.begin()
                     , [] (unsigned char char_upper){ return std::tolower(std::move(char_upper)); });
     return lower;
@@ -84,7 +84,7 @@ std::string improc::String::ToLower(const std::string& str_data)
 std::string improc::String::ToUpper(const std::string& str_data)
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Transforming string to upper case...");
-    std::string upper {std::move(str_data)};
+    std::string upper {str_data};
     std::transform  ( upper.begin(),upper.end(),upper.begin()
                     , [] (unsigned char char_lower){ return std::toupper(std::move(char_lower)); });
     return upper;

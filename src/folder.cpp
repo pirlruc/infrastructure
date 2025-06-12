@@ -86,5 +86,5 @@ std::vector<std::filesystem::path> improc::Folder::SortFilesByAscendingFilename(
                         return left_filepath.filename() < right_filepath.filename();
                     }
                 );
-    return std::move(filepaths);
+    return filepaths;
 }

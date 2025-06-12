@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "spdlog",
-      "version>=": "1.15.2"
+      "version>=": "1.15.3"
     },
     {
       "name": "jsoncpp",
@@ -15,7 +15,7 @@
       "dependencies": [
         {
           "name": "gtest",
-          "version>=": "1.16.0"
+          "version>=": "1.17.0"
         }
       ]
     }
