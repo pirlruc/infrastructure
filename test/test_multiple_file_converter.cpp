@@ -90,7 +90,7 @@ TEST(MultipleFileConverter, TestConverterInvalidFilepath)
 {
     std::string json_filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/multiple_file_config.json";
     Json::Value json_content = improc::JsonFile::Read(json_filepath);
-    std::string json_transform_filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/multiple_file_binary_file.json";
+    std::string json_transform_filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/multiple_file_invalid_path.json";
     Json::Value json_transform_content = improc::JsonFile::Read(json_transform_filepath);
     improc::MultipleFileConverter converter {json_content};
     EXPECT_THROW(converter.ConvertToSingleFile("", json_transform_content),improc::json_error);
