@@ -7,6 +7,6 @@ Name: lib@PROJECT_NAME@
 Description: Infrastructure module of image-proc library
 URL: https://github.com/pirlruc/infrastructure
 Version: @IMPROC_SUPERPROJECT_VERSION@
-Libs: -L${libdir} -l@PROJECT_NAME@ -lspdlog -ljsoncpp -lcppcodec
+Libs: -L${libdir} -l@PROJECT_NAME@ -lspdlog -ljsoncpp
 CFlags: -I${includedir}
 Requires: @PKG_CONFIG_REQUIRES@
