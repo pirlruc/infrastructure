@@ -113,11 +113,13 @@ else()
     FetchContent_Declare(
       cppcodec
       GIT_REPOSITORY https://github.com/tplgy/cppcodec
-      GIT_TAG        v0.2
+      GIT_TAG        8019b8b580f8573c33c50372baec7039dfe5a8ce
       SOURCE_DIR     ${PROJECT_SOURCE_DIR}/external/cppcodec
       SOURCE_SUBDIR  "do-not-build"
     )
-    set(BUILD_TESTING OFF)
+    set(CPPCODEC_BUILD_EXAMPLES OFF)
+    set(CPPCODEC_BUILD_TESTING OFF)
+    set(CPPCODEC_BUILD_TOOLS OFF)
     FetchContent_MakeAvailable(cppcodec) 
     set(CPPCODEC_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/external/cppcodec)
 endif()

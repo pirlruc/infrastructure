@@ -10,7 +10,7 @@
     },
     {
       "name": "cppcodec",
-      "version>=": "0.2#4"
+      "version>=": "8019b8b580f8573c33c50372baec7039dfe5a8ce"
     }
   ],
   "features": {
