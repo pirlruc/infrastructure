@@ -101,6 +101,7 @@ set(
   ${PROJECT_SOURCE_DIR}/test/test_folder.cpp
   ${PROJECT_SOURCE_DIR}/test/test_logger_infrastructure.cpp
   ${PROJECT_SOURCE_DIR}/test/test_file_content_type.cpp
+  ${PROJECT_SOURCE_DIR}/test/test_multiple_file_converter.cpp
 )
 
 add_executable(${PROJECT_NAME}_test ${IMPROC_INFRASTRUCTURE_TEST_FILES})

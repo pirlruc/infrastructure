@@ -159,12 +159,14 @@ set(
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/math/math.tpp
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.tpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/multiple_file_converter.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/structures/file_content_type.hpp
   
   ${PROJECT_SOURCE_DIR}/src/application_context.cpp
   ${PROJECT_SOURCE_DIR}/src/file.cpp
   ${PROJECT_SOURCE_DIR}/src/file_content_type.cpp
   ${PROJECT_SOURCE_DIR}/src/folder.cpp
+  ${PROJECT_SOURCE_DIR}/src/multiple_file_converter.cpp
   ${PROJECT_SOURCE_DIR}/src/string.cpp
 )
 

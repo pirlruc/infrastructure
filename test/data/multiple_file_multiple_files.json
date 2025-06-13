@@ -1,0 +1,14 @@
+{
+    "image-filepath": ["test","data","image_file_test.png"],
+    "printing-resolution-dpi": 500,
+    "image-text-size":
+    {
+        "width": 10,
+        "height": 6,
+        "metric-unit": "mm"
+    },
+    "font-filepath": ["test","data","PublicSans-Regular.ttf"],
+    "font-size": 16,
+    "id": "threshold",
+    "include-file": ["test","data","json_file_test.json"]
+}

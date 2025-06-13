@@ -1,0 +1,11 @@
+{
+    "test":
+    {
+        "color": "gray"
+    },
+    "operation":
+    {
+        "operation-type": "test",
+        "operation-type2": "test2"
+    }
+}
