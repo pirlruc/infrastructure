@@ -37,7 +37,7 @@ improc::BaseFile::BaseFile(const std::filesystem::path& filepath)
 improc::BaseFile::BaseFile(const Json::Value& filepath_json,const std::optional<std::string>& application_folder) 
 {
     IMPROC_INFRASTRUCTURE_LOGGER_TRACE("Creating BaseFile object using json...");
-    std::filesystem::path    filepath     = std::move(application_folder.value_or(""));
+    std::filesystem::path    filepath     = application_folder.value_or("");
     std::vector<std::string> folders_json = improc::json::ReadVector<std::string>(std::move(filepath_json));
     std::for_each(folders_json.begin(),folders_json.end(), [&filepath] (const std::string& folder) {filepath /= std::move(folder);});
     this->set_filepath(std::move(filepath));

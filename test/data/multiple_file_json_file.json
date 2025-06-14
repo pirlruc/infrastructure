@@ -1,0 +1,4 @@
+{
+    "id": "threshold",
+    "include-file": ["test","data","json_file_test.json"]
+}

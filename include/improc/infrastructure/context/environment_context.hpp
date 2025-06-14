@@ -13,7 +13,7 @@ namespace improc
      * @tparam ContextType - Data type of the application context being created
      */
     template <typename ContextType>
-    class IMPROC_API EnvironmentContext
+    class EnvironmentContext
     {
         protected:
             EnvironmentContext();

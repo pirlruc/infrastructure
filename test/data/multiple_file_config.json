@@ -1,0 +1,14 @@
+{
+    "image-filepath": {
+        "file-content-type": "Binary",
+        "json-content-key": "image-base64"
+    },
+    "font-filepath": {
+        "file-content-type": "Binary",
+        "json-content-key": "font-base64"
+    },
+    "include-file": {
+        "file-content-type": "JSON",
+        "json-content-key": "json-content"
+    }
+}

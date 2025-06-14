@@ -5,6 +5,62 @@
 
 #include <improc_infrastructure_test_config.hpp>
 
+TEST(BaseFile, TestEmptyConstructor) {
+    improc::BaseFile base_file_empty{};
+    EXPECT_TRUE(base_file_empty.get_filepath().empty());
+    EXPECT_TRUE(base_file_empty.get_filename().empty());
+    EXPECT_TRUE(base_file_empty.get_extension().empty());
+}
+
+TEST(BaseFile, TestStringConstructor) {
+    std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
+    improc::BaseFile base_file_path{filepath};
+    EXPECT_EQ(base_file_path.get_filepath(), filepath);
+    EXPECT_EQ(base_file_path.get_filename(), "test.json");
+    EXPECT_EQ(base_file_path.get_extension(), ".json");
+}
+
+TEST(BaseFile, TestPathConstructor) {
+    std::filesystem::path filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
+    improc::BaseFile base_file_path{filepath};
+    EXPECT_EQ(base_file_path.get_filepath(), filepath);
+    EXPECT_EQ(base_file_path.get_filename(), "test.json");
+    EXPECT_EQ(base_file_path.get_extension(), ".json");
+}
+
+TEST(BaseFile, TestJsonConstructor) {
+    Json::Value json_file = improc::JsonFile::Read(std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/filepath.json");
+    improc::BaseFile base_file_json{json_file["multiple"], std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER)};
+    std::filesystem::path gt_filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER);
+    gt_filepath /= "test/data/test/test_1.txt";
+    EXPECT_EQ(base_file_json.get_filepath(), gt_filepath);
+}
+
+TEST(BaseFile, TestReadMemberFunction) {
+    std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
+    improc::BaseFile base_file_exists{filepath};
+    EXPECT_FALSE(base_file_exists.Read().empty());
+}
+
+TEST(BaseFile, TestRemoveMemberFunction) {
+    std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/toremove_base.txt";
+    std::ofstream output_file(filepath);
+    output_file.close(); 
+    improc::BaseFile base_file_to_remove{filepath};
+    EXPECT_TRUE(base_file_to_remove.Exists());
+    EXPECT_TRUE(base_file_to_remove.Remove());
+    EXPECT_FALSE(base_file_to_remove.Exists());
+}
+
+TEST(BaseFile, TestExistsMemberFunction) {
+    std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
+    improc::BaseFile base_file_exists{filepath};
+    EXPECT_TRUE(base_file_exists.Exists());
+
+    std::string non_existent_filepath = "non_existent_base_file.txt";
+    EXPECT_THROW(improc::BaseFile base_file_non_existent{non_existent_filepath}, improc::value_error);
+}
+
 TEST(BaseFile,TestReadingNonExistingFile) {
     EXPECT_THROW(improc::BaseFile::Read(std::string("base_file_tst.txt")),improc::value_error);
     EXPECT_THROW(improc::BaseFile::Read(std::filesystem::path("base_file_tst.txt")),improc::value_error);
@@ -17,8 +73,16 @@ TEST(File,TestEmptyFileConstructor) {
     EXPECT_TRUE(file_empty.get_extension().empty());
 }
 
-TEST(File,TestFileConstructor) {
+TEST(File,TestFileStringConstructor) {
     std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
+    improc::File file_str {filepath};
+    EXPECT_EQ(file_str.get_filepath() ,filepath);
+    EXPECT_EQ(file_str.get_filename() ,"test.json");
+    EXPECT_EQ(file_str.get_extension(),".json");
+}
+
+TEST(File,TestFilePathConstructor) {
+    std::filesystem::path filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
     improc::File file_str {filepath};
     EXPECT_EQ(file_str.get_filepath() ,filepath);
     EXPECT_EQ(file_str.get_filename() ,"test.json");
@@ -121,8 +185,16 @@ TEST(JsonFile,TestEmptyFileConstructor) {
     EXPECT_TRUE(file_empty.get_extension().empty());
 }
 
-TEST(JsonFile,TestFileConstructor) {
+TEST(JsonFile,TestFileStringConstructor) {
     std::string filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
+    improc::JsonFile file_str {filepath};
+    EXPECT_EQ(file_str.get_filepath() ,filepath);
+    EXPECT_EQ(file_str.get_filename() ,"test.json");
+    EXPECT_EQ(file_str.get_extension(),".json");
+}
+
+TEST(JsonFile,TestFilePathConstructor) {
+    std::filesystem::path filepath = std::string(IMPROC_INFRASTRUCTURE_TEST_FOLDER) + "/test/data/test.json";
     improc::JsonFile file_str {filepath};
     EXPECT_EQ(file_str.get_filepath() ,filepath);
     EXPECT_EQ(file_str.get_filename() ,"test.json");

@@ -1,0 +1,33 @@
+{
+    "invalid_config_elem":
+    {
+        "name" : "invalid_keys"
+    },
+    "missing_content_type":
+    {
+        "some-key": {"json-content-key": "content"}
+    },
+    "missing_target_json":
+    {
+        "some-key": {"file-content-type": "binary"}
+    },
+    "invalid_content_type":
+    {
+        "some-key": {"file-content-type": "invalid-type", "json-content-key": "content"}
+    },
+    "json_array":
+    [
+        {
+            "test": 1
+        }
+    ],
+    "json_elem_array":
+    {
+        "some-key": 
+        [
+            {
+                "test": 1
+            }
+        ]
+    }
+}

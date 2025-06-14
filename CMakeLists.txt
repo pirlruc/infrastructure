@@ -10,16 +10,6 @@ if(NOT DEFINED IMPROC_SUPERPROJECT_VERSION)
   set(IMPROC_SUPERPROJECT_VERSION 1.0.0)
 endif()
 
-if(NOT DEFINED IMPROC_COVERAGE_VERSION)
-  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(IMPROC_COVERAGE_VERSION "14")
-  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(IMPROC_COVERAGE_VERSION "11")
-  else()
-    set(IMPROC_COVERAGE_VERSION "14")
-  endif()
-endif()
-
 if(NOT DEFINED IMPROC_INFRASTRUCTURE_WITH_TESTS)
   set(IMPROC_INFRASTRUCTURE_WITH_TESTS OFF)
 endif()
@@ -34,6 +24,16 @@ project(
   LANGUAGES   CXX
 )
 string(REPLACE "-" "_" PROJECT_NAME_FILE ${PROJECT_NAME})
+
+if(NOT DEFINED IMPROC_COVERAGE_VERSION)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(IMPROC_COVERAGE_VERSION "17")
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(IMPROC_COVERAGE_VERSION "13")
+  else()
+    set(IMPROC_COVERAGE_VERSION "17")
+  endif()
+endif()
 
 include(FetchContent)
 
@@ -50,7 +50,7 @@ if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
   set(CMAKE_DEBUG_POSTFIX d)
 
   if(IMPROC_WITH_COVERAGE AND NOT IMPROC_WITH_TESTS AND NOT IMPROC_INFRASTRUCTURE_WITH_TESTS)
-    message(STATUS "Warning: IMPROC_COVERAGE ON but tests of image processing library is not ON")
+    message(STATUS "Warning: IMPROC_WITH_COVERAGE ON but tests of image processing library is not ON")
     message(STATUS "---------> Setting IMPROC_INFRASTRUCTURE_WITH_TESTS = ON")
     set(IMPROC_INFRASTRUCTURE_WITH_TESTS ON)
   endif()
@@ -64,10 +64,15 @@ else()
   FetchContent_Declare(
     spdlog
     GIT_REPOSITORY  https://github.com/gabime/spdlog
-    GIT_TAG         v1.15.2
+    GIT_TAG         v1.15.3
     SOURCE_DIR      ${PROJECT_SOURCE_DIR}/external/spdlog
   )
   set(SPDLOG_MASTER_PROJECT ON)
+  if (BUILD_SHARED_LIBS)
+    set(SPDLOG_BUILD_SHARED ON)
+  else()
+    set(SPDLOG_BUILD_SHARED OFF)
+  endif()
   FetchContent_MakeAvailable(spdlog)
   target_include_directories(spdlog INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/spdlog/include>
                                               $<INSTALL_INTERFACE:include> )
@@ -86,20 +91,50 @@ else()
   )
   set(JSONCPP_WITH_TESTS    OFF)
   set(JSONCPP_WITH_EXAMPLE  OFF)
-  set(BUILD_STATIC_LIBS     OFF)
+  if (BUILD_SHARED_LIBS)
+    set(BUILD_STATIC_LIBS   OFF)
+  else()
+    set(BUILD_STATIC_LIBS    ON)
+  endif()
   FetchContent_MakeAvailable(jsoncpp)
-  add_library(JsonCpp::JsonCpp ALIAS jsoncpp_lib)
+
+  if (BUILD_SHARED_LIBS)
+    add_library(JsonCpp::JsonCpp ALIAS jsoncpp_lib)
+  else()
+    add_library(JsonCpp::JsonCpp ALIAS jsoncpp_static)
+  endif()
+endif()
+
+# CPPCODEC
+if(DEFINED CMAKE_TOOLCHAIN_FILE)
+    find_path(CPPCODEC_INCLUDE_DIRS "cppcodec/base32_crockford.hpp")
+else()
+    set(CMAKE_POLICY_DEFAULT_CMP0048 NEW)
+    FetchContent_Declare(
+      cppcodec
+      GIT_REPOSITORY https://github.com/tplgy/cppcodec
+      GIT_TAG        8019b8b580f8573c33c50372baec7039dfe5a8ce
+      SOURCE_DIR     ${PROJECT_SOURCE_DIR}/external/cppcodec
+      SOURCE_SUBDIR  "do-not-build"
+    )
+    set(CPPCODEC_BUILD_EXAMPLES OFF)
+    set(CPPCODEC_BUILD_TESTING OFF)
+    set(CPPCODEC_BUILD_TOOLS OFF)
+    FetchContent_MakeAvailable(cppcodec) 
+    set(CPPCODEC_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/external/cppcodec)
 endif()
 
 set(PKG_CONFIG_REQUIRES "spdlog jsoncpp")
 message(STATUS "Build ${PROJECT_NAME} Version   : ${PROJECT_VERSION}")
+message(STATUS "CMake Toolchain File: ${CMAKE_TOOLCHAIN_FILE}")
+message(STATUS "Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "Simulate ID: ${CMAKE_CXX_SIMULATE_ID}")
+message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
+message(STATUS "Install Dir: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "IMPROC_WITH_TESTS               : ${IMPROC_WITH_TESTS}")
 message(STATUS "IMPROC_INFRASTRUCTURE_WITH_TESTS: ${IMPROC_INFRASTRUCTURE_WITH_TESTS}")
 message(STATUS "IMPROC_WITH_COVERAGE            : ${IMPROC_WITH_COVERAGE}")
 message(STATUS "IMPROC_COVERAGE_VERSION         : ${IMPROC_COVERAGE_VERSION}")
-message(STATUS "CMake Toolchain File: ${CMAKE_TOOLCHAIN_FILE}")
-message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
-message(STATUS "Install Dir: ${CMAKE_INSTALL_PREFIX}")
 
 set(
   IMPROC_INFRASTRUCTURE_LIB_FILES
@@ -125,29 +160,67 @@ set(
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/math/math.tpp
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.hpp
   ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/json_parser.tpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/parsers/multiple_file_converter.hpp
+  ${PROJECT_SOURCE_DIR}/include/improc/infrastructure/structures/file_content_type.hpp
   
   ${PROJECT_SOURCE_DIR}/src/application_context.cpp
   ${PROJECT_SOURCE_DIR}/src/file.cpp
+  ${PROJECT_SOURCE_DIR}/src/file_content_type.cpp
   ${PROJECT_SOURCE_DIR}/src/folder.cpp
+  ${PROJECT_SOURCE_DIR}/src/multiple_file_converter.cpp
   ${PROJECT_SOURCE_DIR}/src/string.cpp
 )
 
-if (BUILD_SHARED_LIBS)
-  add_library(${PROJECT_NAME} SHARED ${IMPROC_INFRASTRUCTURE_LIB_FILES})
-else()
-  add_library(${PROJECT_NAME} STATIC ${IMPROC_INFRASTRUCTURE_LIB_FILES})
-endif()
+add_library(${PROJECT_NAME} ${IMPROC_INFRASTRUCTURE_LIB_FILES})
 add_library(improc::infrastructure ALIAS ${PROJECT_NAME})
 add_dependencies(${PROJECT_NAME} spdlog::spdlog JsonCpp::JsonCpp)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD           17)
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED  TRUE)
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE        CXX)
-set_target_properties(${PROJECT_NAME} PROPERTIES VERSION                ${PROJECT_VERSION})
-set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX          ${CMAKE_DEBUG_POSTFIX})
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD              17)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED     TRUE)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS            OFF)
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE           CXX)
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION                   ${PROJECT_VERSION})
+set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX             ${CMAKE_DEBUG_POSTFIX})
+
+if (BUILD_SHARED_LIBS)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE IMPROC_EXPORTS)
+else()
+  target_compile_definitions(${PROJECT_NAME} PRIVATE IMPROC_STATIC)
+endif()
+
+if(NOT MSVC)
+  set(TARGET_CXX_FLAGS -Wall -Wextra -Wpedantic)
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    list(APPEND TARGET_CXX_FLAGS -DDEBUG -g -Og)
+  else()
+    list(APPEND TARGET_CXX_FLAGS -DNDEBUG -O2)
+  endif()
+else()
+  set(TARGET_CXX_FLAGS /Wall /W4)
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    list(APPEND TARGET_CXX_FLAGS /DDEBUG /Zi /Od)
+  else()
+    list(APPEND TARGET_CXX_FLAGS /DNDEBUG /O2)
+  endif()
+endif()
+
+if(IMPROC_WITH_COVERAGE)
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    list(APPEND TARGET_CXX_FLAGS --coverage)
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    list(APPEND TARGET_CXX_FLAGS -fprofile-instr-generate -fcoverage-mapping)
+  endif()
+endif()
+
+target_compile_options(${PROJECT_NAME} PRIVATE ${TARGET_CXX_FLAGS})
+target_link_options   (${PROJECT_NAME} PRIVATE ${TARGET_CXX_FLAGS})
 
 target_include_directories  (${PROJECT_NAME}   PRIVATE    ${PROJECT_SOURCE_DIR}/include)
+target_include_directories  (${PROJECT_NAME}   PRIVATE    ${CPPCODEC_INCLUDE_DIRS})
 target_include_directories  (${PROJECT_NAME}   INTERFACE  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+                                                          $<INSTALL_INTERFACE:include> )
+target_include_directories  (${PROJECT_NAME}   INTERFACE  $<BUILD_INTERFACE:${CPPCODEC_INCLUDE_DIRS}>
                                                           $<INSTALL_INTERFACE:include> )
 
 # Link dependencies
@@ -184,8 +257,10 @@ install(
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/improc                  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(FILES     ${PROJECT_SOURCE_DIR}/LICENSE                         DESTINATION share/licenses/improc/infrastructure)
 if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  install(FILES     ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE        DESTINATION share/licenses/improc/jsoncpp)
-  install(FILES     ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE         DESTINATION share/licenses/improc/spdlog)
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/external/cppcodec/cppcodec    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  install(FILES     ${PROJECT_SOURCE_DIR}/external/jsoncpp/LICENSE      DESTINATION share/licenses/improc/jsoncpp)
+  install(FILES     ${PROJECT_SOURCE_DIR}/external/spdlog/LICENSE       DESTINATION share/licenses/improc/spdlog)
+  install(FILES     ${PROJECT_SOURCE_DIR}/external/cppcodec/LICENSE     DESTINATION share/licenses/improc/cppcodec)
 endif()
 
 # pkg-config files

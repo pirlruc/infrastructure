@@ -2,6 +2,7 @@
 #define IMPROC_INFRASTRUCTURE_EXCEPTIONS_HPP
  
 #include <stdexcept>
+#include <utility>
  
 namespace improc 
 {
@@ -41,6 +42,11 @@ namespace improc
             explicit freetype_error(const std::string& message): std::runtime_error(std::move(message)) {}
     };
 
+    class opencv_error final: public std::runtime_error
+    {
+        public:
+            explicit opencv_error(const std::string& message): std::runtime_error(std::move(message)) {}
+    };
 
     class inconsistent_size_detected_reference_pixels final: public std::exception {
     public:

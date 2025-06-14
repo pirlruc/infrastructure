@@ -1,4 +1,4 @@
-name: Windows Artifacts
+name: Windows MSVC Artifacts
 
 on:
   # Triggers the workflow on push or pull request events
@@ -19,9 +19,17 @@ jobs:
       matrix:
         config:
         - {
+            name: windows-latest-gcc,
+            os: windows-latest,
+            preset_name: "gcc-release",
+            triplet: "x64-mingw-dynamic",
+            install_dir: "D:/a/infrastructure/infrastructure/install"
+          }
+        - {
             name: windows-latest-clang,
             os: windows-latest,
             preset_name: "clang-release",
+            triplet: "x64-windows",
             install_dir: "D:/a/infrastructure/infrastructure/install"
           }
         - {
@@ -55,7 +63,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          choco install ninja
           ninja    --version
           cmake    --version
           gcc      --version
@@ -86,8 +93,12 @@ jobs:
       - name: Configure & Build
         shell: bash
         run: |
-          export VCPKG_ROOT=C:\vcpkg
-          cmake --preset ${{ matrix.config.preset_name }}
+          export VCPKG_ROOT=C:/vcpkg
+          if [ -n "${{ matrix.config.triplet }}" ]; then
+            cmake --preset ${{ matrix.config.preset_name }} -DVCPKG_TARGET_TRIPLET=${{ matrix.config.triplet }}
+          else
+            cmake --preset ${{ matrix.config.preset_name }}
+          fi
           cmake --build --preset ${{ matrix.config.preset_name }} --target install
 
       - if: ${{ steps.branch-name.outputs.branch == 'developer' }}
