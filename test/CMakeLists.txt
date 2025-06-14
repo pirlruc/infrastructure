@@ -113,7 +113,7 @@ set_target_properties(${PROJECT_NAME}_test PROPERTIES FOLDER                 ${P
 set_target_properties(${PROJECT_NAME}_test PROPERTIES DEBUG_POSTFIX          ${CMAKE_DEBUG_POSTFIX})
 
 target_compile_options(${PROJECT_NAME}_test PRIVATE ${TARGET_CXX_FLAGS})
-target_link_options(${PROJECT_NAME}_test PRIVATE ${TARGET_CXX_FLAGS})
+target_link_options   (${PROJECT_NAME}_test PRIVATE ${TARGET_CXX_FLAGS})
 
 target_include_directories(${PROJECT_NAME}_test   PRIVATE   ${PROJECT_SOURCE_DIR}/test)
 

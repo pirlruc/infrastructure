@@ -205,7 +205,7 @@ if(IMPROC_WITH_COVERAGE)
 endif()
 
 target_compile_options(${PROJECT_NAME} PRIVATE ${TARGET_CXX_FLAGS})
-target_link_options(${PROJECT_NAME} PRIVATE ${TARGET_CXX_FLAGS})
+target_link_options   (${PROJECT_NAME} PRIVATE ${TARGET_CXX_FLAGS})
 
 target_include_directories  (${PROJECT_NAME}   PRIVATE    ${PROJECT_SOURCE_DIR}/include)
 target_include_directories  (${PROJECT_NAME}   PRIVATE    ${CPPCODEC_INCLUDE_DIRS})
