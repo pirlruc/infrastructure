@@ -1,3 +1,5 @@
+> **Deprecated.** Filesystem access moved to [bifrost](https://github.com/NjordLabs/bifrost-cpp). Logging moved to [mimir](https://github.com/NjordLabs/mimir-cpp). Errors moved to [bor](https://github.com/NjordLabs/bor-cpp). String helpers, benchmarks, the application context, and this repository's JSON parser were not carried forward.
+
 # improc_infrastructure
 
 ## main
